@@ -20,6 +20,9 @@ use yii\web\IdentityInterface;
  * @property integer $role
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $last_login
+ * @property string $device_token
+ * @property string $platform
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -45,6 +48,31 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             TimestampBehavior::className(),
         ];
+    }
+    
+    public function fields() {
+        //$fields = parent::fields();
+        //unset($fields['auth_key'], $fields['password_hash'], $fields['password_reset_token']);
+        
+        $fields = [
+            'id',
+            'username',
+            'firstname',
+            'lastname',
+            'gender',
+            'email',
+            'phone',
+            'points',
+            'summits',
+            'meters_above_sea_level',
+            'rank',
+            'last_login',
+            'image',
+            'image_hash',
+            'facebook_id'
+        ];
+        
+        return $fields;
     }
 
     /**

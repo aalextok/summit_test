@@ -101,9 +101,17 @@ class AuthController extends ActiveController
             $user->email = $email;
             $user->phone = Yii::$app->request->post('phone');
             $user->username = Yii::$app->request->post('username');
-            $user->password = Yii::$app->request->post('password');
+            //$user->password = Yii::$app->request->post('password');
+            
+            $password = Yii::$app->request->post('password');
+            if (empty($password)){
+                throw new web\HttpException(422, "Password must be a string and cannot be empty.");
+            }
+            $user->password = $password;
+            
             $user->firstname = Yii::$app->request->post('firstname');
             $user->lastname = Yii::$app->request->post('lastname');
+            
             $user->gender = Yii::$app->request->post('gender');
             $user->gender = isset($user->gender) ? $user->gender : '';
             
@@ -123,14 +131,79 @@ class AuthController extends ActiveController
             ];
         }
         else{
-            $errors = $user->getErrors();
-            $var_export = var_export($errors, true);
-            throw new web\HttpException(422, '...');
-            return ['error' => [
-                'message' => $user->getErrors()
-            ]];
+            throw new web\HttpException(422, implode(' ', array_keys(array_column($user->getErrors(), null, 0))));
         }
         
         throw new web\HttpException(500, "Unknown error");
+    }
+    
+    public function actionLogin($auth_type = 'app'){
+        $user = null;
+        if($auth_type == 'facebook'){
+//            $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
+//            preg_match("/^Bearer\\s+(.*?)$/", $authHeader, $matches);
+//            $token = $matches[1];
+//            
+//            if(!empty($token)){
+//                $facebook = new Facebook(Yii::$app->params['authCredentials']['facebook']);
+//                $oauthToken = new OAuthToken();
+//                $oauthToken->setToken($token);
+//                $facebook->setAccessToken($oauthToken);
+//                $userAttributes = $facebook->getUserAttributes();
+//                $tokenAttr = $facebook->api('debug_token', 'GET', ['input_token' => $token, 'access_token' => $token]);
+//                
+//                $user = User::findOne(['facebook_id' => $userAttributes['id']]);
+//                
+//                
+//                if(isset($user)){
+//                    $user->auth_key = $token;
+//                   $user->auth_key_expires = $tokenAttr['data']['expires_at'];                  
+//                  }
+//                else {
+    //                throw new web\HttpException(404, 'User not found');
+    //            }
+//            }
+        }
+        else {
+            $email = Yii::$app->request->post('email');
+            $password = Yii::$app->request->post('password');
+            $user = User::findIdentityByEmail($email);
+            
+            if(empty($user)){
+                throw new web\HttpException(404, 'User not found');
+            }
+            
+            if(!$user->validatePassword($password)){
+                throw new web\HttpException(401, 'Password incorrect');
+            }
+            
+            $user->generateAuthKey();
+            $user->auth_key_expires = time() + Yii::$app->params['authKeyLifeTime']*60*60;
+            
+        }
+        
+        // save device_token and platform
+        $device_token = Yii::$app->request->post('device_token');
+        $platform = strtolower(Yii::$app->request->post('platform'));
+        $user->device_token = !empty($device_token) ? $device_token : $user->device_token;
+        $user->platform = !empty($platform) ? $platform : $user->platform;
+       
+        $user->last_login = time();
+        $user->login_count++;
+        $user->updated_at = time();
+        
+        if(!empty($user) && $user->update()){
+            return [
+                        'message' => 'Successfully logged in',
+                        'user' => $user,
+                        'auth_key' => $user->auth_key,
+                        'auth_key_expires' => $user->auth_key_expires,
+                ];
+        }
+        else{
+            throw new web\HttpException(422, implode(' ', array_keys(array_column($user->getErrors(), null, 0))));
+        }
+        
+        throw new web\HttpException(500, "Unknown error");      
     }
 }
