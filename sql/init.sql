@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 01, 2015 at 02:03 
+-- Generation Time: Jun 01, 2015 at 07:33 
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -15,6 +15,53 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `summittosea` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `summittosea`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `activity`
+--
+
+CREATE TABLE IF NOT EXISTS `activity` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `competition`
+--
+
+CREATE TABLE IF NOT EXISTS `competition` (
+  `id` int(11) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `achievements_by_places` tinyint(1) NOT NULL DEFAULT '0',
+  `activity_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `participation`
+--
+
+CREATE TABLE IF NOT EXISTS `participation` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `competition_id` int(11) NOT NULL,
+  `places` int(11) DEFAULT NULL,
+  `summits` int(11) DEFAULT NULL,
+  `meters_above_sea_level` int(11) DEFAULT NULL,
+  `distance` int(11) DEFAULT NULL,
+  `points` int(11) DEFAULT NULL,
+  `minutes` int(11) DEFAULT NULL,
+  `start_time` int(11) DEFAULT NULL,
+  `finish_time` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -31,7 +78,48 @@ CREATE TABLE IF NOT EXISTS `place` (
   `distance` int(11) DEFAULT NULL,
   `points` int(11) DEFAULT NULL,
   `latitude` float DEFAULT NULL,
-  `logngtitude` float DEFAULT NULL
+  `longtitude` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `places_activities`
+--
+
+CREATE TABLE IF NOT EXISTS `places_activities` (
+  `id` int(11) NOT NULL,
+  `place_id` int(11) NOT NULL,
+  `activity_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `places_competitions`
+--
+
+CREATE TABLE IF NOT EXISTS `places_competitions` (
+  `id` int(11) NOT NULL,
+  `place_id` int(11) NOT NULL,
+  `competition_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `prize`
+--
+
+CREATE TABLE IF NOT EXISTS `prize` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `points` int(11) DEFAULT NULL,
+  `summits` int(11) DEFAULT NULL,
+  `meters_above_sea_level` int(11) DEFAULT NULL,
+  `distance` int(11) DEFAULT NULL,
+  `competition_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -80,6 +168,21 @@ INSERT INTO `user` (`id`, `username`, `firstname`, `lastname`, `gender`, `email`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `visit`
+--
+
+CREATE TABLE IF NOT EXISTS `visit` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `place_id` int(11) NOT NULL,
+  `competition_id` int(11) DEFAULT NULL,
+  `visit_time` int(11) NOT NULL,
+  `acivity_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `watching`
 --
 
@@ -89,14 +192,62 @@ CREATE TABLE IF NOT EXISTS `watching` (
   `watched_user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `win`
+--
+
+CREATE TABLE IF NOT EXISTS `win` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `prize_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Indexes for dumped tables
 --
 
 --
+-- Indexes for table `activity`
+--
+ALTER TABLE `activity`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `competition`
+--
+ALTER TABLE `competition`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `participation`
+--
+ALTER TABLE `participation`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `place`
 --
 ALTER TABLE `place`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `places_activities`
+--
+ALTER TABLE `places_activities`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `places_competitions`
+--
+ALTER TABLE `places_competitions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `prize`
+--
+ALTER TABLE `prize`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -109,9 +260,21 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `phone` (`phone`);
 
 --
+-- Indexes for table `visit`
+--
+ALTER TABLE `visit`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `watching`
 --
 ALTER TABLE `watching`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `win`
+--
+ALTER TABLE `win`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -119,9 +282,39 @@ ALTER TABLE `watching`
 --
 
 --
+-- AUTO_INCREMENT for table `activity`
+--
+ALTER TABLE `activity`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `competition`
+--
+ALTER TABLE `competition`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `participation`
+--
+ALTER TABLE `participation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `place`
 --
 ALTER TABLE `place`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `places_activities`
+--
+ALTER TABLE `places_activities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `places_competitions`
+--
+ALTER TABLE `places_competitions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `prize`
+--
+ALTER TABLE `prize`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user`
@@ -129,7 +322,17 @@ ALTER TABLE `place`
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT for table `visit`
+--
+ALTER TABLE `visit`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `watching`
 --
 ALTER TABLE `watching`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `win`
+--
+ALTER TABLE `win`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
