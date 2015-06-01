@@ -11,10 +11,10 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `summit`
+-- Database: `summittosea`
 --
-CREATE DATABASE IF NOT EXISTS `summit` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `summit`;
+CREATE DATABASE IF NOT EXISTS `summittosea` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `summittosea`;
 
 -- --------------------------------------------------------
 
