@@ -20,8 +20,8 @@ return [
         'db'=>[
             'class'=>'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=summit',
-            'username' => 'root',
-            'password' => '',
+            'username' => 'summittosea',
+            'password' => 'MtEvhxzBULmhuAFw',
             'charset' => 'utf8'            
         ],
         'log' => [
