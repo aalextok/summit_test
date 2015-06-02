@@ -58,20 +58,20 @@ return [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
-        'response' => [
-            'class' => 'yii\web\Response',
-            'on beforeSend' => function ($event) {
-                $isAjax = Yii::$app->request->isAjax;
-                $response = $event->sender;
-                if ($response->data !== null && Yii::$app->request->isAjax) { //&& !empty(Yii::$app->request->get('suppress_response_code'))
-                    $response->data = [
-                        'success' => $response->isSuccessful,
-                        'data' => $response->data,
-                    ];
-                    $response->statusCode = 200;
-                }
-            },
-        ],
+//        'response' => [
+//            'class' => 'yii\web\Response',
+//            'on beforeSend' => function ($event) {
+//                $isAjax = Yii::$app->request->isAjax;
+//                $response = $event->sender;
+//                if ($response->data !== null && Yii::$app->request->isAjax) { //&& !empty(Yii::$app->request->get('suppress_response_code'))
+//                    $response->data = [
+//                        'success' => $response->isSuccessful,
+//                        'data' => $response->data,
+//                    ];
+//                    $response->statusCode = 200;
+//                }
+//            },
+//        ],
     ],
     'params' => $params,
 ];
