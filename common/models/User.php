@@ -88,7 +88,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]],
             
             ['email', 'email'],
-            [['username', 'email'], 'required'],
+            [['firstname', 'lastname', 'email'], 'required'],
             [['username', 'email', 'firstname', 'lastname'], 'string', 'min' => 1, 'max' => 255],
             [['email', 'username', 'phone'], 'unique'],
             ['image', 'file', 'extensions' => ['png', 'jpg', 'gif', 'jpeg'], 'maxSize' => 1024*1024*1024],
