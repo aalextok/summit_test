@@ -3,6 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+use backend\models\Activity;
+use backend\models\Place;
+use yii\helpers\ArrayHelper;
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\Place */
 /* @var $form yii\widgets\ActiveForm */
@@ -11,7 +15,14 @@ use yii\widgets\ActiveForm;
 <div class="place-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
+    
+    <?php
+        $model->activity_ids = array_map(function($o) { return $o->id; }, $model->activities);
+        $allActivities = ArrayHelper::map(Activity::find()->asArray()->all(), 'id', 'name');
+    ?>
+    
+    <?= Html::activeCheckboxList($model, 'activity_ids', $allActivities) ?>
+    
     <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>

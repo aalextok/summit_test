@@ -29,6 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
+            [
+                'attribute' => 'activities',
+                'value' => $model->getActivitiesNames(),
+            ],
             'code',
             'name',
             'description:ntext',

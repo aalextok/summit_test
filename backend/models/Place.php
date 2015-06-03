@@ -16,9 +16,13 @@ use Yii;
  * @property integer $points
  * @property double $latitude
  * @property double $longtitude
+ * @property array $activities
  */
 class Place extends \yii\db\ActiveRecord
 {
+    public $activity_ids;
+
+
     /**
      * @inheritdoc
      */
@@ -36,8 +40,16 @@ class Place extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['meters_above_sea_level', 'distance', 'points'], 'integer'],
             [['latitude', 'longtitude'], 'number'],
-            [['code', 'name'], 'string', 'max' => 255]
+            [['code', 'name'], 'string', 'max' => 255],
+            [['activities', 'activity_ids'], 'safe']
         ];
+    }
+    
+    public function fields() {
+        $fields = parent::fields();
+        $fields[] = 'activities';
+        
+        return $fields;
     }
 
     /**
@@ -55,6 +67,47 @@ class Place extends \yii\db\ActiveRecord
             'points' => 'Points',
             'latitude' => 'Latitude',
             'longtitude' => 'Longtitude',
+            'activities' => 'Activities',
         ];
+    }
+    
+    public function getActivities() {
+        return $this->hasMany(Activity::className(), ['id' => 'activity_id'])
+                ->viaTable('places_activities', ['place_id' => 'id']);
+    }
+    
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        
+        if(isset(Yii::$app->request->post('Place')['activity_ids'])){
+            $activityIds = array_values(Yii::$app->request->post('Place')['activity_ids']);
+            
+            $oldActivities = $this->activities;
+            $newActivities = Activity::find()->where(['id' => $activityIds])->all();
+            
+            $activitiesToLink = array_udiff($newActivities, $oldActivities, function($aOld, $aNew){
+                return $aOld->id - $aNew->id;
+            });
+            
+            foreach ($activitiesToLink as $activity){
+                $this->link('activities', $activity);
+            }
+            
+            $activitiesToUnlink = array_udiff($oldActivities, $newActivities, function($aOld, $aNew){
+                return $aOld->id - $aNew->id;
+            });
+            
+            foreach ($activitiesToUnlink as $activity){
+                $this->unlink('activities', $activity);
+            }
+        }
+    }
+    
+    public function getActivitiesNames(){
+        $names = '';
+        foreach($this->activities as $activity){
+            $names .= $activity->name.', ';
+        }
+        return rtrim($names, ', ');
     }
 }

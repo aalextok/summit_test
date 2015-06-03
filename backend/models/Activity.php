@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property string $verb
  * @property string $description
  */
 class Activity extends \yii\db\ActiveRecord
@@ -29,7 +30,7 @@ class Activity extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['description'], 'string'],
-            [['name'], 'string', 'max' => 255]
+            [['name', 'verb'], 'string', 'max' => 255]
         ];
     }
 
@@ -41,6 +42,7 @@ class Activity extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'verb' => 'Verb',
             'description' => 'Description',
         ];
     }

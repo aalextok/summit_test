@@ -1,121 +1,105 @@
 <?php
-
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Place;
-use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\filters\auth\HttpBearerAuth;
 
-/**
- * PlaceController implements the CRUD actions for Place model.
- */
+use yii\data\ActiveDataProvider;
+use \yii\db\ActiveQuery;
+
 class PlaceController extends ActiveController
 {
+    public $modelClass = 'backend\models\Place';
+    public $enableCsrfValidation = false;
+    
+    public function actions(){
+        $actions = parent::actions();
+        
+        unset($actions['create']);
+        unset($actions['update']);
+        unset($actions['delete']);
+        
+        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+
+        return $actions;
+    }
+    
     public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::className(),
         ];
+
+        return $behaviors;
     }
-
-    /**
-     * Lists all Place models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Place::find(),
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+    
+    public function beforeAction($action) {
+        Yii::$app->user->enableSession = false;
+        return parent::beforeAction($action);
     }
-
-    /**
-     * Displays a single Place model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Place model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Place();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+    
+    public function prepareDataProvider(){
+        $model = new $this->modelClass;
+//        
+//        $query = new ActiveQuery($model);
+//        $query->joinWith('activities')->where([]);
+//        
+//        $activity = ucfirst(strtolower(trim(Yii::$app->request->getQueryParam('activity'))));
+//        
+//        // TODO search by activity ids list?
+//        
+//        if(!empty($activity)){
+//            $query->andWhere(['activity.name' => $activity]);
+//        }
+        
+        $sql = "SELECT DISTINCT "
+                . "place.id,"
+                . "place.code,"
+                . "place.name,"
+                . "place.description,"
+                . "place.meters_above_sea_level,"
+                . "place.distance,"
+                . "place.points,"
+                . "place.latitude,"
+                . "place.longtitude"
+                . " FROM place";
+        
+        
+        $activity = ucfirst(strtolower(trim(Yii::$app->request->getQueryParam('activity'))));
+        if(!empty($activity)){
+            $sql .= " INNER JOIN places_activities AS pa "
+                    . "ON (place.id = pa.place_id) "
+                    . "INNER JOIN activity "
+                    . "ON (pa.activity_id = activity.id "
+                    . "AND activity.name LIKE '$activity') ";
         }
-    }
-
-    /**
-     * Updates an existing Place model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        
+        $location = trim(Yii::$app->request->getQueryParam('location'));
+        
+        if(!empty($location)){
+            $sql .= " WHERE LOWER(place.name) LIKE LOWER('%$location%') ";
         }
-    }
-
-    /**
-     * Deletes an existing Place model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Place model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Place the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Place::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+        
+        // search nearest places /////////////
+        $latitude = (float)Yii::$app->request->getQueryParam('latitude');
+        $longtitude = (float)Yii::$app->request->getQueryParam('longtitude');
+        $radius = (float)Yii::$app->request->getQueryParam('radius');
+        
+        if(!empty($latitude) && !empty($longtitude) && !empty($radius)){
+            $sql .= " HAVING ( 6371 * acos( cos( radians($latitude) ) * cos( radians( latitude ) ) * cos( radians( longtitude ) - radians($longtitude) ) + sin( radians($latitude) ) * sin( radians( latitude ) ) ) ) < $radius";
         }
+        ////////////////////
+        
+        $query = $model::findBySql($sql);
+        
+        $provider = new ActiveDataProvider([
+            //'query' => $model->find()->joinWith('activities')->where([])->andWhere(['place.name' => 'rrrr'])->andWhere(['']),
+            'query' => $query,
+        ]);
+        
+        return $provider;
     }
+    
 }
