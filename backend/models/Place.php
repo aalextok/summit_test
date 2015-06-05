@@ -41,7 +41,7 @@ class Place extends \yii\db\ActiveRecord
             [['meters_above_sea_level', 'distance', 'points'], 'integer'],
             [['latitude', 'longtitude'], 'number'],
             [['code', 'name'], 'string', 'max' => 255],
-            [['activities', 'activity_ids'], 'safe']
+            [['activity_ids'], 'safe']
         ];
     }
     
@@ -79,7 +79,7 @@ class Place extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes) {
         parent::afterSave($insert, $changedAttributes);
         
-        if(isset(Yii::$app->request->post('Place')['activity_ids'])){
+        if(!empty(Yii::$app->request->post('Place')['activity_ids'])){
             $activityIds = array_values(Yii::$app->request->post('Place')['activity_ids']);
             
             $oldActivities = $this->activities;

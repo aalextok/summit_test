@@ -3,12 +3,19 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+use yii\grid\GridView;
+use yii\data\ActiveDataProvider;
+use backend\models\Place;
+
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\Competition */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Competitions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$model->activity;
 ?>
 <div class="competition-view">
 
@@ -33,8 +40,42 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'description:ntext',
             'achievements_by_places',
-            'activity_id',
+            //'activity_id',
+            [
+                'label' => 'Activity',
+                'value' => isset($model->activity) ? $model->activity->name : '',
+            ]
         ],
     ]) ?>
+    
+    <?php
+    
+    $placesIds = array_map(function($o){
+        return $o->id;
+    }, $model->places);
+    
+    $placesDataProvider = new ActiveDataProvider([
+        'query' => Place::find()->where(['id' => $placesIds]),
+    ]);
+    ?>
+    <label class="control-label">Places:</label>
+    <?= GridView::widget([
+        'dataProvider' => $placesDataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'code',
+            'name',
+            'description:ntext',
+            'meters_above_sea_level',
+            'distance',
+            'points',
+            // 'latitude',
+            // 'longtitude',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 </div>

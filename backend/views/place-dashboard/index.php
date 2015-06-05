@@ -27,8 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'description:ntext',
             'meters_above_sea_level',
-            // 'distance',
-            // 'points',
+            'distance',
+            'points',
             // 'latitude',
             // 'longtitude',
 
