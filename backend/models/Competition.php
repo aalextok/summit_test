@@ -13,6 +13,8 @@ use Yii;
  * @property string $description
  * @property integer $achievements_by_places
  * @property integer $activity_id
+ * @property integer $open_time
+ * @property integer $close_time
  */
 class Competition extends \yii\db\ActiveRecord
 {
@@ -31,8 +33,9 @@ class Competition extends \yii\db\ActiveRecord
     {
         return [
             [['code', 'name', 'description'], 'required'],
+            [['code'], 'unique'],
             [['description'], 'string'],
-            [['achievements_by_places', 'activity_id'], 'integer'],
+            [['achievements_by_places', 'activity_id', 'open_time', 'close_time'], 'integer'],
             [['code', 'name'], 'string', 'max' => 255]
         ];
     }

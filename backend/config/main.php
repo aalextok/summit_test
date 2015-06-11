@@ -11,7 +11,13 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'datecontrol' => [
+            'class' => 'kartik\datecontrol\Module',
+            'saveTimezone' => 'UTC',
+            //'displayTimezone' => 'Asia/Kolkata',
+        ],
+    ],
     'components' => [
         'user' => [
             'identityClass' => 'common\models\User',

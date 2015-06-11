@@ -134,6 +134,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
+        if(empty($username)){
+            return null;
+        }
+        
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
@@ -239,5 +243,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+    
+    public static function errorsToString($errors){
+        $errorsStr = '';
+        foreach($errors as $fieldName => $fieldErrors){
+            foreach ($fieldErrors as $errorMessage){
+                $errorsStr .= $errorMessage.' ';
+            }
+        }
+        
+        return trim($errorsStr);
     }
 }

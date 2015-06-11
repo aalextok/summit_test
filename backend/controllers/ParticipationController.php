@@ -1,121 +1,90 @@
 <?php
-
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Participation;
-use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\filters\auth\HttpBearerAuth;
+use yii\helpers\Url;
 
-/**
- * ParticipationController implements the CRUD actions for Participation model.
- */
+use yii\web;
+
+use backend\models\Participation;
+use backend\models\Competition;
+
 class ParticipationController extends ActiveController
 {
+    public $modelClass = 'backend\models\Participation';
+    public $enableCsrfValidation = false;
+    
+    public function actions(){
+        $actions = parent::actions();
+        
+        unset($actions['create']);
+
+        return $actions;
+    }
+    
     public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::className(),
         ];
+
+        return $behaviors;
     }
-
-    /**
-     * Lists all Participation models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Participation::find(),
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+    
+    public function beforeAction($action) {
+        Yii::$app->user->enableSession = false;
+        return parent::beforeAction($action);
     }
-
-    /**
-     * Displays a single Participation model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Participation model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
+    
+    public function actionCreate(){
+        
         $model = new Participation();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $user = Yii::$app->user->identity;
+        
+        $model->user_id = $user->id;
+        
+        $competitionCode = Yii::$app->getRequest()->getBodyParam('competition_code');
+        $competition = Competition::find()->where(['code' => $competitionCode])->one();
+        if(empty($competition)){
+            throw new web\HttpException(404, "Entity with code '$competitionCode' not found.");
         }
-    }
-
-    /**
-     * Updates an existing Participation model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        
+        if(isset($competition->close_time) && $competition->close_time < time()){
+            throw new web\HttpException(400, "Competition is closed at ".date('Y-m-d', $competition->close_time).".");
         }
-    }
-
-    /**
-     * Deletes an existing Participation model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Participation model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Participation the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Participation::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+        
+        $model->start_time = time();
+        
+        $model->competition_id = $competition->id;
+        
+        $duplicates = Participation::find()->where([
+            'user_id' => $model->user_id,
+        ])->andWhere([
+            'competition_id' => $model->competition_id,
+        ])->all();
+        
+        if(count($duplicates) > 0){
+            throw new web\HttpException(400, "User already participates in this competition."); 
         }
+
+        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        if ($model->save()) {
+            $response = Yii::$app->getResponse();
+            $response->setStatusCode(201);
+            $id = implode(',', array_values($model->getPrimaryKey(true)));
+            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
+        } elseif (!$model->hasErrors()) {
+            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
+        }
+        
+        if($model->hasErrors()){
+            throw web\HttpException(400, User::errorsToString($model->getErrors())); 
+        }
+        
+        return $model;
     }
+    
 }

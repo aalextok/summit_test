@@ -94,7 +94,7 @@ class AuthController extends ActiveController
 
             $user = User::findIdentityByEmail($email, false);
             if($user){
-                throw new web\HttpException(422, "User with email {$user->email} already exists.");
+                throw new web\HttpException(400, "User with email {$user->email} already exists.");
             }
 
             $user = new User();
@@ -105,7 +105,7 @@ class AuthController extends ActiveController
             
             $password = Yii::$app->request->post('password');
             if (empty($password)){
-                throw new web\HttpException(422, "Password must be a string and cannot be empty.");
+                throw new web\HttpException(400, "Password must be a string and cannot be empty.");
             }
             $user->password = $password;
             
@@ -131,7 +131,7 @@ class AuthController extends ActiveController
             ];
         }
         else{
-            throw new web\HttpException(422, implode(' ', array_keys(array_column($user->getErrors(), null, 0))));
+            throw new web\HttpException(400, User::errorsToString($user->getErrors()));
         }
         
         throw new web\HttpException(500, "Unknown error");
@@ -201,7 +201,7 @@ class AuthController extends ActiveController
                 ];
         }
         else{
-            throw new web\HttpException(422, implode(' ', array_keys(array_column($user->getErrors(), null, 0))));
+            throw new web\HttpException(400, User::errorsToString($user->getErrors()));
         }
         
         throw new web\HttpException(500, "Unknown error");      
