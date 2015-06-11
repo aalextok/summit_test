@@ -1,51 +1,128 @@
 <?php
 /* @var $this yii\web\View */
-$this->title = 'My Yii Application';
+$this->title = 'Welcome';
 ?>
-<div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
+<div class="row">
+	<div class="nav-top">
+		<div class="nav-activities pull-left">
+			<div class="dropdown">
+				<a class="btn-menu menu-link dropdown-toggle" type="button" id="activitiesMenu" data-toggle="dropdown" aria-expanded="true">
+				<span class="pull-left">All activities</span>
+				<img src="img/dropdown.png" height="22px" class="pull-right">
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="activitiesMenu">
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">All activities</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Hiking</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Kayaking</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Running</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sailing</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="nav-activities pull-left">
+			<div class="dropdown">
+				<a class="btn-menu menu-link dropdown-toggle" type="button" id="locationMenu" data-toggle="dropdown" aria-expanded="true">
+				<span class="pull-left">Location</span>
+				<img src="img/dropdown.png" height="22px" class="pull-right">
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="locationMenu">
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Place 1</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Place 2</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Place 3</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Place 4</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Place 5</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="nav-map pull-right">
+			<a href="#">
+			<img src="img/map-icon.png" height="22px">
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-6 m-b-40">
+		<div class="event clearfix m-0 b-r-top">
+			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-description pull-left">
+				<div class="event-title">Hike to Toonoja swamp islands</div>
+				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
+			</div>
+		</div>
+		<div class="green-bottom clearfix">
+			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-more pull-right">
+				<a href="#">
+				<img src="img/arrow-right.png" height="22px">
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 m-b-40">
+		<div class="event clearfix m-0 b-r-top">
+			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-description pull-left">
+				<div class="event-title">Hike to Toonoja swamp islands</div>
+				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
+			</div>
+		</div>
+		<div class="green-bottom clearfix">
+			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-more pull-right">
+				<a href="#">
+				<img src="img/arrow-right.png" height="22px">
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 m-b-40">
+		<div class="event clearfix m-0 b-r-top">
+			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-description pull-left">
+				<div class="event-title">Hike to Toonoja swamp islands</div>
+				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
+			</div>
+		</div>
+		<div class="green-bottom clearfix">
+			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-more pull-right">
+				<a href="#">
+				<img src="img/arrow-right.png" height="22px">
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 m-b-40">
+		<div class="event clearfix m-0 b-r-top">
+			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-description pull-left">
+				<div class="event-title">Hike to Toonoja swamp islands</div>
+				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
+			</div>
+		</div>
+		<div class="green-bottom clearfix">
+			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-more pull-right">
+				<a href="#">
+				<img src="img/arrow-right.png" height="22px">
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 m-b-40">
+		<div class="event clearfix m-0 b-r-top">
+			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-description pull-left">
+				<div class="event-title">Hike to Toonoja swamp islands</div>
+				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
+			</div>
+		</div>
+		<div class="green-bottom clearfix">
+			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-more pull-right">
+				<a href="#">
+				<img src="img/arrow-right.png" height="22px">
+				</a>
+			</div>
+		</div>
+	</div>
 </div>
