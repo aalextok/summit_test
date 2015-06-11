@@ -1,10 +1,12 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
+
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -23,10 +25,26 @@ AppAsset::register($this);
 </head>
 <body>
     <?php $this->beginBody() ?>
-    <div class="wrap">
+    
+    <div class="wrapper">
+      <div class="column left-col" id="sidebar">
+		<a class="logo" href="#">
+		<img src="img/logo-min.png">
+		</a>
+		<div class="ins-code hi-icon-effect-5 hi-icon-effect-5a"><a href="#" class="hi-icon icon-plus icon-green-o plus-o m-l-n-100"><span>Insert code</span></a></div>
+		<ul class="nav">
+			<li><a href="#" class="active">Main feed</a></li>
+			<li><a href="<?php echo Url::toRoute("friends/index"); ?>">Friends</a></li>
+			<li><a href="#">My profile</a></li>
+			<li><a href="#">Challenges</a></li>
+			<li class="small-links first-link"><a href="#">Settings</a></li>
+			<li class="small-links"><a href="#">About</a></li>
+		</ul>
+		
         <?php
+            /*
             NavBar::begin([
-                'brandLabel' => 'My Company',
+                'brandLabel' => 'Summit much',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
@@ -36,6 +54,7 @@ AppAsset::register($this);
                 ['label' => 'Home', 'url' => ['/site/index']],
                 ['label' => 'About', 'url' => ['/site/about']],
                 ['label' => 'Contact', 'url' => ['/site/contact']],
+                ['label' => 'Friends', 'url' => ['/site/friends']],
             ];
             if (Yii::$app->user->isGuest) {
                 $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
@@ -48,13 +67,22 @@ AppAsset::register($this);
                 ];
             }
             echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
+                'options' => ['class' => ''],
                 'items' => $menuItems,
             ]);
             NavBar::end();
+            */
         ?>
-
-        <div class="container">
+		
+		
+		<div id="sidebar-footer">
+			<div class="logged">Logged in, <span>John Smith</span></div>
+			<a href="#">Log out</a>
+		</div>
+	  </div>
+    
+    
+	<div class="column right-col challenges" id="main">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
