@@ -11,11 +11,10 @@ $this->title = 'Welcome';
 				<img src="img/dropdown.png" height="22px" class="pull-right">
 				</a>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="activitiesMenu">
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">All activities</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Hiking</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Kayaking</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Running</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sailing</a></li>
+				  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">All activities</a></li>
+					<?php foreach($allActivities as $k => $activity){ ?>
+					  <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><?php echo $activity->name; ?></a></li>
+					<?php } ?>
 				</ul>
 			</div>
 		</div>
@@ -49,7 +48,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra küüla, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">
@@ -66,7 +65,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k��la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">
@@ -83,7 +82,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k��la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">
@@ -100,7 +99,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k��la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">
@@ -117,7 +116,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k��la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">

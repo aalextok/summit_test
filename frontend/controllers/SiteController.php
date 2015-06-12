@@ -13,6 +13,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
+use backend\models\Activity;
+
 /**
  * Site controller
  */
@@ -67,7 +69,11 @@ class SiteController extends \frontend\controllers\BaseController
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $allActivities = Activity::find()->all();
+        
+        return $this->render('index', array(
+            "allActivities" => $allActivities
+        ));
     }
 
     public function actionLogin()
