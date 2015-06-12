@@ -1,12 +1,12 @@
 <?php
-
 namespace frontend\controllers;
 
-class PlaceController extends \yii\web\Controller
+class PlaceController extends \frontend\controllers\BaseController
 {
-    public function actionChekin()
+    public function actionCheckin()
     {
-        return $this->render('chekin');
+        $this->addLayoutClass("content", "congrats");
+        return $this->render('checkin');
     }
 
     public function actionIndex()

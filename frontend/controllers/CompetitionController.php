@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-class CompetitionController extends \yii\web\Controller
+class CompetitionController extends \frontend\controllers\BaseController
 {
     public function actionIndex()
     {

@@ -1,9 +1,6 @@
 <?php
 /* @var $this yii\web\View */
 ?>
-<h1>competition/index</h1>
-
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+<div class="vertical-middle">
+	<h1>No Challenges<br> at the moment</h1>
+</div>

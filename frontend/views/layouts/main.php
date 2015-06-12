@@ -12,6 +12,9 @@ use frontend\widgets\Alert;
 /* @var $content string */
 
 AppAsset::register($this);
+
+$contentClasses = $this->context->getClasses("content", "challenges");
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -31,16 +34,15 @@ AppAsset::register($this);
 		<a class="logo" href="#">
 		<img src="img/logo-min.png">
 		</a>
-		<div class="ins-code hi-icon-effect-5 hi-icon-effect-5a"><a href="#" class="hi-icon icon-plus icon-green-o plus-o m-l-n-100"><span>Insert code</span></a></div>
+		<div class="ins-code hi-icon-effect-5 hi-icon-effect-5a"><a href="<?php echo Url::toRoute("place/checkin"); ?>" class="hi-icon icon-plus icon-green-o plus-o m-l-n-100"><span>Insert code</span></a></div>
 		<ul class="nav">
-			<li><a href="#" class="active">Main feed</a></li>
+			<li><a href="<?php echo Url::toRoute("site/index"); ?>" class="active">Main feed</a></li>
 			<li><a href="<?php echo Url::toRoute("friends/index"); ?>">Friends</a></li>
-			<li><a href="#">My profile</a></li>
-			<li><a href="#">Challenges</a></li>
-			<li class="small-links first-link"><a href="#">Settings</a></li>
-			<li class="small-links"><a href="#">About</a></li>
+			<li><a href="<?php echo Url::toRoute("profile/index"); ?>">My profile</a></li>
+			<li><a href="<?php echo Url::toRoute("competition/index"); ?>">Challenges</a></li>
+			<li class="small-links first-link"><a href="<?php echo Url::toRoute("profile/settings"); ?>">Settings</a></li>
+			<li class="small-links"><a href="<?php echo Url::toRoute("site/about"); ?>">About</a></li>
 		</ul>
-		
         <?php
             /*
             NavBar::begin([
@@ -82,7 +84,7 @@ AppAsset::register($this);
 	  </div>
     
     
-	<div class="column right-col challenges" id="main">
+	<div class="column right-col <?php echo $contentClasses; ?>" id="main">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>

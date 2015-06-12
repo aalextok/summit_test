@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-class FriendsController extends \yii\web\Controller
+class FriendsController extends \frontend\controllers\BaseController
 {
     public function actionIndex()
     {
