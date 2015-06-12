@@ -19,6 +19,9 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "kartik-v/yii2-widget-select2": "*",
+        "yiisoft/yii2-jui": "~2.0.0",
+        "kartik-v/yii2-datecontrol": "dev-master",
+        "kartik-v/yii2-widget-datepicker": "@dev",
         "fxp/composer-asset-plugin": "~1.0"
     },
     "require-dev": {

@@ -41,6 +41,7 @@ class Place extends \yii\db\ActiveRecord
             [['meters_above_sea_level', 'distance', 'points'], 'integer'],
             [['latitude', 'longtitude'], 'number'],
             [['code', 'name'], 'string', 'max' => 255],
+            [['code'], 'unique'],
             [['activity_ids'], 'safe']
         ];
     }

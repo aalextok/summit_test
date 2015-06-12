@@ -4,7 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 use kartik\select2\Select2;
+use kartik\datecontrol\DateControl;
 use yii\helpers\ArrayHelper;
+//use yii\jui\DatePicker;
 
 use backend\models;
 
@@ -34,6 +36,28 @@ use backend\models;
     ?>
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+    
+    <?php 
+    echo "<label class='control-label'>{$model->getAttributeLabel('open_time')}</label>";
+    echo DateControl::widget([
+        'model' => $model,
+        'attribute' => 'open_time',
+        'type'=>DateControl::FORMAT_DATE,
+        'displayFormat' => 'php:D, Y-m-d',
+        'saveFormat' => 'php:U'
+    ]);
+    ?>
+    
+    <?php 
+    echo "<label class='control-label'>{$model->getAttributeLabel('close_time')}</label>";
+    echo DateControl::widget([
+        'model' => $model,
+        'attribute' => 'close_time',
+        'type'=>DateControl::FORMAT_DATE,
+        'displayFormat' => 'php:D, Y-m-d',
+        'saveFormat' => 'php:U'
+    ]);
+    ?>
     
     <?php 
     //

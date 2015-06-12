@@ -39,12 +39,21 @@ $model->activity;
             'code',
             'name',
             'description:ntext',
-            'achievements_by_places',
+            //'achievements_by_places',
             //'activity_id',
             [
                 'label' => 'Activity',
                 'value' => isset($model->activity) ? $model->activity->name : '',
-            ]
+            ],
+            [
+                'attribute' => 'open_time',
+                'value' => date('Y-m-d', $model->open_time),
+            ],
+            [
+                'attribute' => 'close_time',
+                'value' => date('Y-m-d', $model->close_time),
+            ],
+            
         ],
     ]) ?>
     
