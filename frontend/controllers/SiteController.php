@@ -12,9 +12,11 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\authclient\clients\Facebook;
 
 use yii\helpers\Url;
 use backend\models\Activity;
+use common\models\User;
 
 /**
  * Site controller
@@ -51,7 +53,7 @@ class SiteController extends \frontend\controllers\BaseController
             ],
         ];
     }
-
+    
     /**
      * @inheritdoc
      */
@@ -64,6 +66,12 @@ class SiteController extends \frontend\controllers\BaseController
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+            'auth' => [
+              'class' => 'yii\authclient\AuthAction',
+              'successCallback' => [
+                $this, 'successCallback'
+              ]
             ],
         ];
     }
@@ -93,7 +101,49 @@ class SiteController extends \frontend\controllers\BaseController
             "allActivities" => $allActivities
         ));
     }
-
+    
+    public function successCallback($client)
+    {
+      $attributes = $client->getUserAttributes();
+      
+      $check = User::findIdentityByEmail($attributes['email'], false);
+      
+      if($check){
+        //login
+        die('Login missing');
+      } else {
+        //create and login
+        
+        $oauthToken = $client->getAccessToken();
+        
+        //Yii::$app->components['authClientCollection']['clients']['facebook']['clientId']
+        $facebook = new Facebook();
+        
+        $facebook->setAccessToken( $oauthToken );
+        $userAttributes = $facebook->getUserAttributes();
+        //$tokenAttr = $facebook->api('debug_token', 'GET', ['input_token' => $token, 'access_token' => $token]);
+        $picture = $facebook->api('me/picture', 'GET', ['redirect' => 'false']);
+        
+        pre( $picture['data']['url'] );
+        die;
+      }
+      
+      /*
+(
+    [id] => 10207456699999429
+    [email] => janar@eagerfish.eu
+    [first_name] => Janar
+    [gender] => male
+    [last_name] => Jurisson
+    [link] => https://www.facebook.com/app_scoped_user_id/10207456699999429/
+    [locale] => en_US
+    [name] => Janar Jurisson
+    [timezone] => 3
+    [updated_time] => 2014-12-22T06:04:20+0000
+    [verified] => 1
+)*/
+    }
+    
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {

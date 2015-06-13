@@ -35,6 +35,16 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'authClientCollection' => [
+          'class' => 'yii\authclient\Collection',
+          'clients' => [
+            'facebook' => [
+              'class' => 'yii\authclient\clients\Facebook',
+              'clientId' => '1600686150186769',
+              'clientSecret' => '94f0db5dca9e94deafc205e60c5b0fe5',
+            ],
+          ],
+        ]
     ],
     'params' => $params,
 ];

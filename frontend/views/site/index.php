@@ -2,9 +2,16 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use frontend\widgets\SummitAuthChoice;
 ?>
 <div class="col-xs-6">
-  <a href="#" class="btn btn-block btn-facebook">Log in with facebook</a>
+  <?php /*<a href="#" class="btn btn-block btn-facebook">Log in with facebook</a>*/ ?>
+    
+  <?php 
+    echo SummitAuthChoice::widget([
+       'baseAuthUrl' => ['site/auth']
+  ]) ?>
+ 
   <div class="sign-up">
     Don't have an account? <a href="<?php echo Url::toRoute("site/signup"); ?>">SIGN UP HERE</a>
   </div>
