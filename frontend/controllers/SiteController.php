@@ -104,44 +104,58 @@ class SiteController extends \frontend\controllers\BaseController
     
     public function successCallback($client)
     {
-      $attributes = $client->getUserAttributes();
+      $userAttributes = $client->getUserAttributes();
       
-      $check = User::findIdentityByEmail($attributes['email'], false);
+      $check = User::findIdentityByEmail($userAttributes['email'], false);
       
       if($check){
-        //login
-        die('Login missing');
+        Yii::$app->user->login($check);
+      
+        return [
+          'user' => Yii::$app->user->identity
+        ];
       } else {
         //create and login
-        
         $oauthToken = $client->getAccessToken();
+        $token = $oauthToken->getToken();
         
         //Yii::$app->components['authClientCollection']['clients']['facebook']['clientId']
         $facebook = new Facebook();
         
         $facebook->setAccessToken( $oauthToken );
         $userAttributes = $facebook->getUserAttributes();
-        //$tokenAttr = $facebook->api('debug_token', 'GET', ['input_token' => $token, 'access_token' => $token]);
+        
+        $tokenAttr = $facebook->api('debug_token', 'GET', ['input_token' => $token, 'access_token' => $token]);
         $picture = $facebook->api('me/picture', 'GET', ['redirect' => 'false']);
         
-        pre( $picture['data']['url'] );
-        die;
+        $user = new User();
+        //
+        $user->username = $userAttributes['name'];
+        $user->auth_key = $token;
+        $user->auth_key_expires = $tokenAttr['data']['expires_at'];
+        $user->email = $userAttributes['email'];
+        //$user->birthday = date("Y-m-d", strtotime($userAttributes['birthday']));
+        $user->firstname = $userAttributes['first_name'];
+        $user->lastname = $userAttributes['last_name'];
+        $user->gender = in_array($userAttributes['gender'], ['male', 'female']) ? strtoupper($userAttributes['gender']) : 'OTHER';
+        $user->facebook_id = $userAttributes['id'];
+        $user->image = $picture['data']['url'];
+        $user->image_hash = hash_file('md5', $user->image);
+        $user->status = User::STATUS_ACTIVE;
+        
       }
       
-      /*
-(
-    [id] => 10207456699999429
-    [email] => janar@eagerfish.eu
-    [first_name] => Janar
-    [gender] => male
-    [last_name] => Jurisson
-    [link] => https://www.facebook.com/app_scoped_user_id/10207456699999429/
-    [locale] => en_US
-    [name] => Janar Jurisson
-    [timezone] => 3
-    [updated_time] => 2014-12-22T06:04:20+0000
-    [verified] => 1
-)*/
+      
+      if($user && $user->validate()){
+        $user->save();
+        Yii::$app->user->login($user);
+        return [
+          'user' => Yii::$app->user->identity
+        ];
+      }
+      else{
+        throw new web\HttpException(400, User::errorsToString($user->getErrors()));
+      }
     }
     
     public function actionLogin()
