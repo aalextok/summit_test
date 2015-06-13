@@ -13,6 +13,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
+use yii\helpers\Url;
 use backend\models\Activity;
 
 /**
@@ -45,7 +46,7 @@ class SiteController extends \frontend\controllers\BaseController
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['post', 'get'],
                 ],
             ],
         ];
@@ -69,9 +70,26 @@ class SiteController extends \frontend\controllers\BaseController
 
     public function actionIndex()
     {
+        
+        if (!Yii::$app->user->isGuest) {
+          return $this->redirect( Url::toRoute("site/dashboard") , 301);
+        }
+        
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        } else {
+            return $this->render('index', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
+    public function actionDashboard()
+    {
         $allActivities = Activity::find()->all();
         
-        return $this->render('index', array(
+        return $this->render('dashboard', array(
             "allActivities" => $allActivities
         ));
     }

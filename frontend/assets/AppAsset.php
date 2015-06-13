@@ -7,6 +7,7 @@
 
 namespace frontend\assets;
 
+use yii;
 use yii\web\AssetBundle;
 
 /**
@@ -21,16 +22,28 @@ class AppAsset extends AssetBundle
         'css/bootstrap-theme.min.css',
         'css/component.css',
         'css/cover.css',
-        'css/sidebar.css'
+        'css/site.css'
     ];
     public $js = [
         'js/modernizr.custom.js',
         'js/bootstrap.min.js',
         'js/jquery.searchinput.js',
         'js/component.js',
+        'js/summit-to-sea.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+    
+    public function __construct(){
+      
+      if (
+          Yii::$app->controller->module->requestedRoute != 'site/index' && 
+          Yii::$app->controller->module->requestedRoute != ''
+      ) {
+        $this->css[] = 'css/sidebar.css';
+      }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    }
 }

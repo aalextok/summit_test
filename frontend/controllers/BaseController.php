@@ -1,12 +1,31 @@
 <?php
 namespace frontend\controllers;
 
+use yii;
+
 class BaseController extends \yii\web\Controller
 {
   public $layoutClasses = array(
       "body" => array(),
       "content" => array(),
   );
+  
+  public $layout = "main";
+  
+  public function __construct($d, $d2){
+    parent::__construct($d, $d2);
+  }
+  
+  public function beforeAction($action) {
+    
+    if (
+        Yii::$app->controller->module->requestedRoute == 'site/index' || 
+        Yii::$app->controller->module->requestedRoute == ''
+    ) {
+        $this->layout = "landing";
+    }
+    return parent::beforeAction($action);
+  }
   
   /**
    * Allow adding addional style classes
@@ -40,6 +59,29 @@ class BaseController extends \yii\web\Controller
     }
     
     return $classes;
+  }
+  
+  /**
+   * Create display name for user based on his data
+   * 
+   * @return string
+   */
+  public function getUserDisplayName( )
+  {
+    if (Yii::$app->user->isGuest) {
+      return "Not logged";
+    }
+    
+    $name = Yii::$app->user->identity->username;
+    
+    $firstname = Yii::$app->user->identity->firstname;
+    $lastname = Yii::$app->user->identity->lastname;
+    
+    if($firstname && $lastname){
+      $name = $firstname . " " . $lastname;
+    }
+    
+    return $name;
   }
   
 }

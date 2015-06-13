@@ -168,7 +168,8 @@ class AuthController extends ActiveController
             $email = Yii::$app->request->post('email');
             $password = Yii::$app->request->post('password');
             $user = User::findIdentityByEmail($email);
-            
+            pre($password);
+            die;
             if(empty($user)){
                 throw new web\HttpException(404, 'User not found');
             }
