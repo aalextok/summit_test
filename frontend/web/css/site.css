@@ -12,3 +12,11 @@
 .challenge-item {
 	margin-bottom: 30px;
 }
+
+#sidebar .active a {
+	font-size: 17px;
+	color: #294e5c;
+	text-align: center;
+	text-decoration: underline;
+	font-weight: 700;
+}

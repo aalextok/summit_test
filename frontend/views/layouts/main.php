@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\widgets\Menu;
 use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -30,7 +31,7 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <script>
-      var stoApiBaseUri = "<?php echo Url::base() . "/../../backend/web"; /* TODO: make this better, trough urfdl manager/config? */ ?>";
+      var stoApiBaseUri = "<?php echo Url::base() . "/../../backend/web"; /* TODO: make this better, trough url manager/config? */ ?>";
       var stoAuthToken = "<?php echo $authToken; /* TODO: store in cookie for javascript? */ ?>";
     </script>  
 </head>
@@ -43,14 +44,24 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
 		  <?php echo Html::img('@web/img/logo-min.png') ?>
 		</a>
 		<div class="ins-code hi-icon-effect-5 hi-icon-effect-5a"><a href="<?php echo Url::toRoute("place/checkin"); ?>" class="hi-icon icon-plus icon-green-o plus-o m-l-n-100"><span>Insert code</span></a></div>
-		<ul class="nav">
-			<li><a href="<?php echo Url::toRoute("site/index"); ?>" class="active">Main feed</a></li>
-			<li><a href="<?php echo Url::toRoute("friend/index"); ?>">Friends</a></li>
-			<li><a href="<?php echo Url::toRoute(["profile/index", "id" => $userId]); ?>">My profile</a></li>
-			<li><a href="<?php echo Url::toRoute("competition/index"); ?>">Challenges</a></li>
-			<li class="small-links first-link"><a href="<?php echo Url::toRoute("profile/settings"); ?>">Settings</a></li>
-			<li class="small-links"><a href="<?php echo Url::toRoute("site/about"); ?>">About</a></li>
-		</ul>
+		
+		<?php
+		  //TODO: get all active states to work in menu
+          echo Menu::widget([
+              'items' => [
+                ['label' => 'Main feed', 'url' => ['site/index']],
+          		['label' => 'Friends', 'url' => ['friend/index']],
+          		['label' => 'My profile', 'url' => Url::to(['profile/index', 'id' => $userId]) ],
+          		['label' => 'Challenges', 'url' => ['competition/index']],
+          		['label' => 'Settings', 'url' => ['profile/settings'], 'template' => '<li><li class="small-links first-link"><a href="{url}">{label}</a></li>' ],
+          		['label' => 'About', 'url' => Url::to(['site/about']), 'template' => '<li><li class="small-links"><a href="{url}">{label}</a></li>' ],
+              ],
+              'options' => [
+                'class' => 'nav',
+              ],
+          	'activeCssClass'=>'active',
+          ]);
+        ?>
 		
 		<div id="sidebar-footer">
 		    <?php  if (Yii::$app->user->isGuest) { ?>

@@ -199,7 +199,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function getUserDisplayName( $user )
     {
-
       if(!is_object($user)){
         $user = self::findIdentity( $user );
         if(!$user){
@@ -233,6 +232,35 @@ class User extends ActiveRecord implements IdentityInterface
         ->count();
       
       return $cnt;
+    }
+    
+    /**
+     * Get user's rank title/name
+     * TODO: this menthod is just a mock- no real rank yet, yet to be implemented
+     *
+     * @param object|integer
+     * @return string
+     */
+    public static function getUserRankDisplay( $user )
+    {
+      
+      if(!is_object($user)){
+        $user = self::findIdentity( $user );
+        if(!$user){
+          return "";
+        }
+      }
+      
+      //fakse something right now
+      if($user->rank == 1){
+        return "Beginner";
+      }
+      
+      if($user->rank == 2){
+        return "King of the hill";
+      }
+      
+      return "Rookie";
     }
     
     /**

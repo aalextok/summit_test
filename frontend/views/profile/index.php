@@ -17,7 +17,7 @@ use common\models\User;
 	<div class="col-xs-6">
 		<div class="one-field clearfix m-b-20">
 			<div class="king-label pull-left">Rank</div>
-			<div class="king-profile pull-left"><img src="img/crown.jpg"> King of the hill</div>
+			<div class="king-profile pull-left"><img src="img/crown.jpg"> <?php echo User::getUserRankDisplay($user); ?></div>
 		</div>
 		<div class="event clearfix m-b-20">
 			<div class="event-img pull-left">
