@@ -10,8 +10,6 @@ class ProfileController extends \frontend\controllers\BaseController
       
         $userId = Yii::$app->request->get('id');
         
-        pre( $userId );
-        
         return $this->render('index');
     }
 }

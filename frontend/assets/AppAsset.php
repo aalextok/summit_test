@@ -21,7 +21,6 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/bootstrap-theme.min.css',
         'css/component.css',
-        'css/cover.css',
         'css/site.css'
     ];
     public $js = [
@@ -43,6 +42,8 @@ class AppAsset extends AssetBundle
           Yii::$app->controller->module->requestedRoute != ''
       ) {
         $this->css[] = 'css/sidebar.css';
+      } else {
+        $this->css[] = 'css/cover.css';
       }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
     }
