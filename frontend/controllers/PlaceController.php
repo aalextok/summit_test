@@ -3,10 +3,10 @@ namespace frontend\controllers;
 
 class PlaceController extends \frontend\controllers\BaseController
 {
-    public function actionCheckin()
+    public function actionVisit()
     {
         $this->addLayoutClass("content", "congrats");
-        return $this->render('checkin');
+        return $this->render('visit');
     }
 
     public function actionIndex()

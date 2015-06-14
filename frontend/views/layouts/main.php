@@ -45,7 +45,7 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
 		</a>
 		
         <?php  if (!Yii::$app->user->isGuest) { ?>
-  		  <div class="ins-code hi-icon-effect-5 hi-icon-effect-5a"><a href="<?php echo Url::toRoute("place/checkin"); ?>" class="hi-icon icon-plus icon-green-o plus-o m-l-n-100"><span>Insert code</span></a></div>
+  		  <div class="ins-code hi-icon-effect-5 hi-icon-effect-5a"><a href="<?php echo Url::toRoute("place/visit"); ?>" class="hi-icon icon-plus icon-green-o plus-o m-l-n-100"><span>Insert code</span></a></div>
 		<?php } ?>
 		 
 		<?php
