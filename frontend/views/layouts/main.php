@@ -6,6 +6,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
+use common\models\User;
 
 
 /* @var $this \yii\web\View */
@@ -15,8 +16,8 @@ AppAsset::register($this);
 
 $contentClasses = $this->context->getClasses("content", "challenges");
 $userDisplayName = $this->context->getUserDisplayName();
-
-
+$userId = User::getCurrentUserId();
+$userId = ($userId === null) ? 0 : $userId;
 
 ?>
 <?php $this->beginPage() ?>
@@ -41,7 +42,7 @@ $userDisplayName = $this->context->getUserDisplayName();
 		<ul class="nav">
 			<li><a href="<?php echo Url::toRoute("site/index"); ?>" class="active">Main feed</a></li>
 			<li><a href="<?php echo Url::toRoute("friend/index"); ?>">Friends</a></li>
-			<li><a href="<?php echo Url::toRoute("profile/index"); ?>">My profile</a></li>
+			<li><a href="<?php echo Url::toRoute(["profile/index", "id" => $userId]); ?>">My profile</a></li>
 			<li><a href="<?php echo Url::toRoute("competition/index"); ?>">Challenges</a></li>
 			<li class="small-links first-link"><a href="<?php echo Url::toRoute("profile/settings"); ?>">Settings</a></li>
 			<li class="small-links"><a href="<?php echo Url::toRoute("site/about"); ?>">About</a></li>

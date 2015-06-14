@@ -175,7 +175,21 @@ class User extends ActiveRecord implements IdentityInterface
         $timestamp = (int) end($parts);
         return $timestamp + $expire >= time();
     }
-
+    
+    /**
+     * Return currently logged in user ID
+     *
+     * @return integer|null
+     */
+    public static function getCurrentUserId()
+    {
+      if (Yii::$app->user->isGuest) {
+        return null;
+      }
+      
+      return Yii::$app->user->identity->id;
+    }
+    
     /**
      * @inheritdoc
      */
