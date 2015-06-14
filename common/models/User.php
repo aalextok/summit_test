@@ -189,7 +189,35 @@ class User extends ActiveRecord implements IdentityInterface
       
       return Yii::$app->user->identity->id;
     }
-    
+  
+    /**
+     * Create user's display name based on his data
+     * 
+     * @param object|integer
+     * @return string
+     */
+    public function getUserDisplayName( $user )
+    {
+
+      if(!is_object($user)){
+        $user = self::findIdentity( $user );
+        if(!$user){
+          return "anonymous";
+        }
+      }
+      
+      $name = $user->username;
+      
+      $firstname = $user->firstname;
+      $lastname = $user->lastname;
+      
+      if($firstname && $lastname){
+        $name = $firstname . " " . $lastname;
+      }
+      
+      return $name;
+    }
+      
     /**
      * @inheritdoc
      */

@@ -15,7 +15,7 @@ use common\models\User;
 AppAsset::register($this);
 
 $contentClasses = $this->context->getClasses("content", "challenges");
-$userDisplayName = $this->context->getUserDisplayName();
+$userDisplayName = $this->context->getCurrentUserDisplayName();
 $userId = User::getCurrentUserId();
 $userId = ($userId === null) ? 0 : $userId;
 $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthKey();

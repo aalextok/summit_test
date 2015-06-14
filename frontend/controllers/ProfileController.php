@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use common\models\User;
 
 class ProfileController extends \frontend\controllers\BaseController
 {
@@ -9,7 +10,11 @@ class ProfileController extends \frontend\controllers\BaseController
     {
       
         $userId = Yii::$app->request->get('id');
+        $user = User::findIdentity( $userId );
         
-        return $this->render('index');
+        return $this->render('index',[
+            "id" => $userId,
+            "user" => $user
+         ]);
     }
 }

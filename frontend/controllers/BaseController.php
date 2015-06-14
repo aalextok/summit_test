@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use yii;
+use common\models\User;
 
 class BaseController extends \yii\web\Controller
 {
@@ -62,26 +63,17 @@ class BaseController extends \yii\web\Controller
   }
   
   /**
-   * Create display name for user based on his data
+   * Create current user's display name for user based on his data
    * 
    * @return string
    */
-  public function getUserDisplayName( )
+  public function getCurrentUserDisplayName( )
   {
     if (Yii::$app->user->isGuest) {
       return "Not logged";
     }
     
-    $name = Yii::$app->user->identity->username;
-    
-    $firstname = Yii::$app->user->identity->firstname;
-    $lastname = Yii::$app->user->identity->lastname;
-    
-    if($firstname && $lastname){
-      $name = $firstname . " " . $lastname;
-    }
-    
-    return $name;
+    return User::getUserDisplayName( Yii::$app->user->identity );
   }
   
 }

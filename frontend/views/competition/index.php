@@ -14,7 +14,6 @@
   			<div class="texts">
   				<h1>{{challenge.name}}</h1>
   				{{challenge.description}}
-  				
   			</div>
   		</a>
   	</div>
