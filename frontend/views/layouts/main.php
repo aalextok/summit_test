@@ -43,18 +43,26 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
 		<a class="logo" href="<?php echo Url::toRoute("site/index"); ?>">
 		  <?php echo Html::img('@web/img/logo-min.png') ?>
 		</a>
-		<div class="ins-code hi-icon-effect-5 hi-icon-effect-5a"><a href="<?php echo Url::toRoute("place/checkin"); ?>" class="hi-icon icon-plus icon-green-o plus-o m-l-n-100"><span>Insert code</span></a></div>
 		
+        <?php  if (!Yii::$app->user->isGuest) { ?>
+  		  <div class="ins-code hi-icon-effect-5 hi-icon-effect-5a"><a href="<?php echo Url::toRoute("place/checkin"); ?>" class="hi-icon icon-plus icon-green-o plus-o m-l-n-100"><span>Insert code</span></a></div>
+		<?php } ?>
+		 
 		<?php
 		  //TODO: get all active states to work in menu
           echo Menu::widget([
               'items' => [
-                ['label' => 'Main feed', 'url' => ['site/index']],
-          		['label' => 'Friends', 'url' => ['friend/index']],
-          		['label' => 'My profile', 'url' => Url::to(['profile/index', 'id' => $userId]) ],
+                ['label' => 'Main feed', 'url' => ['site/index'], 'visible'=>!Yii::$app->user->isGuest],
+          		['label' => 'Friends', 'url' => ['friend/index'], 'visible'=>!Yii::$app->user->isGuest],
+          		['label' => 'My profile', 'url' => Url::to(['profile/index', 'id' => $userId]), 'visible'=>!Yii::$app->user->isGuest],
           		['label' => 'Challenges', 'url' => ['competition/index']],
-          		['label' => 'Settings', 'url' => ['profile/settings'], 'template' => '<li><li class="small-links first-link"><a href="{url}">{label}</a></li>' ],
-          		['label' => 'About', 'url' => Url::to(['site/about']), 'template' => '<li><li class="small-links"><a href="{url}">{label}</a></li>' ],
+          		[
+                  'label' => 'Settings', 
+                  'url' => ['profile/settings'], 
+                  'template' => '<li><li class="small-links first-link"><a href="{url}">{label}</a></li>', 
+                  'visible'=>!Yii::$app->user->isGuest
+                ],
+          		['label' => 'About', 'url' => Url::to(['site/about']), 'template' => '<li><li class="small-links"><a href="{url}">{label}</a></li>'],
               ],
               'options' => [
                 'class' => 'nav',
