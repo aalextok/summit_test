@@ -18,17 +18,21 @@ $contentClasses = $this->context->getClasses("content", "challenges");
 $userDisplayName = $this->context->getUserDisplayName();
 $userId = User::getCurrentUserId();
 $userId = ($userId === null) ? 0 : $userId;
+$authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthKey();
 
-?>
-<?php $this->beginPage() ?>
+?><?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= Yii::$app->language ?>" ng-app="stsApp">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <script>
+      var stoApiBaseUri = "<?php echo Url::base() . "/../../backend/web"; /* TODO: make this better, trough urfdl manager/config? */ ?>";
+      var stoAuthToken = "<?php echo $authToken; /* TODO: store in cookie for javascript? */ ?>";
+    </script>  
 </head>
 <body>
     <?php $this->beginBody() ?>
