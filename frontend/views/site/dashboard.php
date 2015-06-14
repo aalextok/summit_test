@@ -45,11 +45,12 @@ $this->title = 'Welcome';
 			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
 			<div class="event-description pull-left">
 				<div class="event-title">Hike to Toonoja swamp islands</div>
-				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
+				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago
+				</div>
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra küüla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k����la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">
@@ -66,7 +67,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k��la, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">
@@ -83,7 +84,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k��la, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">
@@ -100,7 +101,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k��la, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">
@@ -117,7 +118,7 @@ $this->title = 'Welcome';
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k��la, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				<img src="img/arrow-right.png" height="22px">

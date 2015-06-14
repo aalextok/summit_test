@@ -26,8 +26,10 @@ class AppAsset extends AssetBundle
     public $js = [
         'js/modernizr.custom.js',
         'js/bootstrap.min.js',
+        'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js', //TODO: should not use CDN?
         'js/jquery.searchinput.js',
         'js/component.js',
+        'js/global-functions.js',
         'js/summit-to-sea.js',
     ];
     public $depends = [
