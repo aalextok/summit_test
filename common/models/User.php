@@ -6,6 +6,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\db\Query;
 
 /**
  * User model
@@ -196,7 +197,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param object|integer
      * @return string
      */
-    public function getUserDisplayName( $user )
+    public static function getUserDisplayName( $user )
     {
 
       if(!is_object($user)){
@@ -217,7 +218,23 @@ class User extends ActiveRecord implements IdentityInterface
       
       return $name;
     }
+    
+    /**
+     * Get user's friend count
+     *
+     * @param integer
+     * @return integer
+     */
+    public static function getUserFriendCount( $userId )
+    {
+      $cnt = (new yii\db\Query())
+        ->from('watching')
+        ->where( 'user_id = ' . $userId )
+        ->count();
       
+      return $cnt;
+    }
+    
     /**
      * @inheritdoc
      */

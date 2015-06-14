@@ -7,8 +7,8 @@ use common\models\User;
 		<img src="img/lady.jpg" class="img-circle">
 		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
 		<div class="profile-stats clearfix">
-			<div class="friends pull-left">FRIENDS <br><span>62</span></div>
-			<div class="meters pull-right">METERS <br><span>8675</span></div>
+			<div class="friends pull-left">FRIENDS <br><span><?php echo User::getUserFriendCount( $user->id ); ?></span></div>
+			<div class="meters pull-right">METERS <br><span><?php echo $user->meters_above_sea_level; ?></span></div>
 		</div>
 		<div class="profile-edit pull-right">
 			<a href="#"><img src="img/edit-profile.png">edit profile</a>
