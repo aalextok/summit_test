@@ -544,12 +544,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "ce965b1664c629ff30fc96d89cc9552b0c206e37"
+                "reference": "dba217fe4a9ef82b34804d7c9940a2bd2b670c1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/ce965b1664c629ff30fc96d89cc9552b0c206e37",
-                "reference": "ce965b1664c629ff30fc96d89cc9552b0c206e37",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/dba217fe4a9ef82b34804d7c9940a2bd2b670c1a",
+                "reference": "dba217fe4a9ef82b34804d7c9940a2bd2b670c1a",
                 "shasum": ""
             },
             "require": {
@@ -563,7 +563,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD 3-Clause"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -585,7 +585,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-04-21 15:33:53"
+            "time": "2015-06-15 17:15:23"
         },
         {
             "name": "kartik-v/yii2-widget-select2",
