@@ -32,6 +32,21 @@ return [
             'password' => 'MtEvhxzBULmhuAFw',
             'charset' => 'utf8'            
         ],
+        'urlManager' => [
+          'enablePrettyUrl' => true,
+          'showScriptName' => false,
+          'enableStrictParsing' => false,
+          'rules' => [
+            'dashboard' => 'site/dashboard',
+            'settings' => 'profile/settings',
+            'about' => 'site/about',
+            '<controller:\w+>/<id:\d+>' => '<controller>/view',
+            '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+            '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+            '<controller:\w+>/' => '<controller>/index',
+            'module/<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
+          ],
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

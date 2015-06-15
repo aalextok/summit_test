@@ -52,17 +52,26 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
 		  //TODO: get all active states to work in menu
           echo Menu::widget([
               'items' => [
-                ['label' => 'Main feed', 'url' => ['site/index'], 'visible'=>!Yii::$app->user->isGuest],
-          		['label' => 'Friends', 'url' => ['friend/index'], 'visible'=>!Yii::$app->user->isGuest],
-          		['label' => 'My profile', 'url' => Url::to(['profile/index', 'id' => $userId]), 'visible'=>!Yii::$app->user->isGuest],
+                ['label' => 'Main feed', 'url' => ['site/dashboard'], 'visible' => !Yii::$app->user->isGuest],
+          		['label' => 'Friends', 'url' => ['friend/index'], 'visible' => !Yii::$app->user->isGuest],
+          		[
+                  'label' => 'My profile', 
+                  'url' => Url::to(['profile/index', 'id' => $userId]), 
+                  'visible'=>!Yii::$app->user->isGuest, 
+                  'active' => $this->context->stoMenuItemActive('my-profile')
+                ],
           		['label' => 'Challenges', 'url' => ['competition/index']],
           		[
                   'label' => 'Settings', 
                   'url' => ['profile/settings'], 
-                  'template' => '<li><li class="small-links first-link"><a href="{url}">{label}</a></li>', 
+                  'template' => '<li class="small-links first-link ' . ($this->context->stoMenuItemActive('my-settings') ? 'active' : '') . '"><a href="{url}">{label}</a></li>', 
                   'visible'=>!Yii::$app->user->isGuest
                 ],
-          		['label' => 'About', 'url' => Url::to(['site/about']), 'template' => '<li><li class="small-links"><a href="{url}">{label}</a></li>'],
+          		[
+                  'label' => 'About', 
+                  'url' => Url::to(['site/about']), 
+                  'template' => '<li class="small-links ' . ($this->context->stoMenuItemActive('about') ? 'active' : '') . '"><a href="{url}">{label}</a></li>'
+                ],
               ],
               'options' => [
                 'class' => 'nav',

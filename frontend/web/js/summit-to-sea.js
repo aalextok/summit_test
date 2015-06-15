@@ -63,6 +63,7 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 	    }
   }).error(function(data, status) {
     // Some error occurred
+	jQuery("#challenges-no-items h1").html("Challenges <br />failed to load");
   	jQuery("#challenges-no-items").show();
   });
   

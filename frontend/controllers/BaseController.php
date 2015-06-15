@@ -76,4 +76,54 @@ class BaseController extends \yii\web\Controller
     return User::getUserDisplayName( Yii::$app->user->identity );
   }
   
+  /**
+   * This method is used in layout view when using Menu::widget to print out menu. 
+   * Some active states were not dedected so these are checked here
+   * 
+   * for example - "Url::to(['profile/index', 'id' => $userId])" was not
+   * getting active class trough original logic. 
+   * 
+   * TODO: Probably problem with my url's and this hack should be removed
+   * 
+   * @param string $context
+   * @return boolean
+   */
+  public function stoMenuItemActive( $context )
+  {
+    $route = Yii::$app->controller->module->requestedRoute;
+    
+    if( $context == 'my-profile' ){
+      
+      if (Yii::$app->user->isGuest) {
+        return false;
+      }
+      
+      $userId = User::getCurrentUserId();
+      
+      if( $route == 'profile/edit' ){
+        return true;
+      }
+      if( $route == 'profile/index' ){
+        $profileId = Yii::$app->request->get('id');
+        if($profileId == $userId){
+          return true;
+        }
+      }
+    }
+    
+    if( $context == 'my-settings' ){
+      if( $route == 'profile/settings' ){
+        return true;
+      }
+    }
+    
+    if( $context == 'about' ){
+      if( $route == 'site/about' ){
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
 }

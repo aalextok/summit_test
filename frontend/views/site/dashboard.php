@@ -1,6 +1,7 @@
 <?php
 /* @var $this yii\web\View */
 $this->title = 'Welcome';
+use yii\helpers\Html;
 ?>
 <div class="row">
 	<div class="nav-top">
@@ -8,7 +9,7 @@ $this->title = 'Welcome';
 			<div class="dropdown">
 				<a class="btn-menu menu-link dropdown-toggle" type="button" id="activitiesMenu" data-toggle="dropdown" aria-expanded="true">
 				<span class="pull-left">All activities</span>
-				<img src="img/dropdown.png" height="22px" class="pull-right">
+				  <?php echo Html::img('@web/img/dropdown.png', ['class' => 'pull-right', 'style' => 'height: 22px;']) ?>
 				</a>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="activitiesMenu">
 				  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">All activities</a></li>
@@ -23,7 +24,7 @@ $this->title = 'Welcome';
 			<div class="dropdown">
 				<a class="btn-menu menu-link dropdown-toggle" type="button" id="locationMenu" data-toggle="dropdown" aria-expanded="true">
 				<span class="pull-left">Location</span>
-				<img src="img/dropdown.png" height="22px" class="pull-right">
+				  <?php echo Html::img('@web/img/dropdown.png', ['class' => 'pull-right', 'style' => 'height: 22px;']) ?>
 				</a>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="locationMenu">
 					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Place 1</a></li>
@@ -36,13 +37,13 @@ $this->title = 'Welcome';
 		</div>
 		<div class="nav-map pull-right">
 			<a href="#">
-			<img src="img/map-icon.png" height="22px">
+			  <?php echo Html::img('@web/img/map-icon.png', ['style' => 'height: 22px;']) ?>
 			</a>
 		</div>
 	</div>
 	<div class="col-xs-6 m-b-40">
 		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
 			<div class="event-description pull-left">
 				<div class="event-title">Hike to Toonoja swamp islands</div>
 				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago
@@ -53,14 +54,14 @@ $this->title = 'Welcome';
 			<div class="place-loc pull-left">Karuskose, Sandra k����la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
-				<img src="img/arrow-right.png" height="22px">
+				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
 				</a>
 			</div>
 		</div>
 	</div>
 	<div class="col-xs-6 m-b-40">
 		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
 			<div class="event-description pull-left">
 				<div class="event-title">Hike to Toonoja swamp islands</div>
 				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
@@ -70,14 +71,14 @@ $this->title = 'Welcome';
 			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
-				<img src="img/arrow-right.png" height="22px">
+				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
 				</a>
 			</div>
 		</div>
 	</div>
 	<div class="col-xs-6 m-b-40">
 		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
 			<div class="event-description pull-left">
 				<div class="event-title">Hike to Toonoja swamp islands</div>
 				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
@@ -87,14 +88,14 @@ $this->title = 'Welcome';
 			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
-				<img src="img/arrow-right.png" height="22px">
+				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
 				</a>
 			</div>
 		</div>
 	</div>
 	<div class="col-xs-6 m-b-40">
 		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
 			<div class="event-description pull-left">
 				<div class="event-title">Hike to Toonoja swamp islands</div>
 				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
@@ -104,14 +105,14 @@ $this->title = 'Welcome';
 			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
-				<img src="img/arrow-right.png" height="22px">
+				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
 				</a>
 			</div>
 		</div>
 	</div>
 	<div class="col-xs-6 m-b-40">
 		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><img src="img/hike.jpg" class="img-circle"></div>
+			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
 			<div class="event-description pull-left">
 				<div class="event-title">Hike to Toonoja swamp islands</div>
 				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
@@ -121,7 +122,7 @@ $this->title = 'Welcome';
 			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
-				<img src="img/arrow-right.png" height="22px">
+				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
 				</a>
 			</div>
 		</div>
