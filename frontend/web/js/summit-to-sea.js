@@ -3,6 +3,13 @@ jQuery( document ).ready(function() {
 	stoInitLoginActions();
 	stoInitVisitActions();
 	
+	/**
+	 * If defined, modify content div styles
+	 */
+	if(jQuery('#main-style-replace').length > 0){
+		jQuery("#main").attr( "style", jQuery('#main-style-replace').val() );
+	}
+	
 });
 
 function stoInitLoginActions(){
@@ -55,6 +62,14 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
   };
 
   $http.get( stoGetApiBaseUri() + '/competition', config).success(function(data, status) {
+	  	var baseUri = jQuery('#competition-view-base-uri').val();
+	  	
+	  	for(var i in data){
+	  		var uriTmp = baseUri;
+	  		uriTmp = uriTmp.replace("replaceid", data[i].id);
+	  		data[i].uri = uriTmp;
+	  	}
+	  	
 	    $scope.competition = data;
 	    if(data.length > 0){
 	    	jQuery("#challenges-no-items").hide();

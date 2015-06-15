@@ -2,6 +2,9 @@
 
 namespace frontend\controllers;
 
+use yii;
+use backend\models\Competition;
+
 class CompetitionController extends \frontend\controllers\BaseController
 {
     public function actionIndex()
@@ -11,7 +14,12 @@ class CompetitionController extends \frontend\controllers\BaseController
 
     public function actionView()
     {
-        return $this->render('view');
+        $cId = Yii::$app->request->get('id');
+        $comp = Competition::findOne( ['id' => $cId] );
+        
+        return $this->render('view', [
+          'competition' => $comp    
+        ]);
     }
 
 }
