@@ -54,7 +54,7 @@ class UserController extends ActiveController
     }
     
     public function checkAccess($action, $model = null, $params = array()) {
-        if($action == 'view' && !empty($model) && $model->role !== 10){
+        if($action == 'view' && !empty($model) && $model->role !== User::ROLE_USER){
             throw new web\ForbiddenHttpException;
         }
         
