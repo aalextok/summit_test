@@ -66,7 +66,7 @@ class WatchingController extends ActiveController
             return $duplicate;
         }
         
-        $watchedUser = User::find(['id' => $model->watched_user_id])->one();
+        $watchedUser = User::find()->where(['id' => $model->watched_user_id])->one();
         if(empty($watchedUser) || $watchedUser->role != User::ROLE_USER){
             throw new \yii\web\HttpException(400, "Wrong watched user id '$model->watched_user_id' provided");
         }
