@@ -82,6 +82,50 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
   	jQuery("#challenges-no-items").show();
   });
   
+});
+
+
+
+
+stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
+  $scope.users = [];
   
+  var config = {headers:  {
+	      'Authorization': 'Bearer ' + stoGetAuthToken(),
+	      'Accept': 'application/json;odata=verbose'
+	  }
+  };
+  
+  $scope.searchChanged = function() { $scope.doSearch( $scope.searchQuery ); };
+  
+  $scope.doSearch = function( query ) {
+	  console.log( "Searching " + query );
+	  jQuery("#users-list-loading").show();	
+	  $http.get( stoGetApiBaseUri() + '/user', config).success(function(data, status) {
+		  	var baseUri = jQuery('#user-profile-view-base-uri').val();
+		  	
+		  	for(var i in data){
+		  		var uriTmp = baseUri;
+		  		uriTmp = uriTmp.replace("replaceid", data[i].id);
+		  		data[i].uri = uriTmp;
+		  	}
+	
+		    $scope.users = data;
+		    if(data.length > 0){
+		    	jQuery("#users-list-no-items").hide();
+		      	jQuery("#users-list-loading").hide();
+		    } else {
+		    	jQuery("#users-list-no-items").show();
+		      	jQuery("#users-list-loading").hide();
+		    }
+	  }).error(function(data, status) {
+	  	jQuery("#users-list-no-items").show();
+	  	jQuery("#users-list-loading").hide();
+	  });
+  };
+  
+  //initial search
+  $scope.doSearch("");
   
 });
+
