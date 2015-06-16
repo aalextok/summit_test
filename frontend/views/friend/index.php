@@ -2,8 +2,10 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
-<div class="row">
+<div class="row" ng-controller="UserSearchListCtrl">
+    <input type="hidden" value="<?php echo Url::toRoute(["profile/index", 'id' => "replaceid"]); ?>" id="user-profile-view-base-uri" />
 	<div class="nav-top">
 		<div class="nav-activities pull-left">
 			<div class="dropdown">
@@ -22,7 +24,7 @@ use yii\helpers\Html;
 		</div>
 		<div class="nav-search pull-left">
 			<form class="nav-search-area">
-				<input type="text" id="input" placeholder="Search for friends" />
+				<input type="text" id="input" placeholder="Search for friends" ng-model="searchQuery" ng-change="searchChanged()" ng-model-options="{ debounce: 500 }" />
 			</form>
 		</div>
 		<div class="nav-map pull-right">
@@ -31,6 +33,28 @@ use yii\helpers\Html;
 			</a>
 		</div>
 	</div>
+	
+    <div class="vertical-middle" id="users-list-no-items" style="display: none;">
+    	<h1>No users found</h1>
+    </div>
+    <div class="vertical-middle" id="users-list-loading" style="display: none;">
+    	Loading ...
+    </div>
+    
+	<div id="users-search-items">
+    	<div class="col-xs-6" ng-repeat="user in users">
+    		<div class="event clearfix m-b-20">
+    			<div class="event-img pull-left"><?php echo Html::img('@web/img/man.jpg', ['class' => 'img-circle']) ?></div>
+    			<div class="event-description pull-left">
+    				<div class="event-title"><a href="{{user.uri}}"><span>{{user.firstname}} {{user.lastname}}</span></a></div>
+    				<div class="event-when">Last visit: {{user.last_login}}</div>
+    				<div class="event-what">Rank: {{user.rank}}</div>
+    			</div>
+    		</div>
+    	</div>
+	</div>
+	
+	<?php /*
 	<div class="col-xs-6">
 		<div class="event clearfix m-b-20">
 			<div class="event-img pull-left"><?php echo Html::img('@web/img/man.jpg', ['class' => 'img-circle']) ?></div>
@@ -61,4 +85,6 @@ use yii\helpers\Html;
 			</div>
 		</div>
 	</div>
+	*/ ?>
+	
 </div>
