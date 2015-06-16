@@ -47,13 +47,13 @@ AppAsset::register($this);
 				<div class="apps">
 					<span>Or download our app</span>
 					<div class="apple-app">
-						<a href="">
-						<img src="img/btn-apple.png" width="130">
+						<a href="?">
+						  <?php echo Html::img('@web/img/btn-apple.png', ['style' => 'width: 130px;']) ?>
 						</a>
 					</div>
 					<div class="android-app">
-						<a href="">
-						<img src="img/btn-android.png" width="130">
+						<a href="?">
+						  <?php echo Html::img('@web/img/btn-android.png', ['style' => 'width: 130px;']) ?>
 						</a>
 					</div>
 				</div>
