@@ -37,8 +37,9 @@ use yii\helpers\Url;
     <div class="vertical-middle" id="users-list-no-items" style="display: none;">
     	<h1>No users found</h1>
     </div>
-    <div class="vertical-middle" id="users-list-loading" style="display: none;">
-    	Loading ...
+    <div class="ajax-content-loading" id="users-list-loading" style="display: none;">
+      <?php echo Html::img('@web/img/loading-big.gif') ?>
+  	  Loading ...
     </div>
     
 	<div id="users-search-items">
