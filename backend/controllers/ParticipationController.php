@@ -81,7 +81,7 @@ class ParticipationController extends ActiveController
         }
         
         if($model->hasErrors()){
-            throw web\HttpException(400, User::errorsToString($model->getErrors())); 
+            throw new web\HttpException(400, User::errorsToString($model->getErrors())); 
         }
         
         return $model;

@@ -60,4 +60,30 @@ class UserController extends ActiveController
         
         parent::checkAccess($action, $model, $params);
     }
+    
+    public function actionUpdate($id){
+        
+        $model = User::find()->where(['id' => $id])->one();
+        
+        if($model->id != Yii::$app->user->identity->id){
+            throw new web\ForbiddenHttpException;
+        }
+        
+        foreach(User::$editableFields as $field){
+            $val = Yii::$app->getRequest()->getBodyParam($field);
+            if(isset($val)){
+                $model->{$field} = $val;
+            }
+        }
+        
+        if ($model->save() === false && !$model->hasErrors()) {
+            throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
+        }
+        
+        if($model->hasErrors()){
+            throw new web\HttpException(400, User::errorsToString($model->getErrors())); 
+        }
+
+        return $model;
+    }
 }

@@ -33,6 +33,14 @@ class User extends ActiveRecord implements IdentityInterface
     const ROLE_USER = 10;
     const ROLE_ADMIN = 20;
     
+    public static $editableFields = [
+        'username',
+        'firstname',
+        'lastname',
+        'gender',
+        'phone',
+    ];
+    
     /**
      * @inheritdoc
      */
@@ -93,6 +101,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['username', 'email', 'firstname', 'lastname'], 'string', 'min' => 1, 'max' => 255],
             [['email', 'username', 'phone'], 'unique'],
             ['image', 'file', 'extensions' => ['png', 'jpg', 'gif', 'jpeg'], 'maxSize' => 1024*1024*1024],
+            ['gender', 'in', 'range' => ['MALE', 'FEMALE', 'OTHER', '']]
             
         ];
     }

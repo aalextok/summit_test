@@ -67,7 +67,7 @@ class WatchingController extends ActiveController
         }
         
         $watchedUser = User::find()->where(['id' => $model->watched_user_id])->one();
-        if(empty($watchedUser) || $watchedUser->role != User::ROLE_USER){
+        if(empty($watchedUser) || $watchedUser->role != User::ROLE_USER || $watchedUser->id == Yii::$app->user->identity->id){
             throw new \yii\web\HttpException(400, "Wrong watched user id '$model->watched_user_id' provided");
         }
         
@@ -83,7 +83,7 @@ class WatchingController extends ActiveController
     }
     
     public function checkAccess($action, $model = null, $params = array()) {
-        if($action == 'delete' && !empty($model) && $model->user_id !== Yii::$app->user->identity->id){
+        if(($action == 'delete' || $action == 'update') && !empty($model) && $model->user_id !== Yii::$app->user->identity->id){
             throw new \yii\web\ForbiddenHttpException;
         }
         

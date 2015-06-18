@@ -8,4 +8,5 @@ return [
                 'clientSecret' => '0cec9ff42991f89f93e34f82df373601',
             ]
         ],
+    'visitInterval' => 0.01 //hours: if less time passed from the moment User entered Place's code last time, new Visit is not created
 ];
