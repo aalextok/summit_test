@@ -43,16 +43,29 @@ use yii\helpers\Url;
     </div>
     
 	<div id="users-search-items">
-    	<div class="col-xs-6" ng-repeat="user in users">
+	    <?php /*
+    	<div class="col-xs-6">
     		<div class="event clearfix m-b-20">
-    			<div class="event-img pull-left"><?php echo Html::img('@web/img/man.jpg', ['class' => 'img-circle']) ?></div>
+    			<div class="event-img pull-left"></div>
     			<div class="event-description pull-left">
-    				<div class="event-title"><a href="{{user.uri}}"><span>{{user.firstname}} {{user.lastname}}</span></a></div>
-    				<div class="event-when">Last visit: {{user.last_login}}</div>
+    				<div class="event-title"><span>{{user.firstname}} {{user.lastname}}</span></a></div>
+    				<div class="event-when">Last visit: {{user.last_login}}</a></div>
     				<div class="event-what">Rank: {{user.rank}}</div>
     			</div>
     		</div>
     	</div>
+    	*/ ?>
+    	
+		<div class="col-xs-6" ng-repeat="user in users">
+			<div class="challenge-place">
+				<?php echo Html::img('@web/img/man.jpg', ['class' => 'img-circle']) ?>
+				<div class="challenge-title"><a href="{{user.uri}}">{{user.firstname}} {{user.lastname}}</a></div>
+				<div class="challenge-height pull-right">
+					<a href="#" class="unf-green">unfollow</a>
+				</div>
+			</div>
+		</div>
+    	
 	</div>
 	
 	<?php /*

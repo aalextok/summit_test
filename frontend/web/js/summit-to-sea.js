@@ -129,3 +129,56 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
   
 });
 
+
+
+stsApp.controller('UserProfileCtrl', function ($scope, $http) {
+  
+  var config = {headers:  {
+	      'Authorization': 'Bearer ' + stoGetAuthToken(),
+	      'Accept': 'application/json;odata=verbose'
+	  }
+  };
+  
+  $scope.toggleWatching = function( oTarget ) {
+      var elem = angular.element( oTarget.target );
+      
+      var state = elem.attr('data-state');
+      var dataId = elem.attr('data-id');
+      var dataOriginalUserId = elem.attr('data-user-id');
+
+	  console.log( state + ':' + dataId);
+	  var data = Object();
+	  
+	  if(state < 1){
+		  var url = stoGetApiBaseUri() + '/watching/create';
+		  data.watched_user_id = dataId;
+		  
+		  $http.post( url, data, config).success(function(data, status) {
+			  elem.text('unfollow');
+			  elem.attr('data-state', 1);
+			  elem.attr('data-id', data.id);
+		  }).error(function(data, status) {
+			  alert(status);
+		  });
+	  } else {
+		  var url = stoGetApiBaseUri() + '/watching/delete/' + dataId;
+		  
+		  $http.delete( url, config).success(function(data, status) {
+			  elem.text('follow');
+			  elem.attr('data-state', 0);
+			  elem.attr('data-id', dataOriginalUserId);
+		  }).error(function(data, status) {
+			  alert(status);
+		  });
+	  }
+	  
+	  
+  };
+  
+  
+});
+
+
+
+
+

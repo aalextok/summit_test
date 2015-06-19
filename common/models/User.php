@@ -244,6 +244,33 @@ class User extends ActiveRecord implements IdentityInterface
     }
     
     /**
+     * Does given user ($userId) follow other user ($followingUserId)
+     * If follows, watching ID is returned. So if greater than 0 
+     * is returned user is following other user
+     * 
+     * user_id - user who is following
+     * watched_user_id - user being watched/followed
+     * 
+     * @param integer $userId
+     * @param integer $watchedUserId
+     * @return integer
+     */
+    public static function getUserFollowingId( $userId, $watchedUserId )
+    {
+      $item = (new yii\db\Query())
+        ->from('watching')
+        ->where( 'user_id = ' . $userId )
+        ->where( 'watched_user_id = ' . $watchedUserId )
+        ->one();
+      
+      if( isset($item['id']) ){
+        return $item['id'];
+      }
+      
+      return 0;
+    }
+    
+    /**
      * Get user's rank title/name
      * TODO: this menthod is just a mock- no real rank yet, yet to be implemented
      *

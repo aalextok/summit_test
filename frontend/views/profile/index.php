@@ -3,9 +3,12 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use common\models\User;
 
+$currentUserId = User::getCurrentUserId();
+$watchingId = User::getUserFollowingId($currentUserId, $user->id);
+
 /* @var $this yii\web\View */
 ?>
-<div class="row">
+<div class="row" ng-controller="UserProfileCtrl">
 	<div class="profile-top">
 		<?php echo Html::img('@web/img/lady.jpg', ['class' => 'img-circle']) ?>
 		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
@@ -13,9 +16,23 @@ use common\models\User;
 			<div class="friends pull-left">FRIENDS <br><span><?php echo User::getUserFriendCount( $user->id ); ?></span></div>
 			<div class="meters pull-right">METERS <br><span><?php echo $user->meters_above_sea_level; ?></span></div>
 		</div>
-		<div class="profile-edit pull-right">
-			<a href="<?php echo Url::to(['profile/edit']); ?>"><?php echo Html::img('@web/img/edit-profile.png') ?>edit profile</a>
-		</div>
+		
+		<?php  if (!Yii::$app->user->isGuest) { ?>
+		  <?php  if ($user->id == $currentUserId) { ?>
+    		<div class="profile-edit pull-right">
+    			<a href="<?php echo Url::to(['profile/edit']); ?>"><?php echo Html::img('@web/img/edit-profile.png') ?>edit profile</a>
+    		</div>
+          <?php } else { ?>
+    		<div class="profile-edit challenge-height pull-right">
+    		    <?php if($watchingId){ ?>
+    			  <a href="#" class="unf-green user-unfollow" ng-click="toggleWatching( $event )" data-state="1" data-id="<?php echo $watchingId; ?>" data-user-id="<?php echo $user->id; ?>">unfollow</a>
+    			<?php } else { ?>
+    			  <a href="#" class="unf-green  user-follow" ng-click="toggleWatching( $event )" data-state="0" data-id="<?php echo $user->id; ?>" data-user-id="<?php echo $user->id; ?>">follow</a>
+    			<?php } ?>
+    		</div>
+         <?php } ?>
+        <?php } ?>
+		
 	</div>
 	<div class="col-xs-6">
 		<div class="one-field clearfix m-b-20">
