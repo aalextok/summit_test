@@ -53,7 +53,10 @@ $model->activity;
                 'attribute' => 'close_time',
                 'value' => date('Y-m-d', $model->close_time),
             ],
-            
+            'meters_above_sea_level',
+            'distance',
+            'points',
+            'summits',
         ],
     ]) ?>
     

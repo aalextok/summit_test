@@ -10,6 +10,7 @@ use yii\web;
 
 use backend\models\Participation;
 use backend\models\Competition;
+use common\models\User;
 
 class ParticipationController extends ActiveController
 {
@@ -64,6 +65,8 @@ class ParticipationController extends ActiveController
             'user_id' => $model->user_id,
         ])->andWhere([
             'competition_id' => $model->competition_id,
+//        ])->andWhere([
+//            'finish_time' => null,
         ])->all();
         
         if(count($duplicates) > 0){

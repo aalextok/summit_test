@@ -21,6 +21,12 @@ use Yii;
 class Place extends \yii\db\ActiveRecord
 {
     public $activity_ids;
+    
+    public static $countableFields = [
+        'points',
+        'meters_above_sea_level',
+        'distance'
+    ];
 
 
     /**

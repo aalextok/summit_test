@@ -84,6 +84,11 @@ use backend\models;
 
     ]);
     ?>
+    
+    <?= $form->field($model, 'meters_above_sea_level')->textInput() ?>
+    <?= $form->field($model, 'distance')->textInput() ?>
+    <?= $form->field($model, 'points')->textInput() ?>
+    <?= $form->field($model, 'summits')->textInput() ?>
 
     <!--<?= $form->field($model, 'achievements_by_places')->textInput() ?> -->
 

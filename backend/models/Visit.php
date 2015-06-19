@@ -4,6 +4,8 @@ namespace backend\models;
 
 use Yii;
 
+use \common\models\User;
+
 /**
  * This is the model class for table "visit".
  *
@@ -48,5 +50,102 @@ class Visit extends \yii\db\ActiveRecord
             'visit_time' => 'Visit Time',
             'activity_id' => 'Activity ID',
         ];
+    }
+    
+    public function getPlace(){
+        return $this->hasOne(Place::className(), ['id' => 'place_id']);
+    }
+    
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        
+        if($insert){
+            // recalculate user stat by place
+            $place = Place::find()->where(['id' => $this->place_id])->one();
+            $user = User::find()->where(['id' => $this->user_id])->one();
+            
+            foreach(Place::$countableFields as $field){
+                if(isset($place->{$field})){
+                    $user->{$field} += $place->{$field};
+                }
+                
+                // 'summits' field
+                if($field == 'meters_above_sea_level' && isset($place->{$field})){
+                    $user->summits++;
+                }
+            }
+            
+            
+            // check rank upgrade (?)
+            
+            $user->save();
+            
+            
+            if(isset($this->participation_id)){
+
+                $participation = Participation::find()->where(['id' => $this->participation_id])->one();
+                
+                // recalculate participation stats. by place incl. places
+                foreach(Place::$countableFields as $field){
+                    if(isset($place->{$field})){
+                       $participation->{$field} += $place->{$field};
+                    }
+                    
+                    // 'summits' field
+                    if($field == 'meters_above_sea_level' && isset($place->{$field})){
+                        $participation->summits++;
+                    }
+                }
+                
+                
+                //is participation with places 
+                $competition = $participation->competition;
+                if(!empty($competition->places)){
+                    $participation->places++;
+                    
+                    // Check if all places within competition are visited:                    
+                    // - get all places for current participation, 
+                    $visits = Visit::find()->where(['participation_id' => $participation->id])->all();
+                    $places = [];
+                    foreach($visits as $v){
+                        $places[] = $v->place;
+                    }
+                    
+                    $unvisitedPlaces = array_udiff($competition->places, $places, function($p1, $p2){
+                        return $p1->id - $p2->id;
+                    });
+                    
+                    if(count($unvisitedPlaces) === 0){
+                        $participation->finish_time = time();
+                        $participation->minutes = (int)(($participation->finish_time - $participation->start_time) / 60);
+                    }
+                }
+                else{ // or with countable values
+                    $participation->places++;
+                    
+                    $countableFields = [
+                        'meters_above_sea_level', 
+                        'distance', 
+                        'points', 
+                        'summits'
+                    ];
+                    $finished = true;
+                    foreach($countableFields as $field){
+                        if(!empty($competition->{$field})){
+                            if(empty($participation->{$field}) || $participation->{$field} < $competition->{$field}){
+                                $finished = false;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if($finished){
+                        $participation->finish_time = time();
+                        $participation->minutes = (int)(($participation->finish_time - $participation->start_time) / 60);
+                    }
+                }              
+                $participation->save();
+            }  
+        }
     }
 }

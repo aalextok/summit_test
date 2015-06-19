@@ -36,7 +36,8 @@ class Competition extends \yii\db\ActiveRecord
             [['code'], 'unique'],
             [['description'], 'string'],
             [['achievements_by_places', 'activity_id', 'open_time', 'close_time'], 'integer'],
-            [['code', 'name'], 'string', 'max' => 255]
+            [['code', 'name'], 'string', 'max' => 255],
+            [['meters_above_sea_level', 'distance', 'points', 'summits'], 'integer'],
         ];
     }
     
