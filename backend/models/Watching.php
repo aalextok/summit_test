@@ -30,6 +30,14 @@ class Watching extends ActiveRecord{
             [['user_id', 'watched_user_id'], 'integer'],
         ];
     }
+    
+    public function fields() {
+        $fields = parent::fields();
+        
+        $fields[] = 'watchedUser';
+        
+        return $fields;
+    }
 
     /**
      * @inheritdoc
@@ -41,5 +49,9 @@ class Watching extends ActiveRecord{
             'user_id' => 'User ID',
             'watched_user_id' => 'Watched User ID',
         ];
+    }
+    
+    public function getWatchedUser(){
+        return $this->hasOne(\common\models\User::className(), ['id' => 'watched_user_id']);
     }
 }

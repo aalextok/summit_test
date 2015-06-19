@@ -12,7 +12,7 @@ use Yii;
  * @property integer $place_id
  * @property integer $competition_id
  * @property integer $visit_time
- * @property integer $acivity_id
+ * @property integer $activity_id
  */
 class Visit extends \yii\db\ActiveRecord
 {
@@ -31,7 +31,7 @@ class Visit extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'place_id', 'visit_time'], 'required'],
-            [['user_id', 'place_id', 'competition_id', 'visit_time', 'acivity_id'], 'integer']
+            [['user_id', 'place_id', 'competition_id', 'visit_time', 'activity_id'], 'integer']
         ];
     }
 
@@ -46,7 +46,7 @@ class Visit extends \yii\db\ActiveRecord
             'place_id' => 'Place ID',
             'competition_id' => 'Competition ID',
             'visit_time' => 'Visit Time',
-            'acivity_id' => 'Acivity ID',
+            'activity_id' => 'Activity ID',
         ];
     }
 }

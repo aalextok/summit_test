@@ -70,4 +70,25 @@ class Participation extends \yii\db\ActiveRecord
     public function getUser(){
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+    
+    public static function getActiveParticipations($userId){
+        $activeParticipations;
+        $participations = Participation::find()
+                ->where(['user_id' => $userId])
+                ->andWhere(['finish_time' => null])
+                ->all();
+        
+        foreach($participations as $p){
+            $p->competition;
+            if($p->competition->close_time < time()){
+                $p->finish_time = time();
+                $p->update();
+            }
+            else{
+                $activeParticipations[] = $p;
+            }
+        }
+        
+        return $activeParticipations;
+    }
 }
