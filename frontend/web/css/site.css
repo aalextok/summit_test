@@ -20,3 +20,13 @@
 	text-decoration: underline;
 	font-weight: 700;
 }
+
+.ajax-content-loading {
+	text-align: center;
+	padding: 15px 0;
+	font-size: 23px;
+}
+
+.ajax-content-loading img {
+	padding-right: 10px;
+}
