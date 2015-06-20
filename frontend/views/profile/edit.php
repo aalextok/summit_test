@@ -4,7 +4,7 @@ use common\models\User;
 
 /* @var $this yii\web\View */
 ?>
-<div class="row" ng-controller="ProfileCtrl">
+<div class="row" ng-controller="ProfileEditCtrl">
   <form>
     <input type="hidden" value="<?php echo $id; ?>" id="user-profile-edit-user-id" />
 	<div class="profile-top">
@@ -18,6 +18,20 @@ use common\models\User;
 			<a href="#" ng-click="proccessForm( $event )">Save</a>
 		</div>
 	</div>
+	
+	<div class="col-xs-12 feedbacks">
+    	<div class="alert alert-success hidden">
+    	  Profile updated.
+    	</div>
+    	<div class="alert alert-danger hidden">
+    	  Profile update failed. Try again. 
+    	</div>
+        <div class="ajax-content-loading hidden">
+          <?php echo Html::img('@web/img/loading-big.gif') ?>
+      	  Loading ...
+        </div>
+	</div>
+	
 	<div class="col-xs-6">
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">Firstname</div>
@@ -29,7 +43,7 @@ use common\models\User;
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">Userame</div>
-			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileUsername" ng-init="formData.username='<?php echo $user->username; ?>'"  value="<?php echo $user->username; ?>" ng-model="formData.username"></div>
+			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileUsername" ng-init="formData.username='<?php echo $user->username; ?>'" value="<?php echo $user->username; ?>" ng-model="formData.username"></div>
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">E-mail</div>
@@ -37,9 +51,10 @@ use common\models\User;
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">Phone</div>
-			<div class="input-profile pull-left"><input type="text" class="form-control" id="profilePhone" value="55 5555 55" ng-model="formData.phone"></div>
+			<div class="input-profile pull-left"><input type="text" class="form-control" id="profilePhone" ng-init="formData.phone='<?php echo $user->phone; ?>'" value="<?php echo $user->phone; ?>" ng-model="formData.phone"></div>
 		</div>
 	</div>
+	
 	<div class="col-xs-6">
 		<div class="change-pass-title">Change password</div>
 		<div class="one-field m-b-35 clearfix">

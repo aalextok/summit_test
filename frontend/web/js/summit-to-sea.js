@@ -183,7 +183,7 @@ stsApp.controller('UserProfileCtrl', function ($scope, $http) {
 
 
 
-stsApp.controller('ProfileCtrl', function ($scope, $http) {
+stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
   
   var headers = {
       'Authorization': 'Bearer ' + stoGetAuthToken(),
@@ -194,35 +194,34 @@ stsApp.controller('ProfileCtrl', function ($scope, $http) {
   var profileUserId = jQuery('#user-profile-edit-user-id').val();
   var url = stoGetApiBaseUri() + '/user/update/' + profileUserId;
   
-  $scope.formData = {};
+  $scope.formData = {};//gender
 
   $scope.proccessForm = function( oTarget ) {
-  
-  $http({
-	  method  : 'PUT',
-	  url     : url,
-	  data    : jQuery.param( $scope.formData ),
-	  headers : headers
-  })
-  .success(function(data) {
-    console.log(data);
-
-    if (!data.success) {
-      // if not successful, bind errors to error variables
-      $scope.errorName = data.errors.name;
-      $scope.errorSuperhero = data.errors.superheroAlias;
-    } else {
-      // if successful, bind success message to message
-      $scope.message = data.message;
-    }
-  });
+      jQuery('.feedbacks .alert-success').addClass('hidden');
+      jQuery('.feedbacks .alert-danger').addClass('hidden');
 	  
+	  $http({
+		  method  : 'PUT',
+		  url     : url,
+		  data    : jQuery.param( $scope.formData ),
+		  headers : headers
+	  })
+	  .success(function(data) {
+	    if (data.id > 0) {
+	      jQuery('.feedbacks .alert-success').removeClass('hidden');
+	    } else {
+	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').html( data.message );
+	    }
+	  })
+	  .error(function(data) {
+	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').html( data.message );
+	  });
 	  
 	  
   };
-  //http://demo.bind.ee/summittosea/backend/web/user/update/user_id
-  //username, firstname, lastname, gender, phone
-  
+
 });
 
 
