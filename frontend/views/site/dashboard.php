@@ -2,8 +2,9 @@
 /* @var $this yii\web\View */
 $this->title = 'Welcome';
 use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
-<div class="row">
+<div class="row" ng-controller="DashBoardCtrl">
 	<div class="nav-top">
 		<div class="nav-activities pull-left">
 			<div class="dropdown">
@@ -41,90 +42,46 @@ use yii\helpers\Html;
 			</a>
 		</div>
 	</div>
-	<div class="col-xs-6 m-b-40">
+	
+  <input type="hidden" value="<?php echo Url::toRoute(["place/view", 'id' => "replaceid"]); ?>" id="place-view-base-uri" />
+  
+  <div class="vertical-middle" id="places-no-items">
+  	<h1>No places<br> at the moment</h1>
+  </div>
+  
+  <div class="row" id="places-items">
+	
+	<div class="col-xs-6 m-b-40" ng-repeat="place in places">
 		<div class="event clearfix m-0 b-r-top">
 			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
 			<div class="event-description pull-left">
-				<div class="event-title">Hike to Toonoja swamp islands</div>
-				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago
+				<div class="event-title">{{place.name}}</div>
+				<div class="event-when">
+				  {{place.description}}
 				</div>
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k����la, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
 			<div class="place-more pull-right">
 				<a href="#">
 				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
 				</a>
 			</div>
 		</div>
-	</div>
-	<div class="col-xs-6 m-b-40">
-		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
-			<div class="event-description pull-left">
-				<div class="event-title">Hike to Toonoja swamp islands</div>
-				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
-			</div>
-		</div>
-		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
-			<div class="place-more pull-right">
-				<a href="#">
-				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
-				</a>
-			</div>
-		</div>
-	</div>
-	<div class="col-xs-6 m-b-40">
-		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
-			<div class="event-description pull-left">
-				<div class="event-title">Hike to Toonoja swamp islands</div>
-				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
-			</div>
-		</div>
-		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
-			<div class="place-more pull-right">
-				<a href="#">
-				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
-				</a>
-			</div>
-		</div>
-	</div>
-	<div class="col-xs-6 m-b-40">
-		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
-			<div class="event-description pull-left">
-				<div class="event-title">Hike to Toonoja swamp islands</div>
-				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
-			</div>
-		</div>
-		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
-			<div class="place-more pull-right">
-				<a href="#">
-				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
-				</a>
-			</div>
-		</div>
-	</div>
-	<div class="col-xs-6 m-b-40">
-		<div class="event clearfix m-0 b-r-top">
-			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
-			<div class="event-description pull-left">
-				<div class="event-title">Hike to Toonoja swamp islands</div>
-				<div class="event-when">Toonoja is an ancient island in the largest swamp in Estonia that was first inhabited 4000 years ago</div>
-			</div>
-		</div>
-		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra k������la, Suure-Jaani vald, Viljandi makond</div>
-			<div class="place-more pull-right">
-				<a href="#">
-				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
-				</a>
-			</div>
-		</div>
-	</div>
+	</div>'
+	
+	<?php /*
+	activities: [{id:1, name:Hike, verb:Hiking, description:Still hiking}]
+    code: "1234"
+    description: "Kõrge mägi, u know"
+    distance: 200
+    id: 1
+    latitude: 25
+    longtitude: 54
+    meters_above_sea_level: 300
+    name: "Munamägi"
+    points: 45
+	*/ ?>
+  </div>
 </div>
