@@ -99,9 +99,15 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
   $scope.searchChanged = function() { $scope.doSearch( $scope.searchQuery ); };
   
   $scope.doSearch = function( query ) {
-	  console.log( "Searching " + query );
-	  jQuery("#users-list-loading").show();	
-	  $http.get( stoGetApiBaseUri() + '/user', config).success(function(data, status) {
+	  jQuery("#users-list-loading").show();
+	  
+	  var data = Object();
+	  data.limit = 1;
+	  data.page = 1;
+	  
+	  var dataString = jQuery.param(data);
+	  
+	  $http.get( stoGetApiBaseUri() + '/user/?' + dataString, config).success(function(data, status) {
 		  	var baseUri = jQuery('#user-profile-view-base-uri').val();
 		  	
 		  	for(var i in data){
@@ -170,15 +176,53 @@ stsApp.controller('UserProfileCtrl', function ($scope, $http) {
 		  }).error(function(data, status) {
 			  alert(status);
 		  });
-	  }
-	  
-	  
+	  }	  
   };
-  
-  
+
 });
 
 
 
+stsApp.controller('ProfileCtrl', function ($scope, $http) {
+  
+  var headers = {
+      'Authorization': 'Bearer ' + stoGetAuthToken(),
+      'Accept': 'application/json;odata=verbose',
+      'Content-Type': 'application/x-www-form-urlencoded'
+  };
+  
+  var profileUserId = jQuery('#user-profile-edit-user-id').val();
+  var url = stoGetApiBaseUri() + '/user/update/' + profileUserId;
+  
+  $scope.formData = {};
+
+  $scope.proccessForm = function( oTarget ) {
+  
+  $http({
+	  method  : 'PUT',
+	  url     : url,
+	  data    : jQuery.param( $scope.formData ),
+	  headers : headers
+  })
+  .success(function(data) {
+    console.log(data);
+
+    if (!data.success) {
+      // if not successful, bind errors to error variables
+      $scope.errorName = data.errors.name;
+      $scope.errorSuperhero = data.errors.superheroAlias;
+    } else {
+      // if successful, bind success message to message
+      $scope.message = data.message;
+    }
+  });
+	  
+	  
+	  
+  };
+  //http://demo.bind.ee/summittosea/backend/web/user/update/user_id
+  //username, firstname, lastname, gender, phone
+  
+});
 
 

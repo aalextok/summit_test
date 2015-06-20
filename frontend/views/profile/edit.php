@@ -4,8 +4,9 @@ use common\models\User;
 
 /* @var $this yii\web\View */
 ?>
-<div class="row">
+<div class="row" ng-controller="ProfileCtrl">
   <form>
+    <input type="hidden" value="<?php echo $id; ?>" id="user-profile-edit-user-id" />
 	<div class="profile-top">
 		<?php echo Html::img('@web/img/lady.jpg', ['class' => 'img-circle']) ?>
 		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
@@ -14,17 +15,21 @@ use common\models\User;
 			<div class="meters pull-right">METERS <br><span><?php echo $user->meters_above_sea_level; ?></span></div>
 		</div>
 		<div class="profile-save pull-right">
-			<a href="#">Save</a>
+			<a href="#" ng-click="proccessForm( $event )">Save</a>
 		</div>
 	</div>
 	<div class="col-xs-6">
 		<div class="one-field clearfix">
-			<div class="label-profile pull-left">Name</div>
-			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileName" value="Iris Fivelstad"></div>
+			<div class="label-profile pull-left">Firstname</div>
+			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileName" ng-init="formData.firstname='<?php echo $user->firstname; ?>'" value="<?php echo $user->firstname; ?>" ng-model="formData.firstname"></div>
+		</div>
+		<div class="one-field clearfix">
+			<div class="label-profile pull-left">Lastname</div>
+			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileName" ng-init="formData.lastname='<?php echo $user->lastname; ?>'" value="<?php echo $user->lastname; ?>" ng-model="formData.lastname"></div>
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">Userame</div>
-			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileUsername" value="Iris_F"></div>
+			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileUsername" ng-init="formData.username='<?php echo $user->username; ?>'"  value="<?php echo $user->username; ?>" ng-model="formData.username"></div>
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">E-mail</div>
@@ -32,7 +37,7 @@ use common\models\User;
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">Phone</div>
-			<div class="input-profile pull-left"><input type="text" class="form-control" id="profilePhone" value="55 5555 55"></div>
+			<div class="input-profile pull-left"><input type="text" class="form-control" id="profilePhone" value="55 5555 55" ng-model="formData.phone"></div>
 		</div>
 	</div>
 	<div class="col-xs-6">
