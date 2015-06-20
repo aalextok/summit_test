@@ -33,7 +33,9 @@ ALTER TABLE `image` ADD `hash` VARCHAR(32) NULL AFTER `location`;
 
 ALTER TABLE `user` ADD `distance` INT NULL AFTER `meters_above_sea_level`;
 
+ALTER TABLE `competition` ADD `meters_above_sea_level` INT NULL AFTER `close_time`, ADD `distance` INT NULL AFTER `meters_above_sea_level`, ADD `points` INT NULL AFTER `distance`, ADD `summits` INT NULL AFTER `points`;
 
+ALTER TABLE `user` CHANGE `rank` `rank` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
 
 --
 -- Table structure for table `rank`
@@ -42,10 +44,7 @@ ALTER TABLE `user` ADD `distance` INT NULL AFTER `meters_above_sea_level`;
 CREATE TABLE IF NOT EXISTS `rank` (
   `id` int(11) NOT NULL,
   `rank` varchar(255) NOT NULL,
-  `points` int(11) DEFAULT NULL,
-  `summits` int(11) DEFAULT NULL,
-  `meters_above_sea_level` int(11) DEFAULT NULL,
-  `distance` int(11) DEFAULT NULL
+  `points` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -69,4 +68,5 @@ ALTER TABLE `rank`
 ALTER TABLE `rank`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `competition` ADD `meters_above_sea_level` INT NULL AFTER `close_time`, ADD `distance` INT NULL AFTER `meters_above_sea_level`, ADD `points` INT NULL AFTER `distance`, ADD `summits` INT NULL AFTER `points`;
+ALTER TABLE `prize` DROP `summits`, DROP `meters_above_sea_level`, DROP `distance`;
+ALTER TABLE `prize` CHANGE `description` `description` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;

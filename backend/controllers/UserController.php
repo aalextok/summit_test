@@ -46,8 +46,54 @@ class UserController extends ActiveController
     public function prepareDataProvider(){
         $model = new $this->modelClass;
         
+        $searchableStrFields = [
+            'username',
+            'firstname',
+            'lastname',
+            'gender',
+            'email',
+            'phone',
+        ];
+        
+        $searchableNumFields = [
+            'points',
+            'summits',
+            'meters_above_sea_level',
+            'distance'
+        ];
+        
+        $rank = Yii::$app->request->getQueryParam('rank');
+        $operator = filter_var(Yii::$app->request->getQueryParam('greater'), FILTER_VALIDATE_BOOLEAN) === false ? '<=' : '>=';
+        
+        $query = $model->find()->where([
+                'role' => 10
+            ])->andWhere([
+                'not in', 
+                'id', 
+                [Yii::$app->user->identity->id]
+            ]);
+        
+        foreach($searchableStrFields as $field){
+            $param = Yii::$app->request->getQueryParam($field); 
+            if(isset($param)){
+                $query->andWhere(['like', $field, $param]);
+            }
+        }
+        
+        foreach($searchableNumFields as $field){
+            $param = Yii::$app->request->getQueryParam($field);
+            if(isset($param)){
+                $query->andWhere([$operator, $field, $param]);
+            }
+        }
+        
+        if(!empty($rank)){
+            $query->andWhere(['rank' => $rank]);
+        }
+        
+        
         $provider = new ActiveDataProvider([
-            'query' => $model->find()->where(['role' => 10]), // do not see yourself
+            'query' => $query,
         ]);
         
         return $provider;
