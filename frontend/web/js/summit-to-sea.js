@@ -199,6 +199,7 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
   $scope.proccessForm = function( oTarget ) {
       jQuery('.feedbacks .alert-success').addClass('hidden');
       jQuery('.feedbacks .alert-danger').addClass('hidden');
+      jQuery('.feedbacks .ajax-content-loading').removeClass('hidden');
 	  
 	  $http({
 		  method  : 'PUT',
@@ -213,15 +214,66 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
 	      jQuery('.feedbacks .alert-danger').html( data.message );
 	    }
+	    jQuery('.feedbacks .ajax-content-loading').addClass('hidden');	
 	  })
 	  .error(function(data) {
 	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
 	      jQuery('.feedbacks .alert-danger').html( data.message );
+	      jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
 	  });
 	  
 	  
   };
 
+});
+
+
+stsApp.controller('DashBoardCtrl', function ($scope, $http) {
+  $scope.places = [];
+  
+  var config = {headers:  {
+	      'Authorization': 'Bearer ' + stoGetAuthToken(),
+	      'Accept': 'application/json;odata=verbose'
+	  }
+  };
+  
+  $scope.searchChanged = function() { $scope.doSearch( ); };
+  
+  $scope.doSearch = function( ) {
+	  jQuery("#places-list-loading").show();
+	  
+	  var data = Object();
+	  data.limit = 1;
+	  data.page = 1;
+	  
+	  var dataString = jQuery.param(data);
+	  
+	  $http.get( stoGetApiBaseUri() + '/place/?' + dataString, config).success(function(data, status) {
+		  	var baseUri = jQuery('#place-view-base-uri').val();
+		  	
+		  	for(var i in data){
+		  		var uriTmp = baseUri;
+		  		uriTmp = uriTmp.replace("replaceid", data[i].id);
+		  		data[i].uri = uriTmp;
+		  	}
+	
+		    $scope.places = data;
+		    if(data.length > 0){
+		    	jQuery("#places-no-items").hide();
+		      	jQuery("#places-list-loading").hide();
+		    } else {
+		    	jQuery("#places-no-items").show();
+		      	jQuery("#places-list-loading").hide();
+		    }
+	  }).error(function(data, status) {
+	  	jQuery("#places-list-no-items").show();
+	  	jQuery("#places-list-loading").hide();
+	  });
+  };
+  
+  //initial search
+  $scope.doSearch();
+  
 });
 
 
