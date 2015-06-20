@@ -32,15 +32,17 @@ AppAsset::register($this);
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Home', 'url' => ['/site/index']],
-                ['label' => 'Users', 'url' => ['user-dashboard/index']],
-                ['label' => 'Places', 'url' => ['place-dashboard/index']],
-                ['label' => 'Competitions', 'url' => ['competition-dashboard/index']],
-                ['label' => 'Activities', 'url' => ['activity-dashboard/index']],
+                //['label' => 'Home', 'url' => ['/site/index']],
             ];
             if (Yii::$app->user->isGuest) {
                 $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
             } else {
+                $menuItems[] = ['label' => 'Users', 'url' => ['user-dashboard/index']];
+                $menuItems[] = ['label' => 'Places', 'url' => ['place-dashboard/index']];
+                $menuItems[] = ['label' => 'Competitions', 'url' => ['competition-dashboard/index']];
+                $menuItems[] = ['label' => 'Prizes', 'url' => ['prize-dashboard/index']];
+                $menuItems[] = ['label' => 'Ranks', 'url' => ['rank-dashboard/index']];
+                $menuItems[] = ['label' => 'Activities', 'url' => ['activity-dashboard/index']];
                 $menuItems[] = [
                     'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],

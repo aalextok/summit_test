@@ -43,4 +43,26 @@ class Win extends \yii\db\ActiveRecord
             'prize_id' => 'Prize ID',
         ];
     }
+    
+    public function fields() {
+        $fields = parent::fields();
+        
+        $fields[] = 'prize';
+        
+        return $fields;
+    }
+    
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        
+        if($insert){
+            // Send email to user
+            
+            // send push-notification
+        }
+    }
+    
+    public function getPrize(){
+        return $this->hasOne(Prize::className(), ['id' => 'prize_id']);
+    }
 }

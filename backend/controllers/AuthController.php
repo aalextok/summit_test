@@ -131,6 +131,8 @@ class AuthController extends ActiveController
             $user->image_hash = md5('');
         }    
         
+        $user->upgradeRank();
+        
         if($user->validate()){
             $user->save();
             

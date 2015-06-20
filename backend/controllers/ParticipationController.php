@@ -7,6 +7,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\helpers\Url;
 
 use yii\web;
+use yii\data\ActiveDataProvider;
 
 use backend\models\Participation;
 use backend\models\Competition;
@@ -21,6 +22,7 @@ class ParticipationController extends ActiveController
         $actions = parent::actions();
         
         unset($actions['create']);
+        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
 
         return $actions;
     }
@@ -90,4 +92,22 @@ class ParticipationController extends ActiveController
         return $model;
     }
     
+    public function prepareDataProvider(){
+        $model = new $this->modelClass;
+        $query = $model->find()->where([]);
+        
+        $all = filter_var(Yii::$app->request->getQueryParam('all'), FILTER_VALIDATE_BOOLEAN);
+        if(!$all){
+            $userId = Yii::$app->request->getQueryParam('user_id');
+            $userId = isset($userId) ? $userId : Yii::$app->user->identity->id;
+            
+            $query->andWhere(['user_id' => $userId]);
+        }
+        
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        
+        return $provider;
+    }
 }

@@ -8,6 +8,8 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\db\Query;
 
+use backend\models\Rank;
+
 /**
  * User model
  *
@@ -377,5 +379,18 @@ class User extends ActiveRecord implements IdentityInterface
         }
         
         return trim($errorsStr);
+    }
+    
+    public function upgradeRank($save = false){
+        $this->points = isset($this->points) ? $this->points : 0;
+        
+        $rank = Rank::find()->where(['<=', 'points', $this->points])->orderBy('points DESC')->one();
+        
+        if($rank->rank != $this->rank){
+            $this->rank = $rank->rank;
+            if($save){
+                $this->save();
+            }
+        }
     }
 }
