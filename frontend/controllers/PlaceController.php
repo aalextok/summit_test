@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use \yii;
 use \frontend\models\VisitForm;
+use \backend\models\Place;
 
 class PlaceController extends \frontend\controllers\BaseController
 {
@@ -24,6 +25,17 @@ class PlaceController extends \frontend\controllers\BaseController
                 'model' => $model,
           ]);
         }
+    }
+    
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $place = Place::findOne( ['id' => $id] );
+        
+        return $this->render('view', array(
+            "place" => $place,
+            "placeId" => $id
+        ));
     }
 
     public function actionIndex()
