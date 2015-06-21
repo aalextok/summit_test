@@ -78,6 +78,18 @@ return [
 //                }
 //            },
 //        ],
+        'mail' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'localhost',
+//                'host' => 'smtp.gmail.com',
+//                'username' => '',
+//                'password' => '',
+//                'port' => '587',
+//                'encryption' => 'tls',
+            ],
+        ],
     ],
     'params' => $params,
 ];

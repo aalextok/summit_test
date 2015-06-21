@@ -1,6 +1,6 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
+    'adminEmail' => 'admin@summittosea.no',
     'authKeyLifeTime' => 24 * 30, // hours
         'authCredentials' => [ 
         'facebook' => [
