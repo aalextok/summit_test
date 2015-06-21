@@ -63,7 +63,8 @@ class PlaceController extends ActiveController
                 . "place.distance,"
                 . "place.points,"
                 . "place.latitude,"
-                . "place.longtitude"
+                . "place.longtitude,"
+                . "place.address"
                 . " FROM place";
         
         

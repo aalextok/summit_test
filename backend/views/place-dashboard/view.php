@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'points',
             'latitude',
             'longtitude',
+            'address',
         ],
     ]) ?>
 

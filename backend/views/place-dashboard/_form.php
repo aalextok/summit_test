@@ -38,6 +38,8 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'latitude')->textInput() ?>
 
     <?= $form->field($model, 'longtitude')->textInput() ?>
+    
+    <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

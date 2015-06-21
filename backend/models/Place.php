@@ -16,6 +16,7 @@ use Yii;
  * @property integer $points
  * @property double $latitude
  * @property double $longtitude
+ * @property string $address
  * @property array $activities
  */
 class Place extends \yii\db\ActiveRecord
@@ -43,7 +44,7 @@ class Place extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description'], 'string'],
+            [['description', 'address'], 'string'],
             [['meters_above_sea_level', 'distance', 'points'], 'integer'],
             [['latitude', 'longtitude'], 'number'],
             [['code', 'name'], 'string', 'max' => 255],
@@ -74,6 +75,7 @@ class Place extends \yii\db\ActiveRecord
             'points' => 'Points',
             'latitude' => 'Latitude',
             'longtitude' => 'Longtitude',
+            'address' => 'Full address',
             'activities' => 'Activities',
         ];
     }
