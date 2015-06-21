@@ -32,6 +32,12 @@ return [
             'password' => 'MtEvhxzBULmhuAFw',
             'charset' => 'utf8'            
         ],
+        'assetManager' => [
+          'bundles' => [
+          ],
+        ],
+        
+        
         'urlManager' => [
           'enablePrettyUrl' => true,
           'showScriptName' => false,
