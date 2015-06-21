@@ -30,7 +30,7 @@ class AuthController extends ActiveController
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::className(),
-            'except' => ['signup', 'login', 'password-reset', 'app-credentials'],
+            'except' => ['signup', 'login', 'password-reset', 'app-credentials', 'test-mail'],
         ];
         $behaviors['verbs'] = [
             'class' => VerbFilter::className(),
@@ -217,4 +217,46 @@ class AuthController extends ActiveController
         
         throw new web\HttpException(500, "Unknown error");      
     }
+    
+    public function actionTestMail(){
+        Yii::$app->mail->compose()
+                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setTo('aalextok@gmail.com')
+                ->setSubject('Test email')
+                ->setTextBody('This is a test message.')
+                ->send();
+    }
+    
+//    public function actionPasswordReset(){
+//        $email = Yii::$app->request->post('email');
+//        $token = Yii::$app->request->post('token');
+//        $new_password = Yii::$app->request->post('new_password');
+//        
+//        $user = User::find()->where(['email' => $email])->one();
+//        if(!$user)
+//            return ['error' => ['message' => 'User not found']];
+//            
+//        if(!$new_password){
+//            $user->generatePasswordResetToken();
+//            $user->update();
+//            Yii::$app->mail->compose()
+//                ->setFrom(Yii::$app->params['adminEmail'])
+//                ->setTo($user->email)
+//                ->setSubject('Password reset')
+//                ->setTextBody(\yii\helpers\Url::to(['site/reset','reset_token' => $user->password_reset_token], true))
+//                ->send();
+//            return ['success' => ['message' => 'Link to password reset form was sent to: '.$user->email]];
+//        }
+//        else{
+//            if($user->isPasswordResetTokenValid($token)){
+//                $user->password = $new_password;
+//                $user->save();
+//                
+//                return $user;
+//            }
+//            else{
+//                return ['error' =>['message' => 'Password reset token not valid, try again']];
+//            }
+//        }     
+//    }
 }
