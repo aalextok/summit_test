@@ -45,6 +45,7 @@ class Competition extends \yii\db\ActiveRecord
         $fields = parent::fields();
         $fields[] = 'places';
         $fields[] = 'activity';
+        $fields[] = 'prize';
         
         unset($fields['achievements_by_places']);
         
@@ -73,6 +74,10 @@ class Competition extends \yii\db\ActiveRecord
     
     public function getActivity(){
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
+    }
+    
+    public function getPrize(){
+        return $this->hasOne(Prize::className(), ['competition_id' => 'id']);
     }
     
     public function afterSave($insert, $changedAttributes) {

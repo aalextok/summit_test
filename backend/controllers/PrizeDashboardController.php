@@ -3,18 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
-use backend\models\Activity;
+use backend\models\Prize;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\User;
 
 /**
- * ActivityDashboardController implements the CRUD actions for Activity model.
+ * PrizeDashboardController implements the CRUD actions for Prize model.
  */
-class ActivityDashboardController extends Controller
+class PrizeDashboardController extends Controller
 {
     public function behaviors()
     {
@@ -25,29 +23,17 @@ class ActivityDashboardController extends Controller
                     'delete' => ['post'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action){
-                            return Yii::$app->user->identity->role === User::ROLE_ADMIN;
-                        }
-                    ],
-                ],
-            ],
         ];
     }
 
     /**
-     * Lists all Activity models.
+     * Lists all Prize models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Activity::find(),
+            'query' => Prize::find(),
         ]);
 
         return $this->render('index', [
@@ -56,7 +42,7 @@ class ActivityDashboardController extends Controller
     }
 
     /**
-     * Displays a single Activity model.
+     * Displays a single Prize model.
      * @param integer $id
      * @return mixed
      */
@@ -68,13 +54,13 @@ class ActivityDashboardController extends Controller
     }
 
     /**
-     * Creates a new Activity model.
+     * Creates a new Prize model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Activity();
+        $model = new Prize();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -86,7 +72,7 @@ class ActivityDashboardController extends Controller
     }
 
     /**
-     * Updates an existing Activity model.
+     * Updates an existing Prize model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -105,7 +91,7 @@ class ActivityDashboardController extends Controller
     }
 
     /**
-     * Deletes an existing Activity model.
+     * Deletes an existing Prize model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -118,15 +104,15 @@ class ActivityDashboardController extends Controller
     }
 
     /**
-     * Finds the Activity model based on its primary key value.
+     * Finds the Prize model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Activity the loaded model
+     * @return Prize the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Activity::findOne($id)) !== null) {
+        if (($model = Prize::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

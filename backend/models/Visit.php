@@ -75,9 +75,7 @@ class Visit extends \yii\db\ActiveRecord
                 }
             }
             
-            
-            // check rank upgrade (?)
-            
+            $user->upgradeRank();
             $user->save();
             
             
@@ -142,6 +140,15 @@ class Visit extends \yii\db\ActiveRecord
                     if($finished){
                         $participation->finish_time = time();
                         $participation->minutes = (int)(($participation->finish_time - $participation->start_time) / 60);
+                        
+                        $prize = $competition->prize;
+                        if(!empty($prize)){
+                            $win = new Win();
+                            $win->prize_id = $prize->id;
+                            $win->user_id = $user->id;
+                            
+                            $win->save();
+                        }
                     }
                 }              
                 $participation->save();
