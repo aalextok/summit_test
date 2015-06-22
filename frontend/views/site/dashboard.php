@@ -55,7 +55,6 @@ use yii\helpers\Url;
 		<div class="event clearfix m-0 b-r-top">
 			<div class="event-img pull-left">
 			  <?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?>
-			  <img src="<?php echo Url::toRoute("img/done-icon.png"); ?>" ng-class="isDone(place)" style="style: 34px" />
 			</div>
 			<div class="event-description pull-left">
 				<div class="event-title"><a href="{{place.uri}}">{{place.name}}</a></div>
@@ -72,7 +71,7 @@ use yii\helpers\Url;
 				</a>
 			</div>
 		</div>
-	</div>'
+	</div>
 	
   </div>
 </div>

@@ -102,7 +102,6 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 	  jQuery("#users-list-loading").show();
 	  
 	  var data = Object();
-	  data.limit = 1;
 	  data.page = 1;
 	  
 	  var dataString = jQuery.param(data);
@@ -241,6 +240,7 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
   
   $scope.doSearch = function( ) {
 	  jQuery("#places-list-loading").show();
+  	  jQuery("#places-no-items").hide();
 	  
 	  var data = Object();
 	  data.limit = 1;
@@ -268,7 +268,7 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 		      	jQuery("#places-list-loading").hide();
 		    }
 	  }).error(function(data, status) {
-	  	jQuery("#places-list-no-items").show();
+	  	jQuery("#places-no-items").show();
 	  	jQuery("#places-list-loading").hide();
 	  });
   };
