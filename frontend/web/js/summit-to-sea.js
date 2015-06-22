@@ -279,12 +279,21 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 
 stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
   $scope.places = [];
+  $scope.isDone = 'done';
   
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
 	      'Accept': 'application/json;odata=verbose'
 	  }
   };
+
+  $scope.isDone = function( place ) {
+	  if(place.id==1){
+		  return "not-done";
+	  }
+	  
+	  return "done";
+  }
   
   $scope.loadPlaces = function(  ) {
 	  jQuery("#places-list-loading").show();

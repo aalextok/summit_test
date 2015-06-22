@@ -23,7 +23,7 @@ use yii\helpers\Url;
     		<div class="challenge-place clearfix">
 				<div class="challenge-image pull-left">
         			<?php echo Html::img('@web/img/mountain.jpg', ['class' => 'img-circle']) ?>
-        			<?php echo Html::img('@web/img/done-icon.png', ['class' => 'done', 'style' => 'width: 34px;']) ?>
+        			<img src="<?php echo Url::toRoute("img/done-icon.png"); ?>" ng-class="isDone(place)" style="style: 34px" />
     			</div>
     			<div class="challenge-title"><a href="{{place.uri}}" onclick="Show_Div(Div_5)">{{place.name}}</a></div>
     			<div class="challenge-height pull-right"><span>{{place.meters_above_sea_level}}</span> Meters above <br>sealevel</div>
