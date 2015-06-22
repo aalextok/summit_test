@@ -31,3 +31,7 @@
 .ajax-content-loading img {
 	padding-right: 10px;
 }
+
+.not-done {
+	display: none;
+}
