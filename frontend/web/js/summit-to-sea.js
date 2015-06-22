@@ -277,3 +277,44 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 });
 
 
+stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
+  $scope.places = [];
+  
+  var config = {headers:  {
+	      'Authorization': 'Bearer ' + stoGetAuthToken(),
+	      'Accept': 'application/json;odata=verbose'
+	  }
+  };
+  
+  $scope.loadPlaces = function(  ) {
+	  jQuery("#places-list-loading").show();
+	  var cId = jQuery("#competition-view-id").val();
+	  
+	  $http.get( stoGetApiBaseUri() + '/competition/' + cId, config).success(function(data, status) {
+		  	var baseUri = jQuery('#place-view-base-uri').val();
+		  	console.log(data);
+		  	for(var i in data.places){
+		  		var uriTmp = baseUri;
+		  		uriTmp = uriTmp.replace("replaceid", data.places[i].id);
+		  		data.places[i].uri = uriTmp;
+		  	}
+	
+		    $scope.places = data.places;
+		    
+		    if(data.places.length > 0){
+		    	jQuery("#places-no-items").hide();
+		      	jQuery("#places-list-loading").hide();
+		    } else {
+		    	jQuery("#places-no-items").show();
+		      	jQuery("#places-list-loading").hide();
+		    }
+	  }).error(function(data, status) {
+	  	jQuery("#places-list-no-items").show();
+	  	jQuery("#places-list-loading").hide();
+	  });
+  };
+  
+  //initial search
+  $scope.loadPlaces();
+  
+});
