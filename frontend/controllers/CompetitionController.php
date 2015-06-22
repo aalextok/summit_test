@@ -18,7 +18,8 @@ class CompetitionController extends \frontend\controllers\BaseController
         $comp = Competition::findOne( ['id' => $cId] );
         
         return $this->render('view', [
-          'competition' => $comp    
+          'competition' => $comp,
+          'competition_id' => $cId
         ]);
     }
 

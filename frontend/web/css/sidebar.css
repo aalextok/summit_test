@@ -730,3 +730,11 @@ a {
 small.text-muted {
     font-family: courier, courier-new, monospace;
 }
+
+/* copy from cover - so other form can have also this nice style */
+.input-des {
+    height: 45px;
+    width: 310px;
+    border: none !important;
+    margin-bottom: 10px;
+}

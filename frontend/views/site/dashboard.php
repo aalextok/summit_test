@@ -55,33 +55,21 @@ use yii\helpers\Url;
 		<div class="event clearfix m-0 b-r-top">
 			<div class="event-img pull-left"><?php echo Html::img('@web/img/hike.jpg', ['class' => 'img-circle']) ?></div>
 			<div class="event-description pull-left">
-				<div class="event-title">{{place.name}}</div>
+				<div class="event-title"><a href="{{place.uri}}">{{place.name}}</a></div>
 				<div class="event-when">
 				  {{place.description}}
 				</div>
 			</div>
 		</div>
 		<div class="green-bottom clearfix">
-			<div class="place-loc pull-left">Karuskose, Sandra küla, Suure-Jaani vald, Viljandi makond</div>
+			<div class="place-loc pull-left">{{place.address}}</div>
 			<div class="place-more pull-right">
-				<a href="#">
+				<a href="{{place.uri}}">
 				  <?php echo Html::img('@web/img/arrow-right.png', ['style' => 'height: 22px;']) ?>
 				</a>
 			</div>
 		</div>
 	</div>'
 	
-	<?php /*
-	activities: [{id:1, name:Hike, verb:Hiking, description:Still hiking}]
-    code: "1234"
-    description: "Kõrge mägi, u know"
-    distance: 200
-    id: 1
-    latitude: 25
-    longtitude: 54
-    meters_above_sea_level: 300
-    name: "Munamägi"
-    points: 45
-	*/ ?>
   </div>
 </div>
