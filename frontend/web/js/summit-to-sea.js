@@ -236,7 +236,7 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 	      'Accept': 'application/json;odata=verbose'
 	  }
   };
-  
+
   $scope.searchChanged = function() { $scope.doSearch( ); };
   
   $scope.doSearch = function( ) {
@@ -258,6 +258,8 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data;
+		    $scope.loadVisits();
+		    
 		    if(data.length > 0){
 		    	jQuery("#places-no-items").hide();
 		      	jQuery("#places-list-loading").hide();
@@ -270,7 +272,7 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 	  	jQuery("#places-list-loading").hide();
 	  });
   };
-  
+
   //initial search
   $scope.doSearch();
   
@@ -279,7 +281,8 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 
 stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
   $scope.places = [];
-  $scope.isDone = 'done';
+  $scope.visits = [];
+  
   
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
@@ -288,11 +291,19 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
   };
 
   $scope.isDone = function( place ) {
-	  if(place.id==1){
-		  return "not-done";
+	  if(place.visited){
+		  return "done";
 	  }
 	  
-	  return "done";
+	  return "not-done";
+  }
+  
+  $scope.isDoneMenu = function( place ) {
+	  if(place.visited){
+		  return "challenge-menu clearfix not-done";
+	  }
+	  
+	  return "challenge-menu clearfix";
   }
   
   $scope.loadPlaces = function(  ) {
@@ -301,11 +312,12 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 	  
 	  $http.get( stoGetApiBaseUri() + '/competition/' + cId, config).success(function(data, status) {
 		  	var baseUri = jQuery('#place-view-base-uri').val();
-		  	console.log(data);
+		  	
 		  	for(var i in data.places){
 		  		var uriTmp = baseUri;
 		  		uriTmp = uriTmp.replace("replaceid", data.places[i].id);
 		  		data.places[i].uri = uriTmp;
+		  		data.places[i].visited = false;
 		  	}
 	
 		    $scope.places = data.places;
@@ -313,6 +325,8 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 		    if(data.places.length > 0){
 		    	jQuery("#places-no-items").hide();
 		      	jQuery("#places-list-loading").hide();
+
+		        $scope.loadVisits();
 		    } else {
 		    	jQuery("#places-no-items").show();
 		      	jQuery("#places-list-loading").hide();
@@ -323,7 +337,30 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 	  });
   };
   
-  //initial search
-  $scope.loadPlaces();
+  $scope.loadVisits = function(  ) {
+	  //backend/web/visit
+	  $http.get( stoGetApiBaseUri() + '/visit', config).success(function(data, status) {
+		  	console.log(data);
+
+		    $scope.visits = data;
+		    $scope.applyVisits();
+		    
+	  }).error(function(data, status) {
+		  
+	  });
+	  
+  };
+
+  $scope.applyVisits = function(  ) {
+	  for( var i in $scope.visits ){
+	  	for(var i2 in $scope.places){
+	  		if($scope.visits[i].place_id == $scope.places[i2].id){
+	  			$scope.places[i].visited = true;
+	  		}
+	  	}
+	  }
+  }
   
+  //initial loading
+  $scope.loadPlaces();
 });

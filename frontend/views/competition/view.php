@@ -28,7 +28,7 @@ use yii\helpers\Url;
     			<div class="challenge-title"><a href="{{place.uri}}" onclick="Show_Div(Div_5)">{{place.name}}</a></div>
     			<div class="challenge-height pull-right"><span>{{place.meters_above_sea_level}}</span> Meters above <br>sealevel</div>
     		</div>
-    		<div class="challenge-menu clearfix" id="Div_5">
+    		<div class="challenge-menu clearfix" id="Div_5" ng-class="isDoneMenu(place)">
     			<div class="challenge-add-code pull-left">
     				<a href="<?php echo Url::toRoute("place/visit"); ?>">
     				  <?php echo Html::img('@web/img/plus-icon-white.png', ['class' => 'm-r-15', 'style' => 'width: 35px;']) ?>
