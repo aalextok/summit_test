@@ -57,17 +57,14 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
 			<div class="site-wrapper-inner">
 				<div class="cover-container">
 					<div class="logo">
-					    <a href="<?php echo Url::toRoute(""); ?>">
+					    <a href="<?php echo Url::toRoute("site/index"); ?>">
 						  <?php echo Html::img('@web/img/logo.png') ?>
 						</a>
 					</div>
-					<div class="sign-in">Sign in</div>
-					<div class="inner cover row">
-						
-                        <?= Alert::widget() ?>
-                        <?= $content ?>
-						
-					</div>
+					
+                    <?= Alert::widget() ?>
+                    <?= $content ?>
+                        
 				</div>
 				<div class="apps">
 					<span>Or download our app</span>

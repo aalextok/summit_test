@@ -41,6 +41,7 @@ class AppAsset extends AssetBundle
       
       if (
           Yii::$app->controller->module->requestedRoute != 'site/index' && 
+          Yii::$app->controller->module->requestedRoute != 'site/signup' && 
           Yii::$app->controller->module->requestedRoute != ''
       ) {
         $this->css[] = 'css/sidebar.css';

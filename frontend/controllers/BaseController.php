@@ -21,6 +21,7 @@ class BaseController extends \yii\web\Controller
     
     if (
         Yii::$app->controller->module->requestedRoute == 'site/index' || 
+        Yii::$app->controller->module->requestedRoute == 'site/signup' || 
         Yii::$app->controller->module->requestedRoute == ''
     ) {
         $this->layout = "landing";
