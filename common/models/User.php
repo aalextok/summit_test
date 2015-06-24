@@ -201,6 +201,23 @@ class User extends ActiveRecord implements IdentityInterface
       
       return Yii::$app->user->identity->id;
     }
+    
+    /**
+     * Login into web using auth token
+     *
+     * @return boolean
+     */
+    public static function loginUserByAuthToken( $token )
+    {
+      $rememberMe = true;
+      
+      $user = self::findIdentityByAccessToken( $token );
+      if($user){
+        return Yii::$app->user->login($user, $rememberMe ? 0 : (3600 * 24 * 30) );
+      }
+      
+      return false;
+    }
   
     /**
      * Create user's display name based on his data
@@ -385,6 +402,10 @@ class User extends ActiveRecord implements IdentityInterface
         $this->points = isset($this->points) ? $this->points : 0;
         
         $rank = Rank::find()->where(['<=', 'points', $this->points])->orderBy('points DESC')->one();
+        
+        if(!$rank){
+          return;
+        }
         
         if($rank->rank != $this->rank){
             $this->rank = $rank->rank;

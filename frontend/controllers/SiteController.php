@@ -104,6 +104,7 @@ class SiteController extends \frontend\controllers\BaseController
     
     public function successCallback($client)
     {
+      die('Not used');
       $userAttributes = $client->getUserAttributes();
       
       $check = User::findIdentityByEmail($userAttributes['email'], false);
@@ -156,6 +157,24 @@ class SiteController extends \frontend\controllers\BaseController
       else{
         throw new web\HttpException(400, User::errorsToString($user->getErrors()));
       }
+    }
+    
+    /**
+     * After getting auth token on frontend (trough ajax call to backend API)
+     * Make app state to be "user logged in" on frontend via
+     * provided auth token. So frontend app knows that user is logged in. 
+     * 
+     * This action is called via ajax
+     */
+    public function actionTokenlogin()
+    {
+        $loginToken = Yii::$app->request->post('loginToken');
+        
+        if ( User::loginUserByAuthToken( $loginToken ) ) {
+          die("OK:" . Url::toRoute("site/dashboard") );
+        }
+        
+        die("ERROR:" );
     }
     
     public function actionLogin()

@@ -126,4 +126,18 @@ class BaseController extends \yii\web\Controller
     return false;
   }
   
+  /**
+   * Return facebook app ID
+   * 
+   * @return string
+   */
+  public function getFacebookAppId( )
+  {
+    if( isset( Yii::$app->components['authClientCollection']['clients']['facebook']['clientId'] ) ) {
+      return Yii::$app->components['authClientCollection']['clients']['facebook']['clientId'];
+    }
+    
+    return "";
+  }
+  
 }

@@ -4,13 +4,23 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use frontend\widgets\SummitAuthChoice;
 ?>
+
+<div class="col-xs-12 login-register-feedback hidden">
+  <div class="alert alert-danger errors">
+    Login failed. Try again.
+  </div>
+</div>
+
 <div class="col-xs-6">
   <?php /*<a href="#" class="btn btn-block btn-facebook">Log in with facebook</a>*/ ?>
     
   <?php 
+  /*
     echo SummitAuthChoice::widget([
        'baseAuthUrl' => ['site/auth']
-  ]) ?>
+  ]) */?>
+ 
+ <a class="btn btn-block btn-facebook btn-facebook-login" onclick="checkFacebookLoginState();" href="#">Log in with facebook</a>
  
   <div class="sign-up">
     Don't have an account? <a href="<?php echo Url::toRoute("site/signup"); ?>">SIGN UP HERE</a>
@@ -49,4 +59,3 @@ use frontend\widgets\SummitAuthChoice;
     */ ?>
   <?php ActiveForm::end(); ?>
 </div>
-
