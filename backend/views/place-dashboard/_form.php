@@ -7,6 +7,8 @@ use backend\models\Activity;
 use backend\models\Place;
 use yii\helpers\ArrayHelper;
 
+use kartik\file\FileInput;
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\Place */
 /* @var $form yii\widgets\ActiveForm */
@@ -14,11 +16,14 @@ use yii\helpers\ArrayHelper;
 
 <div class="place-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'options' => ['enctype'=>'multipart/form-data']
+    ]); ?>
     
     <?php
         $model->activity_ids = array_map(function($o) { return $o->id; }, $model->activities);
         $allActivities = ArrayHelper::map(Activity::find()->asArray()->all(), 'id', 'name');
+        
     ?>
     
     <?= Html::activeCheckboxList($model, 'activity_ids', $allActivities) ?>
@@ -40,6 +45,21 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'longtitude')->textInput() ?>
     
     <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
+    
+    <?php
+//    echo $form->field($model, 'img[]')->widget(FileInput::classname(), [
+//        'options' => ['multiple' => true, 'accept' => 'image/*'],
+//        'pluginOptions' => [
+//            'previewFileType' => 'image',
+//            'initialPreview' => [
+//                Html::img("", ['class'=>'file-preview-image']),
+//            ],
+//            'overwriteInitial' => false,
+//            
+//        ],
+//        
+//    ]);
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

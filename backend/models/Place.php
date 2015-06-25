@@ -22,6 +22,9 @@ use Yii;
 class Place extends \yii\db\ActiveRecord
 {
     public $activity_ids;
+    public $img;
+    
+    public $model = 'Place';
     
     public static $countableFields = [
         'points',
@@ -56,6 +59,7 @@ class Place extends \yii\db\ActiveRecord
     public function fields() {
         $fields = parent::fields();
         $fields[] = 'activities';
+        $fields[] = 'images';
         
         return $fields;
     }
@@ -83,6 +87,13 @@ class Place extends \yii\db\ActiveRecord
     public function getActivities() {
         return $this->hasMany(Activity::className(), ['id' => 'activity_id'])
                 ->viaTable('places_activities', ['place_id' => 'id']);
+    }
+    
+    public function getImages(){
+        return $this->hasMany(Image::className(), [
+            'model' => 'model',
+            'model_id' => 'id'
+        ]);
     }
     
     public function afterSave($insert, $changedAttributes) {

@@ -52,8 +52,22 @@ class Visit extends \yii\db\ActiveRecord
         ];
     }
     
+    public function extraFields(){
+        $extraFields = parent::extraFields();
+        
+        $extraFields[] = 'activity';
+        $extraFields[] = 'place';
+        
+        return $extraFields;
+    }
+    
+    
     public function getPlace(){
         return $this->hasOne(Place::className(), ['id' => 'place_id']);
+    }
+    
+    public function getActivity(){
+        return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
     
     public function afterSave($insert, $changedAttributes) {

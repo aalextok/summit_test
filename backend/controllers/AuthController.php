@@ -39,6 +39,7 @@ class AuthController extends ActiveController
                 'signup' => ['POST'],
                 'password-reset' => ['POST'], 
                 'app-credentials' => ['GET'],
+                'password-change' => ['POST']
             ],  
         ];
         return $behaviors;
@@ -221,6 +222,36 @@ class AuthController extends ActiveController
         }
         
         throw new web\HttpException(500, "Unknown error");      
+    }
+    
+    public function actionPasswordChange(){
+        $user = Yii::$app->user->identity;
+        $password = Yii::$app->request->post('password');
+        
+        if(!$user->validatePassword($password)){
+            throw new web\HttpException(401, 'Password incorrect');
+        }
+        
+        $newPassword = Yii::$app->request->post('new_password');
+        
+        if (empty($newPassword)){
+           throw new web\HttpException(400, "Password must be a string and cannot be empty.");
+        }
+            
+        $user->password = $newPassword;
+        
+        if(!empty($user) && $user->update()){
+            return [
+                        'message' => 'Password changed successfully.',
+                        'user' => $user,
+                ];
+        }
+        else{
+            throw new web\HttpException(400, User::errorsToString($user->getErrors()));
+        }
+        
+        throw new web\HttpException(500, "Unknown error");
+        
     }
     
     public function actionTestMail(){
