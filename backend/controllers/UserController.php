@@ -65,32 +65,47 @@ class UserController extends ActiveController
         $rank = Yii::$app->request->getQueryParam('rank');
         $operator = filter_var(Yii::$app->request->getQueryParam('greater'), FILTER_VALIDATE_BOOLEAN) === false ? '<=' : '>=';
         
-        $query = $model->find()->where([
-                'role' => 10
-            ])->andWhere([
-                'not in', 
-                'id', 
-                [Yii::$app->user->identity->id]
-            ]);
+//        $query = $model->find()->where([
+//                'role' => 10
+//            ])->andWhere([
+//                'not in', 
+//                'id', 
+//                [Yii::$app->user->identity->id]
+//            ]);
+        
+        $query = $model->find()->where([]);
         
         foreach($searchableStrFields as $field){
             $param = Yii::$app->request->getQueryParam($field); 
             if(isset($param)){
-                $query->andWhere(['like', $field, $param]);
+                //$query->andWhere(['like', $field, $param]);
+                $query->orWhere(['like', $field, $param]);
             }
         }
+        
         
         foreach($searchableNumFields as $field){
             $param = Yii::$app->request->getQueryParam($field);
             if(isset($param)){
-                $query->andWhere([$operator, $field, $param]);
+                //$query->andWhere([$operator, $field, $param]);
+                $query->orWhere([$operator, $field, $param]);
             }
         }
         
         if(!empty($rank)){
-            $query->andWhere(['rank' => $rank]);
+            //$query->andWhere(['rank' => $rank]);
+            $query->orWhere(['rank' => $rank]);
         }
         
+        $query->andWhere(['role' => 10]);
+        $query->andWhere([
+            'not in', 
+            'id', 
+            [Yii::$app->user->identity->id]
+        ]);
+        
+        //$command = $query->createCommand();
+        //$sql = $command->rawSql;
         
         $provider = new ActiveDataProvider([
             'query' => $query,
