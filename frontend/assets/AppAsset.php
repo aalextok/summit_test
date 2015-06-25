@@ -20,8 +20,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/bootstrap-theme.min.css',
-        'css/component.css',
-        'css/site.css'
+        'css/component.css'
     ];
     public $js = [
         'js/modernizr.custom.js',
@@ -48,6 +47,8 @@ class AppAsset extends AssetBundle
       } else {
         $this->css[] = 'css/cover.css';
       }
+      
+      $this->css[] = 'css/site.css';
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
     }
 }
