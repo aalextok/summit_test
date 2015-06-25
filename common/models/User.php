@@ -101,7 +101,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'email'],
             [['firstname', 'lastname', 'email'], 'required'],
             [['username', 'email', 'firstname', 'lastname'], 'string', 'min' => 1, 'max' => 255],
-            [['email', 'username', 'phone'], 'unique'],
+            [['email', 'username'], 'unique'],
             ['image', 'file', 'extensions' => ['png', 'jpg', 'gif', 'jpeg'], 'maxSize' => 1024*1024*1024],
             ['gender', 'in', 'range' => ['MALE', 'FEMALE', 'OTHER', '']]
             
