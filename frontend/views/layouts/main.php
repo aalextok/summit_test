@@ -32,7 +32,7 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
     <?php $this->head() ?>
     <script>
       var stoFrontendBaseUri = "<?php echo Url::base(); ?>";
-      var stoApiBaseUri = "<?php echo Url::base() . "/../../backend/web"; /* TODO: make this better, trough url manager/config? */ ?>";
+      var stoApiBaseUri = "<?php echo $this->context->getApiBaseUri(); ?>";
       var stoAuthToken = "<?php echo $authToken; /* TODO: store in cookie for javascript? */ ?>";
     </script>  
 </head>

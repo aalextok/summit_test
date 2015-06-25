@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use yii;
+use yii\helpers\Url;
 use common\models\User;
 
 class BaseController extends \yii\web\Controller
@@ -139,6 +140,19 @@ class BaseController extends \yii\web\Controller
     }
     
     return "";
+  }
+  
+  /**
+   * Return API base uri
+   * 
+   * TODO: make this better, trough url manager/config?
+   * 
+   * @return string
+   */
+  public function getApiBaseUri( )
+  {
+    return Url::base() . "/../../backend/web";
+    //return "http://demo.bind.ee/summittosea/backend/web";
   }
   
 }
