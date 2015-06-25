@@ -77,7 +77,12 @@ class AuthController extends ActiveController
             $userAttributes = $facebook->getUserAttributes();
             $tokenAttr = $facebook->api('debug_token', 'GET', ['input_token' => $token, 'access_token' => $token]);
             $picture = $facebook->api('me/picture', 'GET', ['redirect' => 'false']);
-
+            
+            //if user un-ticked e-mail permission in app permissions dialog upon login/register
+            if(!isset($userAttributes['email'])){
+              throw new web\HttpException(400, "Please provide e-mail permission also when logging in via facebook.");
+            }
+            
             $user = User::findIdentityByEmail($userAttributes['email'], false);
             if($user){
                 throw new web\HttpException(400, "User with email {$user->email} already exists.");

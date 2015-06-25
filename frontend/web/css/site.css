@@ -35,3 +35,11 @@
 .not-done {
 	display: none;
 }
+
+.signup-row {
+	max-width: 340px;
+	margin: 0 auto;
+	text-align: center;
+	padding: 0;
+	
+}

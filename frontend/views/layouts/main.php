@@ -31,11 +31,13 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <script>
+      var stoFrontendBaseUri = "<?php echo Url::base(); ?>";
       var stoApiBaseUri = "<?php echo Url::base() . "/../../backend/web"; /* TODO: make this better, trough url manager/config? */ ?>";
       var stoAuthToken = "<?php echo $authToken; /* TODO: store in cookie for javascript? */ ?>";
     </script>  
 </head>
 <body>
+    <div id="fb-root"></div>
     <?php $this->beginBody() ?>
     
     <div class="wrapper">

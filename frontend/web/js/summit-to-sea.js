@@ -12,20 +12,152 @@ jQuery( document ).ready(function() {
 	
 });
 
+
 function stoInitLoginActions(){
 	
 	jQuery("#front-login-btn").click(function(){
-		jQuery(this).submit();
+		//jQuery(this).submit();
+		stoSubmitLoginform();
+		return false;
 	});
 
 	jQuery('#login-form input').keypress(function (e) {
 	    if (e.which == 13) {
-	    	jQuery(this).submit();
+	    	//jQuery(this).submit();
+			stoSubmitLoginform();
 	    	return false;
 	    }
 	});
 	
+
+	//jQuery(".btn-facebook-login").click(function(){
+	//	checkFacebookLoginState();
+	//});
 }
+
+function stoSubmitLoginform() {
+
+	var username = jQuery('#loginEmail').val();
+	var password = jQuery('#loginPassword ').val();
+	
+	stoLoginToApiCall('web', 'login', '', '', username, password, '', 0);
+}
+
+
+function checkFacebookLoginState(){
+	
+	FB.getLoginStatus(function(response) {
+		  if (response.status === 'connected') {
+		    var uid = response.authResponse.userID;
+		    var accessToken = response.authResponse.accessToken;
+		    
+		    stoLoginToApiCall('facebook', 'login', '', '', '', '', accessToken, 0);
+		  } else if (response.status === 'not_authorized') {
+		    FB.login(function(response) {
+	    	   // handle the response
+		    	checkFacebookLoginState();
+		    }, {scope: 'email'});
+		  } else {
+			    FB.login(function(response) {
+		    	   // handle the response
+			    	checkFacebookLoginState();
+			    }, {scope: 'email'});
+		  }
+	});
+	
+}
+
+
+/**
+ * Login/register trough API and get aut token to be used to login on frontend
+ */
+function stoLoginToApiCall( type, loginregister, firstname, lastname, username, password, token, cnt ){
+	cnt = cnt + 1;//to prevent endless loop
+	var inp = '';
+	
+	jQuery('.login-register-feedback').addClass('hidden');
+	
+	if(loginregister == 'login'){
+		var url = stoGetApiBaseUri() + '/auth/login?auth_type=' + type;
+		if( type == 'web' ){
+			inp += 'email=' + username;
+			inp += '&password=' + password;
+		}
+	} else {
+		var url = stoGetApiBaseUri() + '/auth/signup?auth_type=' + type;
+	}
+	
+    jQuery.ajax({
+        type:"POST",
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", "Bearer " + token);
+        },
+        url: url,
+        data: inp,
+        processData: false,
+        success: function( data ) {
+        	if( typeof data.user != 'undefined' && typeof data.auth_key != 'undefined' ){
+            	stoLoginToFrontend( data.auth_key );
+        	} else {
+            	if(type == 'facebook' && loginregister == 'register' && cnt < 3){
+            		stoLoginToApiCall( type, 'login', '', '', '', '', token, cnt );
+            		console.log('Try to login after creating');
+            	} else {
+            		jQuery('.login-register-feedback').removeClass('hidden');
+            	}
+        	}
+        },
+        error: function( data ) {
+        	//if user tried to login via FB, try registering beforehand, and login again
+        	if(type == 'facebook' && loginregister == 'login' && cnt < 2){
+        		stoLoginToApiCall( type, 'register', '', '', '', '', token, cnt );
+        		console.log('Try to register after login try with FB');
+        	} else {
+        		jQuery('.login-register-feedback').removeClass('hidden');
+        		if(typeof data.responseJSON.message != 'undefined'){
+            		jQuery('.login-register-feedback .errors').html( data.responseJSON.message );
+        		}
+        	}
+        },
+        always: function( data ) {
+        	//
+        }
+    });
+    
+}
+
+
+/**
+ * Login to frontend using obtained auth key
+ */
+function stoLoginToFrontend( token ){
+	
+	var url = stoGetFrontendBaseUri() + '/site/tokenlogin';
+	
+    jQuery.ajax({
+        type:"POST",
+        url: url,
+        data: "loginToken=" + token,
+        processData: false,
+        success: function( data ) {
+            var status = data.substr(0, 2);
+            var url = data.substr(3);
+            if(status == 'OK'){
+            	document.location = url;
+            } else {
+            	//error
+            }
+        },
+        error: function( data ) {
+        	jQuery('.login-register-feedback').removeClass('hidden');
+        },
+        always: function( data ) {
+        	//
+        }
+    });
+    
+}
+
 
 function stoInitVisitActions(){
 	
@@ -52,7 +184,7 @@ var stsApp = angular.module('stsApp', []);
 
 
 stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
-	//  ""
+
   $scope.competition = [];
   
   var config = {headers:  {
@@ -102,7 +234,6 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 	  jQuery("#users-list-loading").show();
 	  
 	  var data = Object();
-	  data.limit = 1;
 	  data.page = 1;
 	  
 	  var dataString = jQuery.param(data);
@@ -236,11 +367,12 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 	      'Accept': 'application/json;odata=verbose'
 	  }
   };
-  
+
   $scope.searchChanged = function() { $scope.doSearch( ); };
   
   $scope.doSearch = function( ) {
 	  jQuery("#places-list-loading").show();
+  	  jQuery("#places-no-items").hide();
 	  
 	  var data = Object();
 	  data.limit = 1;
@@ -258,6 +390,8 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data;
+		    $scope.loadVisits();
+		    
 		    if(data.length > 0){
 		    	jQuery("#places-no-items").hide();
 		      	jQuery("#places-list-loading").hide();
@@ -266,11 +400,11 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 		      	jQuery("#places-list-loading").hide();
 		    }
 	  }).error(function(data, status) {
-	  	jQuery("#places-list-no-items").show();
+	  	jQuery("#places-no-items").show();
 	  	jQuery("#places-list-loading").hide();
 	  });
   };
-  
+
   //initial search
   $scope.doSearch();
   
@@ -279,7 +413,8 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 
 stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
   $scope.places = [];
-  $scope.isDone = 'done';
+  $scope.visits = [];
+  
   
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
@@ -288,11 +423,19 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
   };
 
   $scope.isDone = function( place ) {
-	  if(place.id==1){
-		  return "not-done";
+	  if(place.visited){
+		  return "done";
 	  }
 	  
-	  return "done";
+	  return "not-done";
+  }
+  
+  $scope.isDoneMenu = function( place ) {
+	  if(place.visited){
+		  return "challenge-menu clearfix not-done";
+	  }
+	  
+	  return "challenge-menu clearfix";
   }
   
   $scope.loadPlaces = function(  ) {
@@ -301,11 +444,12 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 	  
 	  $http.get( stoGetApiBaseUri() + '/competition/' + cId, config).success(function(data, status) {
 		  	var baseUri = jQuery('#place-view-base-uri').val();
-		  	console.log(data);
+		  	
 		  	for(var i in data.places){
 		  		var uriTmp = baseUri;
 		  		uriTmp = uriTmp.replace("replaceid", data.places[i].id);
 		  		data.places[i].uri = uriTmp;
+		  		data.places[i].visited = false;
 		  	}
 	
 		    $scope.places = data.places;
@@ -313,6 +457,8 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 		    if(data.places.length > 0){
 		    	jQuery("#places-no-items").hide();
 		      	jQuery("#places-list-loading").hide();
+
+		        $scope.loadVisits();
 		    } else {
 		    	jQuery("#places-no-items").show();
 		      	jQuery("#places-list-loading").hide();
@@ -323,7 +469,30 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 	  });
   };
   
-  //initial search
-  $scope.loadPlaces();
+  $scope.loadVisits = function(  ) {
+	  //backend/web/visit
+	  $http.get( stoGetApiBaseUri() + '/visit', config).success(function(data, status) {
+		  	console.log(data);
+
+		    $scope.visits = data;
+		    $scope.applyVisits();
+		    
+	  }).error(function(data, status) {
+		  
+	  });
+	  
+  };
+
+  $scope.applyVisits = function(  ) {
+	  for( var i in $scope.visits ){
+	  	for(var i2 in $scope.places){
+	  		if($scope.visits[i].place_id == $scope.places[i2].id){
+	  			$scope.places[i].visited = true;
+	  		}
+	  	}
+	  }
+  }
   
+  //initial loading
+  $scope.loadPlaces();
 });

@@ -14,6 +14,7 @@ use yii\bootstrap\ActiveForm;
 
 AppAsset::register($this);
 
+$authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthKey();
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -24,25 +25,46 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <script>
+      var stoFrontendBaseUri = "<?php echo Url::base(); ?>";
+      var stoApiBaseUri = "<?php echo Url::base() . "/../../backend/web"; /* TODO: make this better, trough url manager/config? */ ?>";
+      var stoAuthToken = "<?php echo $authToken; /* TODO: store in cookie for javascript? */ ?>";
+    </script>  
 </head>
 <body>
+    <div id="fb-root"></div>
     <?php $this->beginBody() ?>
     
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '<?php echo $this->context->getFacebookAppId( ); ?>',
+              xfbml      : true,
+              version    : 'v2.3'
+            });
+          };
+    
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
+        </script>
+        
 		<div class="site-wrapper">
 			<div class="site-wrapper-inner">
 				<div class="cover-container">
 					<div class="logo">
-					    <a href="<?php echo Url::toRoute(""); ?>">
+					    <a href="<?php echo Url::toRoute("site/index"); ?>">
 						  <?php echo Html::img('@web/img/logo.png') ?>
 						</a>
 					</div>
-					<div class="sign-in">Sign in</div>
-					<div class="inner cover row">
-						
-                        <?= Alert::widget() ?>
-                        <?= $content ?>
-						
-					</div>
+					
+                    <?= Alert::widget() ?>
+                    <?= $content ?>
+                        
 				</div>
 				<div class="apps">
 					<span>Or download our app</span>
