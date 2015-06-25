@@ -7,7 +7,7 @@ use backend\models\Activity;
 use backend\models\Place;
 use yii\helpers\ArrayHelper;
 
-//use kartik\file\FileInput;
+use kartik\widgets\FileInput
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Place */
