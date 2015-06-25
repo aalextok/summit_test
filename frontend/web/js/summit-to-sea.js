@@ -267,6 +267,11 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 	  
 	  var data = Object();
 	  data.page = 1;
+	  data.firstname = query;
+	  //data.lastname = query;
+	  //data.username = query;
+	  //data.email = query;
+	  //data.phone = query;
 	  
 	  var dataString = jQuery.param(data);
 	  

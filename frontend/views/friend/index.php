@@ -27,11 +27,6 @@ use yii\helpers\Url;
 				<input type="text" id="input" placeholder="Search for friends" ng-model="searchQuery" ng-change="searchChanged()" ng-model-options="{ debounce: 500 }" />
 			</form>
 		</div>
-		<div class="nav-map pull-right">
-			<a href="#">
-		      <?php echo Html::img('@web/img/map-icon.png', ['style' => 'height: 22px;']) ?>
-			</a>
-		</div>
 	</div>
 	
     <div class="vertical-middle" id="users-list-no-items" style="display: none;">
