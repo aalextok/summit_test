@@ -364,10 +364,15 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
       jQuery('.feedbacks .alert-danger').addClass('hidden');
       jQuery('.feedbacks .ajax-content-loading').removeClass('hidden');
 	  
+      var tmpData = $scope.formData;
+      if(tmpData.phone == ''){
+    	  delete tmpData.phone;
+      }
+      
 	  $http({
 		  method  : 'PUT',
 		  url     : url,
-		  data    : jQuery.param( $scope.formData ),
+		  data    : jQuery.param( tmpData ),
 		  headers : headers
 	  })
 	  .success(function(data) {
