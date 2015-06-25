@@ -57,8 +57,7 @@ $watchingId = User::getUserFollowingId($currentUserId, $user->id);
 				<div class="event-title"><span>Iris Fivelstad</span> was out running</div>
 				<div class="event-when">2 days ago</div>
 				<div class="event-what">She tracked 7.92 km in 57m:22s </div>
-				<div class="event-map">
-			      <?php pre($user); ?>    
+				<div class="event-map"> 
 				</div>
 			</div>
 		</div>

@@ -664,7 +664,7 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 	  for( var i in $scope.visits ){
 	  	for(var i2 in $scope.places){
 	  		if($scope.visits[i].place_id == $scope.places[i2].id){
-	  			$scope.places[i].visited = true;
+	  			$scope.places[i2].visited = true;
 	  		}
 	  	}
 	  }
