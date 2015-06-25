@@ -7,21 +7,6 @@ use yii\helpers\Url;
 <div class="row" ng-controller="UserSearchListCtrl">
     <input type="hidden" value="<?php echo Url::toRoute(["profile/index", 'id' => "replaceid"]); ?>" id="user-profile-view-base-uri" />
 	<div class="nav-top">
-		<div class="nav-activities pull-left">
-			<div class="dropdown">
-				<a class="btn-menu menu-link dropdown-toggle" type="button" id="activitiesMenu" data-toggle="dropdown" aria-expanded="true">
-				<span class="pull-left">All activities</span>
-				  <?php echo Html::img('@web/img/dropdown.png', ['class' => 'pull-right', 'style' => 'height: 22px;']) ?>
-				</a>
-				<ul class="dropdown-menu" role="menu" aria-labelledby="activitiesMenu">
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">All activities</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Hiking</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Kayaking</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Running</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sailing</a></li>
-				</ul>
-			</div>
-		</div>
 		<div class="nav-search pull-left">
 			<form class="nav-search-area">
 				<input type="text" id="input" placeholder="Search for friends" ng-model="searchQuery" ng-change="searchChanged()" ng-model-options="{ debounce: 500 }" />
