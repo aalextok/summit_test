@@ -1,6 +1,6 @@
 jQuery( document ).ready(function() {
 	
-	stoInitLoginActions();
+	stoInitLoginAndRegisterActions();
 	stoInitVisitActions();
 	
 	/**
@@ -13,36 +13,56 @@ jQuery( document ).ready(function() {
 });
 
 
-function stoInitLoginActions(){
+function stoInitLoginAndRegisterActions(){
 	
 	jQuery("#front-login-btn").click(function(){
 		//jQuery(this).submit();
-		stoSubmitLoginform();
+		stoSubmitLoginForm();
 		return false;
 	});
 
 	jQuery('#login-form input').keypress(function (e) {
 	    if (e.which == 13) {
-	    	//jQuery(this).submit();
 			stoSubmitLoginform();
 	    	return false;
 	    }
 	});
-	
+
+	jQuery("#front-register-btn").click(function(){
+		//jQuery(this).submit();
+		stoSubmitRegisterForm();
+		return false;
+	});
+
+	jQuery('#form-signup input').keypress(function (e) {
+	    if (e.which == 13) {
+			stoSubmitRegisterForm();
+	    	return false;
+	    }
+	});
 
 	//jQuery(".btn-facebook-login").click(function(){
 	//	checkFacebookLoginState();
 	//});
 }
 
-function stoSubmitLoginform() {
+function stoSubmitLoginForm() {
 
 	var username = jQuery('#loginEmail').val();
-	var password = jQuery('#loginPassword ').val();
+	var password = jQuery('#loginPassword').val();
 	
 	stoLoginToApiCall('web', 'login', '', '', username, password, '', 0);
 }
 
+function stoSubmitRegisterForm() {
+	
+	var username = jQuery('#signupform-username').val();
+	var password = jQuery('#signupform-password').val();
+	var firstname = jQuery('#signupform-firstname').val();
+	var lastname = jQuery('#signupform-lastname').val();
+	
+	stoLoginToApiCall('web', 'register', firstname, lastname, username, password, '', 0);
+}
 
 function checkFacebookLoginState(){
 	
@@ -85,6 +105,13 @@ function stoLoginToApiCall( type, loginregister, firstname, lastname, username, 
 		}
 	} else {
 		var url = stoGetApiBaseUri() + '/auth/signup?auth_type=' + type;
+		if( type == 'web' ){
+			inp += 'email=' + username;
+			inp += '&password=' + password;
+			inp += '&firstname=' + firstname;
+			inp += '&lastname=' + lastname;
+			inp += '&username=' + firstname + '.' + lastname;
+		}
 	}
 	
     jQuery.ajax({
@@ -96,6 +123,11 @@ function stoLoginToApiCall( type, loginregister, firstname, lastname, username, 
         data: inp,
         processData: false,
         success: function( data ) {
+        	if( loginregister == 'register' && typeof data.user != 'undefined' ){
+        		//successful creating, login now
+        		stoLoginToApiCall( 'web', 'login', '', '', username, password, '', cnt );
+        	}
+        	
         	if( typeof data.user != 'undefined' && typeof data.auth_key != 'undefined' ){
             	stoLoginToFrontend( data.auth_key );
         	} else {

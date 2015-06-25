@@ -32,11 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
       
       <p>&nbsp;</p>
       <?= $form->field($model, 'username') ?>
-      <?= $form->field($model, 'email') ?>
       <?= $form->field($model, 'password')->passwordInput() ?>
-      <div class="form-group">
-          <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
-      </div>
+      <?= $form->field($model, 'firstname') ?>
+      <?= $form->field($model, 'lastname') ?>
       
       <div class="hi-icon-effect-1 hi-icon-effect-1a text-center">
         <a href="#" class="hi-icon icon-check done-check text-none" id="front-register-btn">Check</a>
