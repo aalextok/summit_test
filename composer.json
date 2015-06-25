@@ -24,7 +24,8 @@
         "kartik-v/yii2-widget-datepicker": "@dev",
         "fxp/composer-asset-plugin": "~1.0",
         "yiisoft/yii2-authclient": "*",
-        "2amigos/yii2-google-maps-library" : "*"
+        "2amigos/yii2-google-maps-library" : "*",
+        "kartik-v/yii2-widget-fileinput": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -14,12 +14,19 @@ use Yii;
  */
 class Image extends \yii\db\ActiveRecord
 {
+    public $image;
+    
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return 'image';
+    }
+    
+    public function formName() {
+        //parent::formName();
+        return '';
     }
 
     /**
@@ -31,7 +38,12 @@ class Image extends \yii\db\ActiveRecord
             [['location'], 'required'],
             [['model'], 'string'],
             [['model_id'], 'integer'],
-            [['location'], 'string', 'max' => 255]
+            [['location'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
+            [['description'], 'string'],
+            
+            [['image'], 'safe'],
+            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
         ];
     }
 
