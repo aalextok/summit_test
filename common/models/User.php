@@ -278,8 +278,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
       $item = (new yii\db\Query())
         ->from('watching')
-        ->where( 'user_id = ' . $userId )
-        ->where( 'watched_user_id = ' . $watchedUserId )
+        ->where( 'user_id = ' . $userId . ' AND ' . 'watched_user_id = ' . $watchedUserId )
         ->one();
       
       if( isset($item['id']) ){

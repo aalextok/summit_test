@@ -25,9 +25,9 @@ $watchingId = User::getUserFollowingId($currentUserId, $user->id);
           <?php } else { ?>
     		<div class="profile-edit challenge-height pull-right">
     		    <?php if($watchingId){ ?>
-    			  <a href="#" class="unf-green user-unfollow" ng-click="toggleWatching( $event )" data-state="1" data-id="<?php echo $watchingId; ?>" data-user-id="<?php echo $user->id; ?>">unfollow</a>
+    			  <a href="#" class="unf-green user-unfollow" ng-click="toggleWatching( $event, 'view', null )" data-state="1" data-id="<?php echo $watchingId; ?>" data-user-id="<?php echo $user->id; ?>">unfollow</a>
     			<?php } else { ?>
-    			  <a href="#" class="unf-green  user-follow" ng-click="toggleWatching( $event )" data-state="0" data-id="<?php echo $user->id; ?>" data-user-id="<?php echo $user->id; ?>">follow</a>
+    			  <a href="#" class="unf-green user-follow" ng-click="toggleWatching( $event, 'view', null )" data-state="0" data-id="<?php echo $user->id; ?>" data-user-id="<?php echo $user->id; ?>">follow</a>
     			<?php } ?>
     		</div>
          <?php } ?>

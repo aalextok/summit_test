@@ -253,6 +253,8 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 
 stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
   $scope.users = [];
+  $scope.watchings = [];
+  $scope.watchingsLoaded = false;
   
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
@@ -282,9 +284,19 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 		  		var uriTmp = baseUri;
 		  		uriTmp = uriTmp.replace("replaceid", data[i].id);
 		  		data[i].uri = uriTmp;
+		  		data[i].watching = false;
+		  		data[i].watchingId = 0;
 		  	}
 	
 		    $scope.users = data;
+		    
+		    if(!$scope.watchingsLoaded){
+		    	$scope.loadWatchings();
+		    } else {
+		    	$scope.loadWatchings();
+			    //$scope.applyWatchings(); - better load everytime ... in case user has changed some statuses somewhere
+		    }
+		    
 		    if(data.length > 0){
 		    	jQuery("#users-list-no-items").hide();
 		      	jQuery("#users-list-loading").hide();
@@ -297,24 +309,65 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 	  	jQuery("#users-list-loading").hide();
 	  });
   };
-  
-  //initial search
-  $scope.doSearch("");
-  
-});
 
+  $scope.loadWatchings = function() {
+	  $http.get( stoGetApiBaseUri() + '/watching', config).success(function(data, status) {
+		  	console.log(data);
 
-
-stsApp.controller('UserProfileCtrl', function ($scope, $http) {
-  
-  var config = {headers:  {
-	      'Authorization': 'Bearer ' + stoGetAuthToken(),
-	      'Accept': 'application/json;odata=verbose'
-	  }
+		    $scope.watchings = data;
+		    $scope.watchingsLoaded = true;
+		    $scope.applyWatchings();
+	  }).error(function(data, status) {
+		  
+	  });
+	  
   };
+
+  $scope.applyWatchings = function(  ) {
+	  for( var i in $scope.watchings ){
+	  	for(var i2 in $scope.users){
+	  		if($scope.watchings[i].watched_user_id == $scope.users[i2].id){
+	  			$scope.users[i2].watching = true;
+	  			$scope.users[i2].watchingId = $scope.watchings[i].id;
+	  		}
+	  	}
+	  }
+  }
   
-  $scope.toggleWatching = function( oTarget ) {
+  $scope.isWatchingClass = function( user ) {
+	  if(user.watching){
+		  return "unf-green user-unfollow";
+	  }
+	  
+	  return "unf-green user-follow";
+  }
+  
+  $scope.isWatchingText = function( user ) {
+	  if(user.watching){
+		  return "unfallow";
+	  }
+	  
+	  return "follow";
+  }
+  
+  /* this method is copied also 1:1 into users UserProfileCtrl controller */
+  $scope.toggleWatching = function( oTarget, which, user ) {
       var elem = angular.element( oTarget.target );
+      
+      /**
+       * On first click- init data for listing, which is already present in one profile view
+       */
+      if(which == 'list'){
+          var dataId = elem.attr('data-id');
+          var firstId = user.watching ? user.watchingId : user.id;
+
+    	  if(dataId == 0){
+        	  console.log("is listing- first init");
+    		  elem.attr('data-id', firstId);
+    		  elem.attr('data-user-id', user.id);
+    		  elem.attr('data-state', (user.watching ? 1 : 0) );
+    	  }
+      }
       
       var state = elem.attr('data-state');
       var dataId = elem.attr('data-id');
@@ -332,17 +385,99 @@ stsApp.controller('UserProfileCtrl', function ($scope, $http) {
 			  elem.attr('data-state', 1);
 			  elem.attr('data-id', data.id);
 		  }).error(function(data, status) {
-			  alert(status);
+			  
 		  });
 	  } else {
 		  var url = stoGetApiBaseUri() + '/watching/delete/' + dataId;
 		  
-		  $http.delete( url, config).success(function(data, status) {
+		  config.method = 'DELETE';
+		  
+		  /*
+				$http({
+				        method: 'DELETE', 
+				        url: '/someUrl'
+				});
+		  */
+		  $http['delete'](url, config).success(function(data, status) {
 			  elem.text('follow');
 			  elem.attr('data-state', 0);
 			  elem.attr('data-id', dataOriginalUserId);
 		  }).error(function(data, status) {
-			  alert(status);
+			  
+		  });
+	  }	  
+  };
+  
+  
+  //initial search
+  $scope.doSearch("");
+  
+});
+
+
+
+stsApp.controller('UserProfileCtrl', function ($scope, $http) {
+  
+  var config = {headers:  {
+	      'Authorization': 'Bearer ' + stoGetAuthToken(),
+	      'Accept': 'application/json;odata=verbose'
+	  }
+  };
+  
+  /* this method is copied also 1:1 into users UserSearchListCtrl controller */
+  $scope.toggleWatching = function( oTarget, which, user ) {
+      var elem = angular.element( oTarget.target );
+      
+      /**
+       * On first click- init data for listing, which is already present in one profile view
+       */
+      if(which == 'list'){
+          var dataId = elem.attr('data-id');
+          var firstId = user.watching ? user.watchingId : user.id;
+
+    	  if(dataId == 0){
+        	  console.log("is listing- first init");
+    		  elem.attr('data-id', firstId);
+    		  elem.attr('data-user-id', user.id);
+    		  elem.attr('data-state', (user.watching ? 1 : 0) );
+    	  }
+      }
+      
+      var state = elem.attr('data-state');
+      var dataId = elem.attr('data-id');
+      var dataOriginalUserId = elem.attr('data-user-id');
+
+	  console.log( state + ':' + dataId);
+	  var data = Object();
+	  
+	  if(state < 1){
+		  var url = stoGetApiBaseUri() + '/watching/create';
+		  data.watched_user_id = dataId;
+		  
+		  $http.post( url, data, config).success(function(data, status) {
+			  elem.text('unfollow');
+			  elem.attr('data-state', 1);
+			  elem.attr('data-id', data.id);
+		  }).error(function(data, status) {
+			  
+		  });
+	  } else {
+		  var url = stoGetApiBaseUri() + '/watching/delete/' + dataId;
+		  
+		  config.method = 'DELETE';
+		  
+		  /*
+				$http({
+				        method: 'DELETE', 
+				        url: '/someUrl'
+				});
+		  */
+		  $http['delete'](url, config).success(function(data, status) {
+			  elem.text('follow');
+			  elem.attr('data-state', 0);
+			  elem.attr('data-id', dataOriginalUserId);
+		  }).error(function(data, status) {
+			  
 		  });
 	  }	  
   };

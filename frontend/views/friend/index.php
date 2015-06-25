@@ -41,7 +41,7 @@ use yii\helpers\Url;
 				<?php echo Html::img('@web/img/man.jpg', ['class' => 'img-circle']) ?>
 				<div class="challenge-title"><a href="{{user.uri}}">{{user.firstname}} {{user.lastname}}</a></div>
 				<div class="challenge-height pull-right">
-					<a href="#" class="unf-green">unfollow</a>
+					<a href="#" ng-class="isWatchingClass(user)" ng-bind="isWatchingText(user)" ng-click="toggleWatching( $event, 'list', user )" data-state="0" data-id="0" data-user-id="0">-</a>
 				</div>
 			</div>
 		</div>
