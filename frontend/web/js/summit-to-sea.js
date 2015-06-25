@@ -371,7 +371,7 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	  
       var tmpData = $scope.formData;
       if(tmpData.phone == ''){
-    	  delete tmpData.phone;
+    	  //delete tmpData.phone;
       }
       
 	  $http({
