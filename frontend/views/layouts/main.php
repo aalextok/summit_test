@@ -63,16 +63,16 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
                   'active' => $this->context->stoMenuItemActive('my-profile')
                 ],
           		['label' => 'Challenges', 'url' => ['competition/index']],
-          		[
+          		/*[
                   'label' => 'Settings', 
                   'url' => ['profile/settings'], 
                   'template' => '<li class="small-links first-link ' . ($this->context->stoMenuItemActive('my-settings') ? 'active' : '') . '"><a href="{url}">{label}</a></li>', 
                   'visible'=>!Yii::$app->user->isGuest
-                ],
+                ],*/
           		[
                   'label' => 'About', 
                   'url' => Url::to(['site/about']), 
-                  'template' => '<li class="small-links ' . ($this->context->stoMenuItemActive('about') ? 'active' : '') . '"><a href="{url}">{label}</a></li>'
+                  'template' => '<li class="small-links first-link ' . ($this->context->stoMenuItemActive('about') ? 'active' : '') . '"><a href="{url}">{label}</a></li>'
                 ],
               ],
               'options' => [
