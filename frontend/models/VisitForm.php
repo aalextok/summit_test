@@ -14,7 +14,7 @@ use common\models\User;
  */
 class VisitForm extends Model
 {
-    public $code;
+    public $place_code;
     public $foundPlace;
 
     /**
@@ -24,8 +24,8 @@ class VisitForm extends Model
     {
         return [
             // code is required
-            [['code'], 'required'],
-            ['code', 'validateCode']
+            //[['code'], 'required'],
+            ['place_code', 'validateCode']
         ];
     }
 
@@ -35,7 +35,7 @@ class VisitForm extends Model
     public function attributeLabels()
     {
         return [
-            'code' => 'Code',
+            'place_code' => 'Code',
         ];
     }
 
@@ -54,7 +54,7 @@ class VisitForm extends Model
         $visit->place_id = $this->foundPlace->id;
         //$visit->competition_id = 0;
         $visit->visit_time = time();
-        $visit->acivity_id = 1;//TODO: where this comes from?
+        $visit->activity_id = 1;//TODO: where this comes from?
       }
       
       return $visit->save();
