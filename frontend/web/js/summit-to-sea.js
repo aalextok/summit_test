@@ -1,7 +1,7 @@
 jQuery( document ).ready(function() {
 	
 	stoInitLoginAndRegisterActions();
-	stoInitVisitActions();
+	//Remove: stoInitVisitActions();
 	
 	/**
 	 * If defined, modify content div styles
@@ -673,3 +673,54 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
   //initial loading
   $scope.loadPlaces();
 });
+
+
+
+stsApp.controller('PlaceVisitCtrl', function ($scope, $http) {
+
+  var headers = {
+      'Authorization': 'Bearer ' + stoGetAuthToken(),
+      'Accept': 'application/json;odata=verbose',
+      'Content-Type': 'application/x-www-form-urlencoded'
+  };
+  
+  var profileUserId = jQuery('#user-profile-edit-user-id').val();
+  var url = stoGetApiBaseUri() + '/visit/create';
+  
+  $scope.formData = {};
+  //$scope.formData.activity_id = 1;
+
+  $scope.proccessForm = function( oTarget ) {
+      jQuery('.feedbacks .alert-success').addClass('hidden');
+      jQuery('.feedbacks .alert-danger').addClass('hidden');
+      jQuery('.feedbacks .ajax-content-loading').removeClass('hidden');
+	  
+      var tmpData = $scope.formData;
+      
+	  $http({
+		  method  : 'POST',
+		  url     : url,
+		  data    : jQuery.param( tmpData ),
+		  headers : headers
+	  })
+	  .success(function(data) {
+	    if (data.id > 0) {
+	      jQuery('.feedbacks .alert-success').removeClass('hidden');
+	    } else {
+	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').html( data.message );
+	    }
+	    jQuery('.feedbacks .ajax-content-loading').addClass('hidden');	
+	  })
+	  .error(function(data) {
+	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').html( data.message );
+	      jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+	  });
+	  
+	  
+  };
+
+});
+
+
