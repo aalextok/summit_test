@@ -72,7 +72,7 @@ class Participation extends \yii\db\ActiveRecord
     }
     
     public static function getActiveParticipations($userId){
-        $activeParticipations;
+        $activeParticipations = [];
         $participations = Participation::find()
                 ->where(['user_id' => $userId])
                 ->andWhere(['finish_time' => null])
