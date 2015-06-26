@@ -47,6 +47,16 @@ use kartik\widgets\FileInput
     <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
     
     <?php
+    $locations = ArrayHelper::map(\backend\models\Location::find()->all(), 'id', 'name');
+    //$locations[0] = "";
+    sort($locations);
+    $locations = array_combine($locations, $locations);
+    
+    echo $form->field($model, 'location')->dropDownList($locations)->label('Location');
+    
+    ?>
+    
+    <?php
 //    echo $form->field($model, 'img[]')->widget(FileInput::classname(), [
 //        'options' => ['multiple' => true, 'accept' => 'image/*'],
 //        'pluginOptions' => [

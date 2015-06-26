@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Place */
+/* @var $model backend\models\Location */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Places', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Locations', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="place-view">
+<div class="location-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,20 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            [
-                'attribute' => 'activities',
-                'value' => $model->getActivitiesNames(),
-            ],
-            'code',
             'name',
-            'description:ntext',
-            'meters_above_sea_level',
-            'distance',
-            'points',
-            'latitude',
-            'longtitude',
-            'address',
-            'location'
         ],
     ]) ?>
 

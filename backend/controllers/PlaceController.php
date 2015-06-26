@@ -64,7 +64,8 @@ class PlaceController extends ActiveController
                 . "place.points,"
                 . "place.latitude,"
                 . "place.longtitude,"
-                . "place.address"
+                . "place.address,"
+                . "place.location"
                 . " FROM place";
         
         
@@ -77,10 +78,16 @@ class PlaceController extends ActiveController
                     . "AND activity.name LIKE '$activity') ";
         }
         
-        $location = trim(Yii::$app->request->getQueryParam('location'));
+        $sql .= ' WHERE TRUE ';
         
+        $name = trim(Yii::$app->request->getQueryParam('place'));
+        if(!empty($name)){
+            $sql .= " AND LOWER(place.name) LIKE LOWER('%$name%') ";
+        }
+        
+        $location = trim(Yii::$app->request->getQueryParam('location'));
         if(!empty($location)){
-            $sql .= " WHERE LOWER(place.name) LIKE LOWER('%$location%') ";
+            $sql .= " AND LOWER(place.location) LIKE LOWER('%$location%') ";
         }
         
         // search nearest places /////////////

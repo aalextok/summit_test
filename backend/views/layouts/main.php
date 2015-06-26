@@ -43,6 +43,7 @@ AppAsset::register($this);
                 $menuItems[] = ['label' => 'Prizes', 'url' => ['prize-dashboard/index']];
                 $menuItems[] = ['label' => 'Ranks', 'url' => ['rank-dashboard/index']];
                 $menuItems[] = ['label' => 'Activities', 'url' => ['activity-dashboard/index']];
+                $menuItems[] = ['label' => 'Locations', 'url' => ['location-dashboard/index']];
                 $menuItems[] = [
                     'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],
