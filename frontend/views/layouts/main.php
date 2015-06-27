@@ -55,6 +55,7 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
           echo Menu::widget([
               'items' => [
                 ['label' => 'Main feed', 'url' => ['site/dashboard'], 'visible' => !Yii::$app->user->isGuest],
+                ['label' => 'Activities', 'url' => ['place/index'], 'visible' => !Yii::$app->user->isGuest],
           		['label' => 'Friends', 'url' => ['friend/index'], 'visible' => !Yii::$app->user->isGuest],
           		[
                   'label' => 'My profile', 

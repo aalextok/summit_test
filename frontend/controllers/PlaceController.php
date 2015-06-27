@@ -4,6 +4,8 @@ namespace frontend\controllers;
 use \yii;
 use \frontend\models\VisitForm;
 use \backend\models\Place;
+use backend\models\Activity;
+use backend\models\Location;
 
 class PlaceController extends \frontend\controllers\BaseController
 {
@@ -40,7 +42,13 @@ class PlaceController extends \frontend\controllers\BaseController
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $allActivities = Activity::find()->all();
+        $allLocations = Location::find()->all();
+        
+        return $this->render('index', array(
+            "allActivities" => $allActivities,
+            "allLocations" => $allLocations
+        ));
     }
 
 }

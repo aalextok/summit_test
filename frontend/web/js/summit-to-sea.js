@@ -538,22 +538,55 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 
 stsApp.controller('DashBoardCtrl', function ($scope, $http) {
   $scope.places = [];
+  $scope.filterActivityId = 0;
+  $scope.filterLocationId = 0;
+  $scope.filterActivityName = "";
+  $scope.filterLocationName = "";
   
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
 	      'Accept': 'application/json;odata=verbose'
 	  }
   };
+  
+  
+  $scope.filterPlacesByActivity = function( oTarget, activityId, activityName ) {
+	  //var elem = angular.element( oTarget.target );
 
-  $scope.searchChanged = function() { $scope.doSearch( ); };
+	  var display = "Activity";
+	  if(activityId > 0){
+		  display = "Activity: " + activityName;
+	  }
+	  
+	  jQuery('#activity-selector-selected').text( display );
+	  $scope.filterActivityId = activityId;
+	  $scope.filterActivityName = activityName;
+	  $scope.doSearch( );
+  }
+  
+  $scope.filterPlacesByLocation = function( oTarget, locationId, locationName ) {
+	  //var elem = angular.element( oTarget.target );
+	  
+	  var display = "Location";
+	  if(locationId > 0){
+		  display = "Location: " + locationName;
+	  }
+	  
+	  jQuery('#location-selector-selected').text( display );
+	  $scope.filterLocationId = locationId;
+	  $scope.filterLocationName = locationName;
+	  $scope.doSearch( );
+  }
+
   
   $scope.doSearch = function( ) {
 	  jQuery("#places-list-loading").show();
   	  jQuery("#places-no-items").hide();
 	  
 	  var data = Object();
-	  data.limit = 1;
 	  data.page = 1;
+	  data.activity = $scope.filterActivityName;
+	  data.location = $scope.filterLocationName;
 	  
 	  var dataString = jQuery.param(data);
 	  
@@ -567,7 +600,6 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data;
-		    $scope.loadVisits();
 		    
 		    if(data.length > 0){
 		    	jQuery("#places-no-items").hide();
