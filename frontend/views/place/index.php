@@ -4,7 +4,7 @@ $this->title = 'Activities';
 use yii\helpers\Html;
 use yii\helpers\Url;
 ?>
-<div class="row" ng-controller="DashBoardCtrl">
+<div class="row" ng-controller="PlacesListCtrl">
 	<div class="nav-top">
 		<div class="nav-activities pull-left">
 			<div class="dropdown">

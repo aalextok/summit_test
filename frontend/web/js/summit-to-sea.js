@@ -541,7 +541,7 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 });
 
 
-stsApp.controller('DashBoardCtrl', function ($scope, $http) {
+stsApp.controller('PlacesListCtrl', function ($scope, $http) {
   $scope.places = [];
   $scope.filterActivityId = 0;
   $scope.filterLocationId = 0;
