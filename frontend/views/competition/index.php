@@ -11,7 +11,7 @@ use yii\helpers\Url;
   	<h1>No Challenges<br> at the moment</h1>
   </div>
 
-  <div class="row" id="challenges-items">
+  <div class="row hidden" id="challenges-items">
   	
   	<div class="col-xs-6 challenge-item" ng-repeat="challenge in competition">
   		<a href="{{challenge.uri}}">

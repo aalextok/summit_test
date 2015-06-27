@@ -48,7 +48,7 @@ use yii\helpers\Url;
   	<h1>No places<br> at the moment  </h1>
   </div>
   
-  <div class="row" id="places-items">
+  <div class="row hidden" id="places-items">
 	
 	<div class="col-xs-6 m-b-40" ng-repeat="place in places">
 		<div class="event clearfix m-0 b-r-top">

@@ -22,7 +22,7 @@ use yii\helpers\Url;
   	  Loading ...
     </div>
     
-	<div id="users-search-items">
+	<div class="hidden" id="users-search-items">
 	    <?php /*
     	<div class="col-xs-6">
     		<div class="event clearfix m-b-20">

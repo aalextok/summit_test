@@ -245,6 +245,8 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 	    } else {
 	    	jQuery("#challenges-no-items").show();
 	    }
+	    
+	    jQuery("#challenges-items").removeClass('hidden');
   }).error(function(data, status) {
     // Some error occurred
 	jQuery("#challenges-no-items h1").html("Challenges <br />failed to load");
@@ -301,6 +303,8 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 		    	$scope.loadWatchings();
 			    //$scope.applyWatchings(); - better load everytime ... in case user has changed some statuses somewhere
 		    }
+		    
+		    jQuery("#users-search-items").removeClass('hidden');
 		    
 		    if(data.length > 0){
 		    	jQuery("#users-list-no-items").hide();
@@ -605,6 +609,8 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data;
+		    
+		    jQuery("#places-items").removeClass('hidden');
 		    
 		    if(data.length > 0){
 		    	jQuery("#places-no-items").hide();
