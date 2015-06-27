@@ -4,12 +4,12 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 ?>
-<div class="row" ng-controller="UserSearchListCtrl">
+<div class="row UserSearchListCtrl" ng-controller="UserSearchListCtrl">
     <input type="hidden" value="<?php echo Url::toRoute(["profile/index", 'id' => "replaceid"]); ?>" id="user-profile-view-base-uri" />
 	<div class="nav-top">
 		<div class="nav-search pull-left">
 			<form class="nav-search-area">
-				<input type="text" id="input" placeholder="Search for friends" ng-model="searchQuery" ng-change="searchChanged()" ng-model-options="{ debounce: 500 }" />
+				<input type="text" id="users-search" placeholder="Search for friends" ng-model="searchQuery" ng-change="searchChanged()" ng-model-options="{ debounce: 500 }" />
 			</form>
 		</div>
 	</div>

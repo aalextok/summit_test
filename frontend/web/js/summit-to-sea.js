@@ -9,7 +9,12 @@ jQuery( document ).ready(function() {
 	if(jQuery('#main-style-replace').length > 0){
 		jQuery("#main").attr( "style", jQuery('#main-style-replace').val() );
 	}
-	
+
+	jQuery('#users-search').searchInput();
+
+	jQuery( ".searchinput-icon-search" ).on( "click", function() {
+		jQuery(this).parents('form').find('input').trigger('input');
+	});
 });
 
 
