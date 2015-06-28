@@ -519,18 +519,43 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
   
   var profileUserId = jQuery('#user-profile-edit-user-id').val();
   var url = stoGetApiBaseUri() + '/user/update/' + profileUserId;
+  var urlPasswordChange = stoGetApiBaseUri() + '/auth/password-change/';
   
   $scope.formData = {};//gender
 
   $scope.proccessForm = function( oTarget ) {
+	  var changePass = false;
+	  var changePassError = "";
+	  
       jQuery('.feedbacks .alert-success').addClass('hidden');
-      jQuery('.feedbacks .alert-danger').addClass('hidden');
+      jQuery('.feedbacks .alert-danger').html( jQuery('.feedbacks .alert-danger').attr('data-original') ).addClass('hidden');
       jQuery('.feedbacks .ajax-content-loading').removeClass('hidden');
 	  
       var tmpData = $scope.formData;
       if(tmpData.phone == ''){
     	  //delete tmpData.phone;
       }
+      
+      
+      //if password is also updated, do some pre flight checks
+      if(typeof $scope.formData.password != 'undefined' && $scope.formData.password != ""){
+    	  changePass = true;
+    	  
+    	  if(typeof $scope.formData.new_password == 'undefined' || $scope.formData.new_password == ""){
+    		  changePassError = "New password not given";
+    	  } else {
+        	  if(typeof $scope.formData.new_password_repeat == 'undefined' || $scope.formData.new_password != $scope.formData.new_password_repeat){
+        		  changePassError = "Passwords must match";
+        	  }
+    	  }
+
+    	  if( changePassError != '' ){
+		      jQuery('.feedbacks .alert-danger').html( changePassError ).removeClass('hidden');
+		      jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+		      return;
+    	  }
+      }
+      
       
 	  $http({
 		  method  : 'PUT',
@@ -540,12 +565,20 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	  })
 	  .success(function(data) {
 	    if (data.id > 0) {
-	      jQuery('.feedbacks .alert-success').removeClass('hidden');
+	    	if( !changePass ){
+	    		jQuery('.feedbacks .alert-success').html("Profile updated").removeClass('hidden');
+	    	}
 	    } else {
 	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
 	      jQuery('.feedbacks .alert-danger').html( data.message );
 	    }
-	    jQuery('.feedbacks .ajax-content-loading').addClass('hidden');	
+	    
+	    if( changePass ){
+	    	$scope.proccessPasswordChange();
+	    } else {
+	    	jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+	    }
+	    
 	  })
 	  .error(function(data) {
 	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
@@ -553,6 +586,36 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	      jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
 	  });
 	  
+	  
+  };
+  $scope.proccessPasswordChange = function( ) {
+	  $http({
+		  method  : 'POST',
+		  url     : urlPasswordChange,
+		  data    : jQuery.param( { 
+			  "password" : $scope.formData.password,
+			  "new_password" : $scope.formData.new_password
+		  } ),
+		  headers : headers
+	  })
+	  .success(function(data) {
+		
+	    if (typeof data.user != 'undefined') {
+	    	jQuery('.feedbacks .alert-success').html("Profile updated").removeClass('hidden');
+	    } else {
+		  jQuery('.feedbacks .alert-success').html("Profile updated but password update failed.").removeClass('hidden');
+	      //jQuery('.feedbacks .alert-danger').html( jQuery('.feedbacks .alert-danger').attr('data-password-error') ).removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').html( data.message ).removeClass('hidden');;
+	    }
+	    
+	    jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+	  })
+	  .error(function(data) {
+		  jQuery('.feedbacks .alert-success').html("Profile updated but password update failed.").removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').html( data.message );
+	      jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+	  });
 	  
   };
 
