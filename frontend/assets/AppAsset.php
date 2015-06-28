@@ -19,15 +19,17 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/bootstrap-theme.min.css',
+        //'css/bootstrap-theme.min.css',
         'css/component.css'
     ];
     public $js = [
         'js/modernizr.custom.js',
         'js/bootstrap.min.js',
         'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js', //TODO: should not use CDN?
+        'https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js',
         'js/jquery.searchinput.js',
         'js/component.js',
+        'js/plugins.js',
         'js/global-functions.js',
         'js/summit-to-sea.js',
     ];

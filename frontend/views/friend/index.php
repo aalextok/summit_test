@@ -4,12 +4,12 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 ?>
-<div class="row" ng-controller="UserSearchListCtrl">
+<div class="row UserSearchListCtrl" ng-controller="UserSearchListCtrl">
     <input type="hidden" value="<?php echo Url::toRoute(["profile/index", 'id' => "replaceid"]); ?>" id="user-profile-view-base-uri" />
 	<div class="nav-top">
 		<div class="nav-search pull-left">
 			<form class="nav-search-area">
-				<input type="text" id="input" placeholder="Search for friends" ng-model="searchQuery" ng-change="searchChanged()" ng-model-options="{ debounce: 500 }" />
+				<input type="text" id="users-search" placeholder="Search for friends" ng-model="searchQuery" ng-change="searchChanged()" ng-model-options="{ debounce: 500 }" />
 			</form>
 		</div>
 	</div>
@@ -22,7 +22,7 @@ use yii\helpers\Url;
   	  Loading ...
     </div>
     
-	<div id="users-search-items">
+	<div class="hidden" id="users-search-items">
 	    <?php /*
     	<div class="col-xs-6">
     		<div class="event clearfix m-b-20">
@@ -38,7 +38,7 @@ use yii\helpers\Url;
     	
 		<div class="col-xs-6" ng-repeat="user in users">
 			<div class="challenge-place">
-				<?php echo Html::img('@web/img/man.jpg', ['class' => 'img-circle']) ?>
+    	        <img src="<?php echo Url::base() . '/img/default-avatar-man.jpg'; ?>" class="img-circle"/>
 				<div class="challenge-title"><a href="{{user.uri}}">{{user.firstname}} {{user.lastname}}</a></div>
 				<div class="challenge-height pull-right">
 					<a href="#" ng-class="isWatchingClass(user)" ng-bind="isWatchingText(user)" ng-click="toggleWatching( $event, 'list', user )" data-state="0" data-id="0" data-user-id="0">-</a>

@@ -9,7 +9,12 @@ jQuery( document ).ready(function() {
 	if(jQuery('#main-style-replace').length > 0){
 		jQuery("#main").attr( "style", jQuery('#main-style-replace').val() );
 	}
-	
+
+	jQuery('#users-search').searchInput();
+
+	jQuery( ".searchinput-icon-search" ).on( "click", function() {
+		jQuery(this).parents('form').find('input').trigger('input');
+	});
 });
 
 
@@ -207,6 +212,20 @@ function stoInitVisitActions(){
 }
 
 
+function stoInitMasonry(){
+	jQuery('.mgrid').masonry({
+	  itemSelector: '.mgrid-item',
+	  //columnWidth: 200
+	});
+}
+
+
+function stoInitProfileEvents(){
+	jQuery(".event-when").timeago();
+}
+
+
+
 //http://stackoverflow.com/questions/14183025/setting-application-wide-http-headers-in-angularjs
 
 var stsApp = angular.module('stsApp', []);
@@ -240,6 +259,8 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 	    } else {
 	    	jQuery("#challenges-no-items").show();
 	    }
+	    
+	    jQuery("#challenges-items").removeClass('hidden');
   }).error(function(data, status) {
     // Some error occurred
 	jQuery("#challenges-no-items h1").html("Challenges <br />failed to load");
@@ -296,6 +317,8 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 		    	$scope.loadWatchings();
 			    //$scope.applyWatchings(); - better load everytime ... in case user has changed some statuses somewhere
 		    }
+		    
+		    jQuery("#users-search-items").removeClass('hidden');
 		    
 		    if(data.length > 0){
 		    	jQuery("#users-list-no-items").hide();
@@ -496,18 +519,43 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
   
   var profileUserId = jQuery('#user-profile-edit-user-id').val();
   var url = stoGetApiBaseUri() + '/user/update/' + profileUserId;
+  var urlPasswordChange = stoGetApiBaseUri() + '/auth/password-change/';
   
   $scope.formData = {};//gender
 
   $scope.proccessForm = function( oTarget ) {
+	  var changePass = false;
+	  var changePassError = "";
+	  
       jQuery('.feedbacks .alert-success').addClass('hidden');
-      jQuery('.feedbacks .alert-danger').addClass('hidden');
+      jQuery('.feedbacks .alert-danger').html( jQuery('.feedbacks .alert-danger').attr('data-original') ).addClass('hidden');
       jQuery('.feedbacks .ajax-content-loading').removeClass('hidden');
 	  
       var tmpData = $scope.formData;
       if(tmpData.phone == ''){
     	  //delete tmpData.phone;
       }
+      
+      
+      //if password is also updated, do some pre flight checks
+      if(typeof $scope.formData.password != 'undefined' && $scope.formData.password != ""){
+    	  changePass = true;
+    	  
+    	  if(typeof $scope.formData.new_password == 'undefined' || $scope.formData.new_password == ""){
+    		  changePassError = "New password not given";
+    	  } else {
+        	  if(typeof $scope.formData.new_password_repeat == 'undefined' || $scope.formData.new_password != $scope.formData.new_password_repeat){
+        		  changePassError = "Passwords must match";
+        	  }
+    	  }
+
+    	  if( changePassError != '' ){
+		      jQuery('.feedbacks .alert-danger').html( changePassError ).removeClass('hidden');
+		      jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+		      return;
+    	  }
+      }
+      
       
 	  $http({
 		  method  : 'PUT',
@@ -517,12 +565,20 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	  })
 	  .success(function(data) {
 	    if (data.id > 0) {
-	      jQuery('.feedbacks .alert-success').removeClass('hidden');
+	    	if( !changePass ){
+	    		jQuery('.feedbacks .alert-success').html("Profile updated").removeClass('hidden');
+	    	}
 	    } else {
 	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
 	      jQuery('.feedbacks .alert-danger').html( data.message );
 	    }
-	    jQuery('.feedbacks .ajax-content-loading').addClass('hidden');	
+	    
+	    if( changePass ){
+	    	$scope.proccessPasswordChange();
+	    } else {
+	    	jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+	    }
+	    
 	  })
 	  .error(function(data) {
 	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
@@ -532,28 +588,140 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	  
 	  
   };
+  $scope.proccessPasswordChange = function( ) {
+	  $http({
+		  method  : 'POST',
+		  url     : urlPasswordChange,
+		  data    : jQuery.param( { 
+			  "password" : $scope.formData.password,
+			  "new_password" : $scope.formData.new_password
+		  } ),
+		  headers : headers
+	  })
+	  .success(function(data) {
+		
+	    if (typeof data.user != 'undefined') {
+	    	jQuery('.feedbacks .alert-success').html("Profile updated").removeClass('hidden');
+	    } else {
+		  jQuery('.feedbacks .alert-success').html("Profile updated but password update failed.").removeClass('hidden');
+	      //jQuery('.feedbacks .alert-danger').html( jQuery('.feedbacks .alert-danger').attr('data-password-error') ).removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').html( data.message ).removeClass('hidden');;
+	    }
+	    
+	    jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+	  })
+	  .error(function(data) {
+		  jQuery('.feedbacks .alert-success').html("Profile updated but password update failed.").removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').removeClass('hidden');
+	      jQuery('.feedbacks .alert-danger').html( data.message );
+	      jQuery('.feedbacks .ajax-content-loading').addClass('hidden');
+	  });
+	  
+  };
 
 });
 
 
-stsApp.controller('DashBoardCtrl', function ($scope, $http) {
-  $scope.places = [];
+stsApp.controller('UserActivitiesListingCtrl', function ($scope, $http) {
   
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
 	      'Accept': 'application/json;odata=verbose'
 	  }
   };
+  
+  //currently actually only visits are displayed
+  $scope.events = [];
+  
+  $scope.loadEvents = function(  ) {
+	  jQuery("#activities-list-loading").show();
+	  var userId = jQuery("#user-view-id").val();
 
-  $scope.searchChanged = function() { $scope.doSearch( ); };
+	  $scope.visits = [];
+	  $http.get( stoGetApiBaseUri() + '/visit/?user_id=' + userId + '&expand=activity', config).success(function(data, status) {
+		  	
+		  	for(var i in data){
+		  		data[i].isodate = stoTimestampToIsoDate( data[i].visit_time * 1000 );
+		  	}
+
+		    $scope.events = data;
+		    
+		    //TODO: maybe some angular callback? Maybe not needed?
+		    setTimeout(function(){
+		    	jQuery("#activities-list-loading").hide();
+		    	jQuery('#activities-list').removeClass('hidden');
+		    	stoInitProfileEvents();
+		    	stoInitMasonry();
+		    }, 250);
+		    
+		    if(data.length > 0){
+		    	jQuery("#places-no-items").hide();
+		      	jQuery("#places-list-loading").hide();
+		    } else {
+		    	jQuery("#places-no-items").show();
+		      	jQuery("#places-list-loading").hide();
+		    }
+	  }).error(function(data, status) {
+	  	jQuery("#places-list-no-items").show();
+	  	jQuery("#places-list-loading").hide();
+	  });
+  };
+  
+  $scope.loadEvents();
+});
+
+
+stsApp.controller('PlacesListCtrl', function ($scope, $http) {
+  $scope.places = [];
+  $scope.filterActivityId = 0;
+  $scope.filterLocationId = 0;
+  $scope.filterActivityName = "";
+  $scope.filterLocationName = "";
+  
+  var config = {headers:  {
+	      'Authorization': 'Bearer ' + stoGetAuthToken(),
+	      'Accept': 'application/json;odata=verbose'
+	  }
+  };
+  
+  
+  $scope.filterPlacesByActivity = function( oTarget, activityId, activityName ) {
+	  //var elem = angular.element( oTarget.target );
+
+	  var display = "Activity";
+	  if(activityId > 0){
+		  display = "Activity: " + activityName;
+	  }
+	  
+	  jQuery('#activity-selector-selected').text( display );
+	  $scope.filterActivityId = activityId;
+	  $scope.filterActivityName = activityName;
+	  $scope.doSearch( );
+  }
+  
+  $scope.filterPlacesByLocation = function( oTarget, locationId, locationName ) {
+	  //var elem = angular.element( oTarget.target );
+	  
+	  var display = "Location";
+	  if(locationId > 0){
+		  display = "Location: " + locationName;
+	  }
+	  
+	  jQuery('#location-selector-selected').text( display );
+	  $scope.filterLocationId = locationId;
+	  $scope.filterLocationName = locationName;
+	  $scope.doSearch( );
+  }
+
   
   $scope.doSearch = function( ) {
 	  jQuery("#places-list-loading").show();
   	  jQuery("#places-no-items").hide();
 	  
 	  var data = Object();
-	  data.limit = 1;
 	  data.page = 1;
+	  data.activity = $scope.filterActivityName;
+	  data.location = $scope.filterLocationName;
 	  
 	  var dataString = jQuery.param(data);
 	  
@@ -567,7 +735,8 @@ stsApp.controller('DashBoardCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data;
-		    $scope.loadVisits();
+		    
+		    jQuery("#places-items").removeClass('hidden');
 		    
 		    if(data.length > 0){
 		    	jQuery("#places-no-items").hide();

@@ -46,11 +46,11 @@ use yii\helpers\Url;
   <input type="hidden" value="<?php echo Url::toRoute(["place/view", 'id' => "replaceid"]); ?>" id="place-view-base-uri" />
   
   <div class="vertical-middle" id="places-no-items">
-  	<h1>No places<br> at the moment  </h1>
+  	<h1>No events<br> at the moment  </h1>
   </div>
   
   <div class="row" id="places-items">
-	
+	<?php /*
 	<div class="col-xs-6 m-b-40" ng-repeat="place in places">
 		<div class="event clearfix m-0 b-r-top">
 			<div class="event-img pull-left">
@@ -72,6 +72,7 @@ use yii\helpers\Url;
 			</div>
 		</div>
 	</div>
+	*/ ?>
 	
   </div>
 </div>

@@ -8,7 +8,7 @@ use common\models\User;
   <form>
     <input type="hidden" value="<?php echo $id; ?>" id="user-profile-edit-user-id" />
 	<div class="profile-top">
-		<?php echo Html::img('@web/img/lady.jpg', ['class' => 'img-circle']) ?>
+    	<img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle"/>
 		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
 		<div class="profile-stats clearfix">
 			<div class="friends pull-left">FRIENDS <br><span><?php echo User::getUserFriendCount( $user->id ); ?></span></div>
@@ -23,7 +23,7 @@ use common\models\User;
     	<div class="alert alert-success hidden">
     	  Profile updated.
     	</div>
-    	<div class="alert alert-danger hidden">
+    	<div class="alert alert-danger hidden" data-original="Profile update failed. Try again. " data-password-error="Password update failed">
     	  Profile update failed. Try again. 
     	</div>
         <div class="ajax-content-loading hidden">
@@ -47,7 +47,7 @@ use common\models\User;
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">E-mail</div>
-			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileEmail" value="iris@gmail.com"></div>
+			<div class="input-profile pull-left"><input type="text" class="form-control" id="profileEmail" value="<?php echo $user->email; ?>" disabled="disabled"></div>
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile pull-left">Phone</div>
@@ -59,15 +59,15 @@ use common\models\User;
 		<div class="change-pass-title">Change password</div>
 		<div class="one-field m-b-35 clearfix">
 			<div class="label-profile p-10 pull-left">Current<br>password</div>
-			<div class="input-profile pull-left"><input type="password" class="form-control" id="profileName" value="demopass"></div>
+			<div class="input-profile pull-left"><input type="password" name="password" class="form-control" ng-model="formData.password" value=""></div>
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile np-p pull-left">New password</div>
-			<div class="input-profile pull-left"><input type="password" class="form-control" id="profileName"></div>
+			<div class="input-profile pull-left"><input name="new_password" type="password" class="form-control" ng-model="formData.new_password" ></div>
 		</div>
 		<div class="one-field clearfix">
 			<div class="label-profile p-10 pull-left">New password, again</div>
-			<div class="input-profile pull-left"><input type="password" class="form-control" id="profileName"></div>
+			<div class="input-profile pull-left"><input name="new_password_repeat" type="password" class="form-control" ng-model="formData.new_password_repeat" ></div>
 		</div>
 	</div>
   </form>
