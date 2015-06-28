@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\db\Query;
+use yii\helpers\Url;
 
 use backend\models\Rank;
 
@@ -321,6 +322,41 @@ class User extends ActiveRecord implements IdentityInterface
       return "Rookie";
     }
     
+    /**
+     * Get user avatar profile photo object or uri
+     *
+     * TODO: finish this after profile photo upload done
+     *
+     * @param $user object|integer
+     * @param $onlyUri object|boolean
+     * @return object|string
+     */
+    public static function getUserPhoto( $user, $onlyUri = false )
+    {
+    
+      if(!is_object($user)){
+        $user = self::findIdentity( $user );
+        if(!$user){
+          return "";
+        }
+      }
+      
+      /*
+      $item = (new yii\db\Query())
+        ->from('image')
+        ->where( 'user_id = ' . $userId . ' AND watched_user_id = ' . $watchedUserId )
+        ->one();
+      
+      if( isset($item['id']) ){
+        return $item['id'];
+      }
+      //$onlyUri
+    
+      */
+      
+      
+      return Url::base() . '/img/default-avatar-man.jpg';
+    }
     
     /**
      * @inheritdoc

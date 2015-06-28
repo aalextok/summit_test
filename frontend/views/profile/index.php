@@ -10,7 +10,7 @@ $watchingId = User::getUserFollowingId($currentUserId, $user->id);
 ?>
 <div class="row">
 	<div class="profile-top" ng-controller="UserProfileCtrl">
-		<?php echo Html::img('@web/img/lady.jpg', ['class' => 'img-circle']) ?>
+    	<img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle"/>
 		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
 		<div class="profile-stats clearfix">
 			<div class="friends pull-left">FRIENDS <br><span><?php echo User::getUserFriendCount( $user->id ); ?></span></div>
@@ -65,7 +65,9 @@ $watchingId = User::getUserFollowingId($currentUserId, $user->id);
     	
     	<div class="col-xs-6 mgrid-item" ng-repeat="event in events">
     		<div class="event clearfix m-b-20">
-    			<div class="event-img pull-left"><?php echo Html::img('@web/img/lady.jpg', ['class' => 'img-circle']) ?></div>
+    			<div class="event-img pull-left">
+    			  <img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle"/>
+    			</div>
     			<div class="event-description pull-left">
     				<div class="event-title"><span><?php echo User::getUserDisplayName( $user ); ?></span> was out {{event.activity.verb}}</div>
     				<div class="event-when" title="{{event.isodate}}"></div>
