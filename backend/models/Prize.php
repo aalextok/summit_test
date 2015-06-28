@@ -15,12 +15,21 @@ use Yii;
  */
 class Prize extends \yii\db\ActiveRecord
 {
+    public $model = 'Prize';
+    
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return 'prize';
+    }
+    
+    public function fields() {
+        $fields = parent::fields();
+        $fields[] = 'images';
+        
+        return $fields;
     }
 
     /**
@@ -52,5 +61,12 @@ class Prize extends \yii\db\ActiveRecord
     
     public function getCompetition(){
         return $this->hasOne(Competition::className(), ['id' => 'competition_id']);
+    }
+    
+    public function getImages(){
+        return $this->hasMany(Image::className(), [
+            'model' => 'model',
+            'model_id' => 'id'
+        ]);
     }
 }

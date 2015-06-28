@@ -7,6 +7,8 @@ use kartik\select2\Select2;
 use kartik\datecontrol\DateControl;
 use yii\helpers\ArrayHelper;
 //use yii\jui\DatePicker;
+use kartik\widgets\FileInput;
+use yii\helpers\Url;
 
 use backend\models;
 
@@ -17,7 +19,9 @@ use backend\models;
 
 <div class="competition-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'options' => ['enctype'=>'multipart/form-data']
+    ]); ?>
 
     <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
 
@@ -93,6 +97,45 @@ use backend\models;
     <!--<?= $form->field($model, 'achievements_by_places')->textInput() ?> -->
 
     <!--<?= $form->field($model, 'activity_id')->textInput() ?> -->
+    
+    <?php
+    
+    $initialPreview = [];
+    $initialPreviewConfig = [];
+    
+    foreach($model->images as $image){
+        $initialPreview[] = Html::img(Yii::getAlias('@web').'/'.$image->location, ['class'=>'file-preview-image', 'alt' => $image->name, 'title' => $image->name]);
+    
+        $initialPreviewConfig[] = [
+            'caption' => $image->name,
+            'url' => Url::to(['site/delete-image', 'id' => $image->id]),
+            'key' => $image->id,
+        ];
+    }
+    
+    echo "<label class='control-label'>{$model->getAttributeLabel('images')}</label>";
+    echo FileInput::widget([
+        'name' => 'images',
+        'options'=>[
+            'multiple' => true,
+            'accept' => 'image/*'
+        ],
+        'pluginOptions' => [
+            'uploadUrl' => Url::to([
+                'site/upload-images', 
+                'model' => $model->model, 
+                'classname' => $model->className(),
+                'model_id' => $model->id,
+            ]),            
+            'uploadExtraData' => [
+            ],
+            'initialPreview' => $initialPreview,
+            'initialPreviewConfig' => $initialPreviewConfig,
+            'overwriteInitial' => false,
+            'maxFileCount' => 10
+        ],
+    ]);
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

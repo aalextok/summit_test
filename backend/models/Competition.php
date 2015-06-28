@@ -18,6 +18,8 @@ use Yii;
  */
 class Competition extends \yii\db\ActiveRecord
 {
+    public $model = 'Competition';
+    
     /**
      * @inheritdoc
      */
@@ -46,6 +48,7 @@ class Competition extends \yii\db\ActiveRecord
         $fields[] = 'places';
         $fields[] = 'activity';
         $fields[] = 'prize';
+        $fields[] = 'images';
         
         unset($fields['achievements_by_places']);
         
@@ -78,6 +81,13 @@ class Competition extends \yii\db\ActiveRecord
     
     public function getPrize(){
         return $this->hasOne(Prize::className(), ['competition_id' => 'id']);
+    }
+    
+    public function getImages(){
+        return $this->hasMany(Image::className(), [
+            'model' => 'model',
+            'model_id' => 'id'
+        ]);
     }
     
     public function afterSave($insert, $changedAttributes) {

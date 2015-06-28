@@ -9,6 +9,11 @@ use yii\filters\VerbFilter;
 use common\models\User;
 use backend\models\ResetForm;
 
+use backend\models\Image;
+use yii\web\UploadedFile;
+use yii\helpers\Html;
+use yii\helpers\Url;
+
 /**
  * Site controller
  */
@@ -33,7 +38,12 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['index', 'docs'],
+                        'actions' => [
+                            'index', 
+                            'docs', 
+                            'delete-image', 
+                            'upload-images'
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action){
@@ -131,4 +141,121 @@ class SiteController extends Controller
 //    public function actionDocs(){
 //        return $this->render('docs');
 //    }
+    
+    public function actionUploadImages(){  
+        $model = Yii::$app->request->get('model');
+        $modelId = Yii::$app->request->get('model_id');
+        $classname = Yii::$app->request->get('classname');
+        $replaceId = Yii::$app->request->get('replace_id');
+        
+        if(empty($model) || empty($modelId) || empty($classname)){
+            return json_encode([
+                'error' => 'Model of model ID not defined.'
+            ]);
+        }
+        
+        $target = $classname::find()->where(['id' => $modelId])->one();
+        
+        if(empty($target)){
+            return json_encode([
+                'error' => 'Object to attach file to not found.',
+            ]);
+        }
+        
+        $image = new Image();
+        $image->image = UploadedFile::getInstanceByName('images');
+        
+        if(empty($image->image)){
+            return json_encode([
+                'error' => 'File not uploaded.'
+            ]);
+        }
+        
+        $image->model = $model;
+        $image->model_id = $modelId;
+        
+        $image->name = pathinfo($image->image->name, PATHINFO_FILENAME);
+        $image->hash = hash_file('md5', $image->image->tempName);
+        
+        $path = Yii::$app->params['imgDir'].strtolower($image->model).'/'.$image->model_id;
+        $image->image->name = $path.'/'.uniqid().'.'.$image->image->extension;
+        $image->location = $image->image->name;
+        
+        if(!$image->save()){
+            return json_encode([
+                'error' => 'Cannot save file.'
+            ]);
+        }
+        
+        if(!is_dir($path)){
+            mkdir($path, 0777, true);
+        }
+
+        $image->image->saveAs($image->location);
+        
+        if(!empty($replaceId)){
+            $replace = Image::find()->where(['id' => $replaceId])->one();
+            
+            if(!empty($replace)){
+                try{
+                    unlink($replace->location);
+                    $replace->delete();
+                }
+                catch(yii\base\ErrorException $e){}
+            }
+        }
+        
+        $initialPreview = [];
+        $initialPreviewConfig = [];
+        
+        $initialPreview[] = Html::img(Yii::getAlias('@web').'/'.$image->location, [
+            'class'=>'file-preview-image', 
+            'alt' => $image->name, 
+            'title' => $image->name
+        ]);
+        
+        $initialPreviewConfig[] = [
+            'caption' => $image->name,
+            'url' => Url::to(['site/delete-image', 'id' => $image->id]),
+            'key' => $image->id,
+        ];
+        
+        return json_encode([
+            'ok' => 'Image successfully uploaded.',
+            'initialPreview' => $initialPreview,
+            'initialPreviewConfig' => $initialPreviewConfig,
+            'append' => ($replaceId) ? false : true,
+        ]);
+    }
+
+
+    public function actionDeleteImage($id){
+        $image = Image::find()->where(['id' => $id])->one();
+        
+        if(empty($image)){
+            return json_encode([
+                'error' => "Image #{$id} not found.",
+            ]);
+        }
+        
+        $unlinked = false;
+        $deleted = false;
+        
+        try{
+            $unlinked = unlink($image->location);
+        }
+        catch (yii\base\ErrorException $e){}
+        
+        $deleted = $image->delete();
+        
+        if(!$unlinked || !$deleted){
+            return json_encode([
+                'error' => "Image #{$id} cannot be removed.",
+            ]);
+        }
+        
+        return json_encode([
+            'ok' => "Image #{$id} removed.",
+        ]);
+    }
 }

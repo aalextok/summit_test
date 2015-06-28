@@ -13,12 +13,21 @@ use Yii;
  */
 class Rank extends \yii\db\ActiveRecord
 {
+    public $model = 'Rank';
+    
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return 'rank';
+    }
+    
+    public function fields() {
+        $fields = parent::fields();
+        $fields[] = 'image';
+        
+        return $fields;
     }
 
     /**
@@ -44,5 +53,12 @@ class Rank extends \yii\db\ActiveRecord
             'rank' => 'Rank',
             'points' => 'Points',
         ];
+    }
+    
+    public function getImage(){
+        return $this->hasOne(Image::className(), [
+            'model' => 'model',
+            'model_id' => 'id'
+        ]);
     }
 }

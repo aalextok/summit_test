@@ -45,5 +45,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'location'
         ],
     ]) ?>
+    
+    <?php
+    $images = [];
+    foreach ($model->images as $image){
+        $images[] = [
+            'title' => $image->name,
+            'href' => Yii::getAlias('@web').'/'.$image->location,
+        ];
+    }
+    
+    echo dosamigos\gallery\Carousel::widget([
+        'items' => $images,
+        'json' => true,
+    ]);
+    ?>
 
 </div>

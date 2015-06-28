@@ -6,8 +6,9 @@ use yii\widgets\ActiveForm;
 use backend\models\Activity;
 use backend\models\Place;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
-use kartik\widgets\FileInput
+use kartik\widgets\FileInput;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Place */
@@ -23,7 +24,7 @@ use kartik\widgets\FileInput
     <?php
         $model->activity_ids = array_map(function($o) { return $o->id; }, $model->activities);
         $allActivities = ArrayHelper::map(Activity::find()->asArray()->all(), 'id', 'name');
-        
+        $model->images;
     ?>
     
     <?= Html::activeCheckboxList($model, 'activity_ids', $allActivities) ?>
@@ -57,18 +58,42 @@ use kartik\widgets\FileInput
     ?>
     
     <?php
-//    echo $form->field($model, 'img[]')->widget(FileInput::classname(), [
-//        'options' => ['multiple' => true, 'accept' => 'image/*'],
-//        'pluginOptions' => [
-//            'previewFileType' => 'image',
-//            'initialPreview' => [
-//                Html::img("", ['class'=>'file-preview-image']),
-//            ],
-//            'overwriteInitial' => false,
-//            
-//        ],
-//        
-//    ]);
+    
+    $initialPreview = [];
+    $initialPreviewConfig = [];
+    
+    foreach($model->images as $image){
+        $initialPreview[] = Html::img(Yii::getAlias('@web').'/'.$image->location, ['class'=>'file-preview-image', 'alt' => $image->name, 'title' => $image->name]);
+    
+        $initialPreviewConfig[] = [
+            'caption' => $image->name,
+            'url' => Url::to(['site/delete-image', 'id' => $image->id]),
+            'key' => $image->id,
+        ];
+    }
+    
+    echo "<label class='control-label'>{$model->getAttributeLabel('images')}</label>";
+    echo FileInput::widget([
+        'name' => 'images',
+        'options'=>[
+            'multiple' => true,
+            'accept' => 'image/*'
+        ],
+        'pluginOptions' => [
+            'uploadUrl' => Url::to([
+                'site/upload-images', 
+                'model' => $model->model, 
+                'classname' => $model->className(),
+                'model_id' => $model->id,
+            ]),            
+            'uploadExtraData' => [
+            ],
+            'initialPreview' => $initialPreview,
+            'initialPreviewConfig' => $initialPreviewConfig,
+            'overwriteInitial' => false,
+            'maxFileCount' => 10
+        ],
+    ]);
     ?>
 
     <div class="form-group">

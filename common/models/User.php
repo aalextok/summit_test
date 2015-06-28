@@ -43,6 +43,9 @@ class User extends ActiveRecord implements IdentityInterface
         'phone',
     ];
     
+    public $rank_id;
+    public $rank_model = 'Rank';
+    
     /**
      * @inheritdoc
      */
@@ -77,6 +80,7 @@ class User extends ActiveRecord implements IdentityInterface
             'summits',
             'meters_above_sea_level',
             'rank',
+            'rank_image',
             'last_login',
             'image',
             'image_hash',
@@ -412,5 +416,19 @@ class User extends ActiveRecord implements IdentityInterface
                 $this->save();
             }
         }
+    }
+    
+    public function getRank_image(){
+        $rank = Rank::find()->where(['rank' => $this->rank])->one();
+        if(!empty($rank)){
+            $this->rank_id = $rank->id;
+
+            return $this->hasOne(\backend\models\Image::className(), [
+                'model' => 'rank_model',
+                'model_id' => 'rank_id'
+            ]);
+        }
+        
+        return null;
     }
 }

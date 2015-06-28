@@ -86,7 +86,7 @@ $model->activity;
             // 'latitude',
             // 'longtitude',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 
