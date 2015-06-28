@@ -35,7 +35,12 @@ $watchingId = User::getUserFollowingId($currentUserId, $user->id);
 		
 	</div>
 	
-	<div class="mgrid" ng-controller="UserActivitiesListingCtrl" >
+    <div class="ajax-content-loading" id="activities-list-loading" style="display: none;">
+      <?php echo Html::img('@web/img/loading-big.gif') ?>
+  	  Loading ...
+    </div>
+    
+	<div class="mgrid hidden" ng-controller="UserActivitiesListingCtrl" id="activities-list" >
     	<div class="col-xs-6 mgrid-item">
     		<div class="one-field clearfix m-b-20">
     			<div class="king-label pull-left">Rank</div>

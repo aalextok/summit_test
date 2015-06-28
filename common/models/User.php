@@ -321,6 +321,7 @@ class User extends ActiveRecord implements IdentityInterface
       return "Rookie";
     }
     
+    
     /**
      * @inheritdoc
      */

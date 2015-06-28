@@ -571,7 +571,7 @@ stsApp.controller('UserActivitiesListingCtrl', function ($scope, $http) {
   $scope.events = [];
   
   $scope.loadEvents = function(  ) {
-	  jQuery("#places-list-loading").show();
+	  jQuery("#activities-list-loading").show();
 	  var userId = jQuery("#user-view-id").val();
 
 	  $scope.visits = [];
@@ -580,12 +580,13 @@ stsApp.controller('UserActivitiesListingCtrl', function ($scope, $http) {
 		  	for(var i in data){
 		  		data[i].isodate = stoTimestampToIsoDate( data[i].visit_time * 1000 );
 		  	}
-		  	console.log( data );
+
 		    $scope.events = data;
 		    
 		    //TODO: maybe some angular callback? Maybe not needed?
 		    setTimeout(function(){
-
+		    	jQuery("#activities-list-loading").hide();
+		    	jQuery('#activities-list').removeClass('hidden');
 		    	stoInitProfileEvents();
 		    	stoInitMasonry();
 		    }, 250);
