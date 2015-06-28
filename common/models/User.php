@@ -276,9 +276,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function getUserFollowingId( $userId, $watchedUserId )
     {
+      if(!$watchedUserId || !$userId){
+        return 0;
+      }
+      
       $item = (new yii\db\Query())
         ->from('watching')
-        ->where( 'user_id = ' . $userId . ' AND ' . 'watched_user_id = ' . $watchedUserId )
+        ->where( 'user_id = ' . $userId . ' AND watched_user_id = ' . $watchedUserId )
         ->one();
       
       if( isset($item['id']) ){

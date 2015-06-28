@@ -212,6 +212,20 @@ function stoInitVisitActions(){
 }
 
 
+function stoInitMasonry(){
+	jQuery('.mgrid').masonry({
+	  itemSelector: '.mgrid-item',
+	  //columnWidth: 200
+	});
+}
+
+
+function stoInitProfileEvents(){
+	jQuery(".event-when").timeago();
+}
+
+
+
 //http://stackoverflow.com/questions/14183025/setting-application-wide-http-headers-in-angularjs
 
 var stsApp = angular.module('stsApp', []);
@@ -542,6 +556,54 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	  
   };
 
+});
+
+
+stsApp.controller('UserActivitiesListingCtrl', function ($scope, $http) {
+  
+  var config = {headers:  {
+	      'Authorization': 'Bearer ' + stoGetAuthToken(),
+	      'Accept': 'application/json;odata=verbose'
+	  }
+  };
+  
+  //currently actually only visits are displayed
+  $scope.events = [];
+  
+  $scope.loadEvents = function(  ) {
+	  jQuery("#places-list-loading").show();
+	  var userId = jQuery("#user-view-id").val();
+
+	  $scope.visits = [];
+	  $http.get( stoGetApiBaseUri() + '/visit/?user_id=' + userId + '&expand=activity', config).success(function(data, status) {
+		  	
+		  	for(var i in data){
+		  		data[i].isodate = stoTimestampToIsoDate( data[i].visit_time * 1000 );
+		  	}
+		  	console.log( data );
+		    $scope.events = data;
+		    
+		    //TODO: maybe some angular callback? Maybe not needed?
+		    setTimeout(function(){
+
+		    	stoInitProfileEvents();
+		    	stoInitMasonry();
+		    }, 250);
+		    
+		    if(data.length > 0){
+		    	jQuery("#places-no-items").hide();
+		      	jQuery("#places-list-loading").hide();
+		    } else {
+		    	jQuery("#places-no-items").show();
+		      	jQuery("#places-list-loading").hide();
+		    }
+	  }).error(function(data, status) {
+	  	jQuery("#places-list-no-items").show();
+	  	jQuery("#places-list-loading").hide();
+	  });
+  };
+  
+  $scope.loadEvents();
 });
 
 
