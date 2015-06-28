@@ -50,7 +50,7 @@ use yii\helpers\Url;
   </div>
   
   <div class="row" id="places-items">
-	
+	<?php /*
 	<div class="col-xs-6 m-b-40" ng-repeat="place in places">
 		<div class="event clearfix m-0 b-r-top">
 			<div class="event-img pull-left">
@@ -72,6 +72,7 @@ use yii\helpers\Url;
 			</div>
 		</div>
 	</div>
+	*/ ?>
 	
   </div>
 </div>

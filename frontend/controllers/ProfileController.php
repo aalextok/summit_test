@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\User;
+use yii\helpers\Url;
 
 class ProfileController extends \frontend\controllers\BaseController
 {
@@ -20,6 +21,9 @@ class ProfileController extends \frontend\controllers\BaseController
     
     public function actionEdit()
     {
+        if (Yii::$app->user->isGuest) {
+          return $this->redirect( Url::toRoute("site/index") , 301);
+        }
         
         $userId = User::getCurrentUserId();
         $user = User::findIdentity( $userId );
