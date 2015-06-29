@@ -703,6 +703,7 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
   $scope.filterActivityName = "";
   $scope.filterLocationName = "";
   
+  //google maps and clustering related variables
   $scope.showItemsOnMap = false;
   $scope.gmapMarkerCluster = null;
   $scope.gmap = null;
@@ -764,6 +765,9 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data;
+		    if($scope.showItemsOnMap){
+		    	$scope.updateMap();
+		    }
 		    
 		    jQuery("#places-items").removeClass('hidden');
 		    
@@ -784,7 +788,6 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 	  $scope.showItemsOnMap = $scope.showItemsOnMap ? false : true;
 	  
 	  if(!$scope.gmap){
-		  	console.log('Creating map');
 			$scope.gmap = stoCretaeGoogleMaps( 'mapcanvas' );
 			
 			$scope.gmapMarkerCluster = new MarkerClusterer($scope.gmap, null, {
@@ -792,8 +795,6 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 			      gridSize: 11,
 			      ignoreHidden: true
 			});
-	  } else {
-		  console.log('Map exists');
 	  }
 	  
 	  $scope.updateMap();
@@ -812,10 +813,10 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
    * Update markers on map based on $scope.places data
    * destroy all markers and create new ones, clusterize
    */
-  $scope.updateMap = function( data ) {
-	  
+  $scope.updateMap = function( ) {
+	  stoShowMarkers( $scope, $scope.places );
+	  //$scope.places
 	  //$scope.gmap
-	  
   };
   
   
