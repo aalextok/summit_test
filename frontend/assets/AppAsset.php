@@ -26,7 +26,7 @@ class AppAsset extends AssetBundle
         'js/modernizr.custom.js',
         'js/bootstrap.min.js',
         'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js', //TODO: should not use CDN?
-        'https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js', //TODO: should not use CDN?
         'js/jquery.searchinput.js',
         'js/component.js',
         'js/plugins.js',
@@ -39,6 +39,9 @@ class AppAsset extends AssetBundle
     ];
     
     public function __construct(){
+      $gMapsKey = Yii::$app->params['googleMapsApiKey'];
+      
+      array_unshift($this->js, 'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&key=' . $gMapsKey);
       
       if (
           Yii::$app->controller->module->requestedRoute != 'site/index' && 

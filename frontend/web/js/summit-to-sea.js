@@ -703,6 +703,10 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
   $scope.filterActivityName = "";
   $scope.filterLocationName = "";
   
+  $scope.showItemsOnMap = false;
+  $scope.gmapMarkerCluster = null;
+  $scope.gmap = null;
+  
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
 	      'Accept': 'application/json;odata=verbose'
@@ -776,6 +780,45 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 	  });
   };
 
+  $scope.toggleMapView = function( ) {
+	  $scope.showItemsOnMap = $scope.showItemsOnMap ? false : true;
+	  
+	  if(!$scope.gmap){
+		  	console.log('Creating map');
+			$scope.gmap = stoCretaeGoogleMaps( 'mapcanvas' );
+			
+			$scope.gmapMarkerCluster = new MarkerClusterer($scope.gmap, null, {
+			      maxZoom: 11,
+			      gridSize: 11,
+			      ignoreHidden: true
+			});
+	  } else {
+		  console.log('Map exists');
+	  }
+	  
+	  $scope.updateMap();
+	  
+	  if($scope.showItemsOnMap){
+		  jQuery('#places-items-on-map').removeClass('hidden');
+		  jQuery('#places-items').addClass('hidden');
+	  } else {
+		  jQuery('#places-items-on-map').addClass('hidden');
+		  jQuery('#places-items').removeClass('hidden');
+	  }
+	  
+  };
+  
+  /** 
+   * Update markers on map based on $scope.places data
+   * destroy all markers and create new ones, clusterize
+   */
+  $scope.updateMap = function( data ) {
+	  
+	  //$scope.gmap
+	  
+  };
+  
+  
   //initial search
   $scope.doSearch();
   
