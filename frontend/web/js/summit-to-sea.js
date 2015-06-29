@@ -10,11 +10,15 @@ jQuery( document ).ready(function() {
 		jQuery("#main").attr( "style", jQuery('#main-style-replace').val() );
 	}
 
+	/**
+	 * "Nice up" users search
+	 */
 	jQuery('#users-search').searchInput();
 
 	jQuery( ".searchinput-icon-search" ).on( "click", function() {
 		jQuery(this).parents('form').find('input').trigger('input');
 	});
+	
 });
 
 
@@ -71,22 +75,27 @@ function stoSubmitRegisterForm() {
 
 function checkFacebookLoginState(){
 	
+	//TODO: popups get blocked - http://stackoverflow.com/questions/26817023/fb-login-inside-fb-getloginstatus-popup-window-blocked
+	
 	FB.getLoginStatus(function(response) {
 		  if (response.status === 'connected') {
-		    var uid = response.authResponse.userID;
-		    var accessToken = response.authResponse.accessToken;
-		    
-		    stoLoginToApiCall('facebook', 'login', '', '', '', '', accessToken, 0);
+			    var uid = response.authResponse.userID;
+			    var accessToken = response.authResponse.accessToken;
+			    
+			    stoLoginToApiCall('facebook', 'login', '', '', '', '', accessToken, 0);
 		  } else if (response.status === 'not_authorized') {
-		    FB.login(function(response) {
-	    	   // handle the response
-		    	checkFacebookLoginState();
-		    }, {scope: 'email'});
+				// the user is logged in to Facebook, 
+				// but has not authenticated your app
+				FB.login(function(response) {
+				   // handle the response
+					checkFacebookLoginState();
+				}, {scope: 'email'});
 		  } else {
-			    FB.login(function(response) {
-		    	   // handle the response
-			    	checkFacebookLoginState();
-			    }, {scope: 'email'});
+				// the user isn't logged in to Facebook.
+				FB.login(function(response) {
+				   // handle the response
+					checkFacebookLoginState();
+				}, {scope: 'email'});
 		  }
 	});
 	
@@ -522,6 +531,21 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
   var urlPasswordChange = stoGetApiBaseUri() + '/auth/password-change/';
   
   $scope.formData = {};//gender
+  
+
+  jQuery('#user-profile-edit-user-id').click(function(){
+    //var previewField= jQuery(this).attr('data-target-input');
+    //var fileField= jQuery(this).attr('data-target-file-field');
+    
+    jQuery( jQuery(this).parents('.file-row').find('.inp-file-upload')  ).change(function(){
+      var path = jQuery(this).val();
+      jQuery( jQuery(this).parents('.file-row').find('.inp-file-preview') ).val( path );
+    });
+    
+    jQuery( jQuery(this).parents('.file-row').find('.inp-file-upload')  ).trigger('click');
+    
+    return false;
+  });
 
   $scope.proccessForm = function( oTarget ) {
 	  var changePass = false;
@@ -618,6 +642,7 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	  });
 	  
   };
+
 
 });
 
