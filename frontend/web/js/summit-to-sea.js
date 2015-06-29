@@ -376,7 +376,7 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
   
   $scope.isWatchingText = function( user ) {
 	  if(user.watching){
-		  return "unfallow";
+		  return "unfollow";
 	  }
 	  
 	  return "follow";
@@ -767,7 +767,7 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 		    	jQuery("#places-no-items").hide();
 		      	jQuery("#places-list-loading").hide();
 		    } else {
-		    	jQuery("#places-no-items").show();
+		    	jQuery("#places-no-items").removeClass('hidden').show();
 		      	jQuery("#places-list-loading").hide();
 		    }
 	  }).error(function(data, status) {

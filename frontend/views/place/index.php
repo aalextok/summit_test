@@ -44,8 +44,8 @@ use yii\helpers\Url;
 	
   <input type="hidden" value="<?php echo Url::toRoute(["place/view", 'id' => "replaceid"]); ?>" id="place-view-base-uri" />
   
-  <div class="vertical-middle" id="places-no-items">
-  	<h1>No places<br> at the moment  </h1>
+  <div class="vertical-middle hidden" id="places-no-items">
+  	<h1>No places<br /> at the moment  </h1>
   </div>
   
   <div class="row hidden" id="places-items">
