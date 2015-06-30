@@ -63,5 +63,8 @@
     position: absolute;
     left: -9999px;
 }
-}
 
+/* red more place link fix */
+.place-more a {
+	padding: 17px 20px 19px 20px;
+}
