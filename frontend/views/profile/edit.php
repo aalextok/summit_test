@@ -5,8 +5,7 @@ use common\models\User;
 
 use kartik\widgets\FileInput;
 
-$profile = User::getUserPhoto( $user );
-pre( $profile );
+$profilePhoto = User::getUserPhoto( $user->id );
 
 /* @var $this yii\web\View */
 ?>
@@ -17,7 +16,7 @@ pre( $profile );
     	
     	
     	<a href="#" id="change-profile-photo">
-    	  <img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle" data-image-id="" />
+    	  <img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle" data-image-id="<?php echo isset($profilePhoto['id']) ? $profilePhoto['id'] : 0; ?>" />
     	</a>
     	
 		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>

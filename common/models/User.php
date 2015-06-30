@@ -353,7 +353,9 @@ class User extends ActiveRecord implements IdentityInterface
       if( isset($item['id']) && $onlyUri){
         return Url::base() . '/../../backend/web/' .  $item['location'];
       }
-      //
+      if( isset($item['id']) && !$onlyUri){
+        return $item;
+      }
     
       return Url::base() . '/img/default-avatar-man.jpg';
     }
