@@ -13,6 +13,7 @@ class BaseController extends \yii\web\Controller
   );
   
   public $layout = "main";
+  public $pageTitle = "";
   
   public function __construct($d, $d2){
     parent::__construct($d, $d2);
@@ -28,6 +29,17 @@ class BaseController extends \yii\web\Controller
         $this->layout = "landing";
     }
     return parent::beforeAction($action);
+  }
+  
+  public function getPageTitle(){
+    if(!$this->pageTitle){
+      return Yii::$app->params['appName'];
+    }
+    return $this->pageTitle;
+  }
+  
+  public function setPageTitle( $title ){
+    $this->pageTitle = Yii::$app->params['appName'] . " - ". $title ;
   }
   
   /**

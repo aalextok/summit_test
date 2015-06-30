@@ -1,6 +1,7 @@
 <?php
 return [
     'adminEmail' => 'admin@example.com',
+    'appName' => 'Summit To Sea',
     
     /**
      * After creating google app @ https://console.developers.google.com enable 
