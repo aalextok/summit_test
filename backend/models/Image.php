@@ -147,8 +147,9 @@ class Image extends \yii\db\ActiveRecord
         $ext = pathinfo($this->location, PATHINFO_EXTENSION);
         
         foreach(Yii::$app->params['imgResolutions'] as $rKey => $resolution){
-            $img->resize($resolution['width'], $resolution['height'])
-                 ->save("$dir/{$name}_$rKey.$ext");
+            $img->resize($resolution['width'], $resolution['height'], \yii\image\drivers\Image::PRECISE)
+                ->crop($resolution['width'], $resolution['height'])
+                ->save("$dir/{$name}_$rKey.$ext");
         }
     }
     
