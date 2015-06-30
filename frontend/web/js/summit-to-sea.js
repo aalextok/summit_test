@@ -32,7 +32,7 @@ function stoInitLoginAndRegisterActions(){
 
 	jQuery('#login-form input').keypress(function (e) {
 	    if (e.which == 13) {
-			stoSubmitLoginform();
+			stoSubmitLoginForm();
 	    	return false;
 	    }
 	});
@@ -56,7 +56,6 @@ function stoInitLoginAndRegisterActions(){
 }
 
 function stoSubmitLoginForm() {
-
 	var username = jQuery('#loginEmail').val();
 	var password = jQuery('#loginPassword').val();
 	
@@ -255,6 +254,8 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 
   $http.get( stoGetApiBaseUri() + '/competition', config).success(function(data, status) {
 	  	var baseUri = jQuery('#competition-view-base-uri').val();
+    	
+	  	jQuery("#challenges-list-loading").removeClass('hidden').show();
 	  	
 	  	for(var i in data){
 	  		var uriTmp = baseUri;
@@ -268,7 +269,8 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 	    } else {
 	    	jQuery("#challenges-no-items").removeClass('hidden').show();
 	    }
-	    
+
+	  	jQuery("#challenges-list-loading").hide();
 	    jQuery("#challenges-items").removeClass('hidden');
   }).error(function(data, status) {
     // Some error occurred
