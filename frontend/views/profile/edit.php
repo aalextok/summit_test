@@ -1,6 +1,9 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use common\models\User;
+
+use kartik\widgets\FileInput;
 
 /* @var $this yii\web\View */
 ?>
@@ -8,7 +11,74 @@ use common\models\User;
   <form>
     <input type="hidden" value="<?php echo $id; ?>" id="user-profile-edit-user-id" />
 	<div class="profile-top">
-    	<a href="#" id="change-profile-photo"><img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle"/></a>
+    	
+    	
+    	<a href="#" id="change-profile-photo">
+    	  <img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle"/>
+    	</a>
+    	
+        <?php
+        $initialPreview = [];
+        $initialPreviewConfig = [];
+        
+        /*
+        foreach($user->images as $image){
+            $initialPreview[] = Html::img(Yii::getAlias('@web').'/'.$image->location, ['class'=>'file-preview-image', 'alt' => $image->name, 'title' => $image->name]);
+        
+            $initialPreviewConfig[] = [
+                'caption' => $image->name,
+                'url' => Url::to(['site/delete-image', 'id' => $image->id]),
+                'key' => $image->id,
+            ];
+        }
+        */
+        
+        $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthKey();
+        $uri = $this->context->getApiBaseUri();
+        
+        $uri .= '/image/create';
+        
+        $ajaxSettings = new stdClass();
+        $ajaxSettings->headers = new stdClass();
+        
+        $ajaxSettings->headers->Authorization = 'Bearer ' . $authToken;
+        $ajaxSettings->headers->Accept = 'application/json;odata=verbose';
+        
+        echo "<label class='control-label'>Pildid profile</label>";
+        echo FileInput::widget([
+            'name' => 'image',
+            'options'=>[
+                'multiple' => false,
+                'accept' => 'image/*'
+            ],
+            'pluginOptions' => [
+                'uploadUrl' => $uri,            
+                'uploadExtraData' => [
+                  'model' => 'User',
+                  'model_id' => $user->id,
+                  'is_avatar' => '1',
+                ],
+                'ajaxSettings' => $ajaxSettings,
+                //'ajaxSettings' => {
+                //  "headers" => {
+                //    "Authorization" => 'Bearer " . $authToken . "'
+                //  }
+                //},
+                'initialPreview' => $initialPreview,
+                'initialPreviewConfig' => $initialPreviewConfig,
+                'overwriteInitial' => false,
+                'maxFileCount' => 1
+            ],
+        ]);
+        
+        /*
+        'Authorization': 'Bearer ' + stoGetAuthToken(),
+        
+        ajaxSettings: {
+          
+        }*/
+        ?>
+    	
 		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
 		<div class="profile-stats clearfix">
 			<div class="friends pull-left">FRIENDS <br><span><?php echo User::getUserFriendCount( $user->id ); ?></span></div>
