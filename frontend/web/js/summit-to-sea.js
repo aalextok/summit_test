@@ -266,14 +266,14 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 	    if(data.length > 0){
 	    	jQuery("#challenges-no-items").hide();
 	    } else {
-	    	jQuery("#challenges-no-items").show();
+	    	jQuery("#challenges-no-items").removeClass('hidden').show();
 	    }
 	    
 	    jQuery("#challenges-items").removeClass('hidden');
   }).error(function(data, status) {
     // Some error occurred
 	jQuery("#challenges-no-items h1").html("Challenges <br />failed to load");
-  	jQuery("#challenges-no-items").show();
+  	jQuery("#challenges-no-items").removeClass('hidden').show();
   });
   
 });
@@ -866,6 +866,12 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data.places;
+		    
+
+		    //TODO: maybe some angular callback? Maybe not needed?
+		    setTimeout(function(){
+		    	jQuery('#competition-place-items').removeClass('hidden');
+		    }, 250);
 		    
 		    if(data.places.length > 0){
 		    	jQuery("#places-no-items").hide();
