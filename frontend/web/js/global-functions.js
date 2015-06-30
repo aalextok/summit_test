@@ -88,50 +88,51 @@ function stoShowMarkers( $scope, markersData ) {
   //markersData - add these onto map
   for (var i in markersData) {
     var md = markersData[i];
-    var existsKey = getRtMarkersKeyIfMarkerAlreadyAdded( md.id );
+    //var existsKey = getRtMarkersKeyIfMarkerAlreadyAdded( md.id );
     
     var latLng = new google.maps.LatLng(md.latitude, md.longtitude);
      
-    if(existsKey < 0){
+    //if(existsKey < 0){
       var markernew = new google.maps.Marker({
         map: $scope.gmap,
         title: md.name,
         position: latLng
       });
+      
+      var content = "<p><strong><a href='" + md.uri + "'>" + md.name + "</a></strong></p><p>" + md.description + "</p>";
+      
       //add markers
       markernew.id = md.id;
-      markernew.info = md.description;
+      markernew.info = content;
       rtMarkers[i] = markernew;
       $scope.gmapMarkerCluster.addMarker( rtMarkers[i] );
       attachMarkerActions(rtMarkers[i]);
       
       if(openedInfowindowMarkerId == md.id){
-        iwin.open($scope.gmap, rtMarkers[i]);
+        $scope.iwin.open($scope.gmap, rtMarkers[i]);
       }
       
-    } else {
-      //update marker
-      rtMarkers[ existsKey ].setPosition( latLng );
-    }
+    //} else {
+    //  //update marker
+    //  rtMarkers[ existsKey ].setPosition( latLng );
+    //}
   }
   
   function attachMarkerActions(marker) {
     google.maps.event.addListener(marker, 'click', function() {
-      iwin.setContent( marker.info );
-      iwin.open($scope.gmap, marker);
+      $scope.iwin.setContent( marker.info );
+      $scope.iwin.open($scope.gmap, marker);
       openedInfowindowMarkerId = marker.postId;
       return false;
     });
     google.maps.event.addListener(marker, 'mouseover', function() {
-      iwin.setContent( marker.info );
-      iwin.open($scope.gmap, marker);
+      $scope.iwin.setContent( marker.info );
+      $scope.iwin.open($scope.gmap, marker);
       openedInfowindowMarkerId = marker.postId;
       return false;
     });
     
   }
-  
-  blockAddingDuringMarkerResetting = false;
 
 }
 

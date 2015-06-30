@@ -700,6 +700,7 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
   $scope.showItemsOnMap = false;
   $scope.gmapMarkerCluster = null;
   $scope.gmap = null;
+  $scope.iwin = null;
   
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
@@ -787,6 +788,10 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 			      maxZoom: 11,
 			      gridSize: 11,
 			      ignoreHidden: true
+			});
+
+			$scope.iwin =  new google.maps.InfoWindow({
+				content: ""
 			});
 	  }
 	  
