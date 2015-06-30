@@ -345,14 +345,17 @@ class User extends ActiveRecord implements IdentityInterface
         }
       }
       
+      //the last one is right one
       $item = (new yii\db\Query())
         ->from('image')
         ->where( 'model_id = ' . $user->id . ' AND model = "User"' )
+        ->orderBy('id DESC')
         ->one();
       
       if( isset($item['id']) && $onlyUri){
         return Url::base() . '/../../backend/web/' .  $item['location'];
       }
+      
       if( isset($item['id']) && !$onlyUri){
         return $item;
       }
