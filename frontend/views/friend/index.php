@@ -38,7 +38,7 @@ use yii\helpers\Url;
     	
 		<div class="col-xs-6" ng-repeat="user in users">
 			<div class="challenge-place">
-    	        <img src="<?php echo Url::base() . '/img/default-avatar-man.jpg'; ?>" class="img-circle"/>
+    	        <img src="{{user.thumbUri}}" class="img-circle"/>
 				<div class="challenge-title"><a href="{{user.uri}}">{{user.firstname}} {{user.lastname}}</a></div>
 				<div class="challenge-height pull-right">
 					<a href="#" ng-class="isWatchingClass(user)" ng-bind="isWatchingText(user)" ng-click="toggleWatching( $event, 'list', user )" data-state="0" data-id="0" data-user-id="0">-</a>

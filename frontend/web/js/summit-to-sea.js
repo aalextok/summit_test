@@ -306,7 +306,9 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 	  data.phone = query;
 	  
 	  var dataString = jQuery.param(data);
-	  
+
+	  var defaultAvatar = stoGetFrontendBaseUri() + '/img/default-avatar-man.jpg';
+		
 	  $http.get( stoGetApiBaseUri() + '/user/?' + dataString, config).success(function(data, status) {
 		  	var baseUri = jQuery('#user-profile-view-base-uri').val();
 		  	
@@ -314,11 +316,12 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 		  		var uriTmp = baseUri;
 		  		uriTmp = uriTmp.replace("replaceid", data[i].id);
 		  		data[i].uri = uriTmp;
+		  		data[i].thumbUri = data[i].image != "" ? stoGetImagesBaseUri() + '/' + data[i].image : defaultAvatar;
 		  		data[i].watching = false;
 		  		data[i].watchingId = 0;
 		  	}
-	
-		    $scope.users = data;
+		  	
+		  	$scope.users = data;
 		    
 		    if(!$scope.watchingsLoaded){
 		    	$scope.loadWatchings();
