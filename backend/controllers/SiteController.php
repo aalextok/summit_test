@@ -173,6 +173,7 @@ class SiteController extends Controller
         
         $image->model = $model;
         $image->model_id = $modelId;
+        $image->user_id = Yii::$app->user->identity->id;
         
         $image->name = pathinfo($image->image->name, PATHINFO_FILENAME);
         $image->hash = hash_file('md5', $image->image->tempName);

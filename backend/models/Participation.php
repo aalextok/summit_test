@@ -23,6 +23,8 @@ use common\models\User;
  */
 class Participation extends \yii\db\ActiveRecord
 {
+    public $model = 'Participation';
+    
     /**
      * @inheritdoc
      */
@@ -63,12 +65,26 @@ class Participation extends \yii\db\ActiveRecord
         ];
     }
     
+    public function extraFields() {
+        $extraFields = parent::extraFields();
+        $extraFields[] = 'images';
+        
+        return $extraFields;
+    }
+    
     public function getCompetition(){
         return $this->hasOne(Competition::className(), ['id' => 'competition_id']);
     }
     
     public function getUser(){
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+    
+    public function getImages(){
+        return $this->hasMany(Image::className(), [
+            'model' => 'model',
+            'model_id' => 'id'
+        ]);
     }
     
     public static function getActiveParticipations($userId){

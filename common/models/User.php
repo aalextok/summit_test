@@ -47,6 +47,8 @@ class User extends ActiveRecord implements IdentityInterface
     public $rank_id;
     public $rank_model = 'Rank';
     
+    public $model = 'User';
+    
     /**
      * @inheritdoc
      */

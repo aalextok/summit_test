@@ -18,6 +18,8 @@ use \common\models\User;
  */
 class Visit extends \yii\db\ActiveRecord
 {
+    public $model = 'Visit';
+    
     /**
      * @inheritdoc
      */
@@ -57,6 +59,7 @@ class Visit extends \yii\db\ActiveRecord
         
         $extraFields[] = 'activity';
         $extraFields[] = 'place';
+        $extraFields[] = 'images';
         
         return $extraFields;
     }
@@ -68,6 +71,13 @@ class Visit extends \yii\db\ActiveRecord
     
     public function getActivity(){
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
+    }
+    
+    public function getImages(){
+        return $this->hasMany(Image::className(), [
+            'model' => 'model',
+            'model_id' => 'id'
+        ]);
     }
     
     public function afterSave($insert, $changedAttributes) {
