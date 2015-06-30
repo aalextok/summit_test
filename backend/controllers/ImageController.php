@@ -91,8 +91,10 @@ class ImageController extends ActiveController
             }
             
             $path = Yii::$app->params['imgDir'].strtolower($image->model).'/'.$image->model_id;
+            $uniqid = uniqid();
+            $extension = $image->image->extension;
             
-            $image->image->name = $path.'/'.uniqid().'.'.$image->image->extension;
+            $image->image->name = $path.'/'.$uniqid.'.'.$extension;
             $image->location = $image->image->name;
             
             
@@ -112,6 +114,9 @@ class ImageController extends ActiveController
                 }
 
                 $image->image->saveAs($image->location);
+                
+                $image->saveResolutions();
+                $image->resolutions = $image->getResolutions();
 
                 $response = Yii::$app->getResponse();
                 $response->setStatusCode(201);
@@ -180,7 +185,9 @@ class ImageController extends ActiveController
         }
         
         $path = $image->location;
-
+        $resolutions = $image->resolutions;
+        
+        $image->deleteResolutions();
         if ($image->delete() === false) {
             throw new ServerErrorHttpException('Failed to delete the object for unknown reason.');
         }

@@ -27,7 +27,8 @@
         "2amigos/yii2-google-maps-library" : "*",
         "kartik-v/yii2-widget-fileinput": "*",
         "kartik-v/yii2-widgets": "dev-master",
-        "2amigos/yii2-gallery-widget": "~1.0"
+        "2amigos/yii2-gallery-widget": "~1.0",
+        "yurkinx/yii2-image": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

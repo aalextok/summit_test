@@ -193,6 +193,7 @@ class SiteController extends Controller
         }
 
         $image->image->saveAs($image->location);
+        $image->saveResolutions();
         
         if(!empty($replaceId)){
             $replace = Image::find()->where(['id' => $replaceId])->one();
@@ -200,6 +201,7 @@ class SiteController extends Controller
             if(!empty($replace)){
                 try{
                     unlink($replace->location);
+                    $replace->deleteResolutions();
                     $replace->delete();
                 }
                 catch(yii\base\ErrorException $e){}
@@ -247,6 +249,7 @@ class SiteController extends Controller
         }
         catch (yii\base\ErrorException $e){}
         
+        $image->deleteResolutions();
         $deleted = $image->delete();
         
         if(!$unlinked || !$deleted){

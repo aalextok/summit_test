@@ -16,6 +16,7 @@ use Yii;
 class Image extends \yii\db\ActiveRecord
 {
     public $image;
+    public $resolutions;
     
     public static $masterEntities = [
         'User',
@@ -43,7 +44,14 @@ class Image extends \yii\db\ActiveRecord
         return $scenarios;
     }
     
-    public function extraFields() {
+    public function fields() {
+        $fields = parent::fields();
+        $fields[] = 'resolutions';
+        
+        return $fields;
+    }
+
+        public function extraFields() {
         $extraFields = parent::extraFields();
         $extraFields[] = 'master';
         $extraFields[] = 'user';
@@ -109,5 +117,48 @@ class Image extends \yii\db\ActiveRecord
         }
         
         return true;
+    }
+    
+    public function afterFind() {
+        parent::afterFind();
+        
+        $this->resolutions = $this->getResolutions();
+    }
+
+    public function getResolutions(){
+        $resolutions = [];
+        
+        foreach(Yii::$app->params['imgResolutions'] as $rKey => $resolution){
+            $path = pathinfo($this->location, PATHINFO_DIRNAME).'/'.pathinfo($this->location, PATHINFO_FILENAME).'_'.$rKey.'.'.pathinfo($this->location, PATHINFO_EXTENSION);
+            
+            if(is_file($path)){
+                $resolutions[] = $path;
+            }
+        }
+        
+        return $resolutions;
+    }
+    
+    public function saveResolutions(){
+        $img = Yii::$app->image->load($this->location);
+        
+        $dir = pathinfo($this->location, PATHINFO_DIRNAME);
+        $name = pathinfo($this->location, PATHINFO_FILENAME);
+        $ext = pathinfo($this->location, PATHINFO_EXTENSION);
+        
+        foreach(Yii::$app->params['imgResolutions'] as $rKey => $resolution){
+            $img->resize($resolution['width'], $resolution['height'])
+                 ->save("$dir/{$name}_$rKey.$ext");
+        }
+    }
+    
+    public function deleteResolutions(){
+        $resolutions = $this->getResolutions();
+        foreach ($resolutions as $r){
+            try {
+                unlink($r);
+
+            }catch (yii\base\ErrorException $e){}
+        }
     }
 }

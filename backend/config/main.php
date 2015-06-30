@@ -65,6 +65,10 @@ return [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
+        'image' => [
+            'class' => 'yii\image\ImageDriver',
+            'driver' => 'GD',  //GD or Imagick
+        ],
 //        'response' => [
 //            'class' => 'yii\web\Response',
 //            'on beforeSend' => function ($event) {
