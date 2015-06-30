@@ -52,7 +52,8 @@ use kartik\widgets\FileInput;
                 'accept' => 'image/*'
             ],
             'pluginOptions' => [
-                'uploadUrl' => $uri,            
+                'uploadUrl' => $uri,  
+                'dropZoneEnabled' => false,           
                 'uploadExtraData' => [
                   'model' => 'User',
                   'model_id' => $user->id,
