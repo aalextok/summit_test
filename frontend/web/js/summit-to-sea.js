@@ -10,11 +10,15 @@ jQuery( document ).ready(function() {
 		jQuery("#main").attr( "style", jQuery('#main-style-replace').val() );
 	}
 
+	/**
+	 * "Nice up" users search
+	 */
 	jQuery('#users-search').searchInput();
 
 	jQuery( ".searchinput-icon-search" ).on( "click", function() {
 		jQuery(this).parents('form').find('input').trigger('input');
 	});
+	
 });
 
 
@@ -28,7 +32,7 @@ function stoInitLoginAndRegisterActions(){
 
 	jQuery('#login-form input').keypress(function (e) {
 	    if (e.which == 13) {
-			stoSubmitLoginform();
+			stoSubmitLoginForm();
 	    	return false;
 	    }
 	});
@@ -52,7 +56,6 @@ function stoInitLoginAndRegisterActions(){
 }
 
 function stoSubmitLoginForm() {
-
 	var username = jQuery('#loginEmail').val();
 	var password = jQuery('#loginPassword').val();
 	
@@ -71,22 +74,27 @@ function stoSubmitRegisterForm() {
 
 function checkFacebookLoginState(){
 	
+	//TODO: popups get blocked - http://stackoverflow.com/questions/26817023/fb-login-inside-fb-getloginstatus-popup-window-blocked
+	
 	FB.getLoginStatus(function(response) {
 		  if (response.status === 'connected') {
-		    var uid = response.authResponse.userID;
-		    var accessToken = response.authResponse.accessToken;
-		    
-		    stoLoginToApiCall('facebook', 'login', '', '', '', '', accessToken, 0);
+			    var uid = response.authResponse.userID;
+			    var accessToken = response.authResponse.accessToken;
+			    
+			    stoLoginToApiCall('facebook', 'login', '', '', '', '', accessToken, 0);
 		  } else if (response.status === 'not_authorized') {
-		    FB.login(function(response) {
-	    	   // handle the response
-		    	checkFacebookLoginState();
-		    }, {scope: 'email'});
+				// the user is logged in to Facebook, 
+				// but has not authenticated your app
+				FB.login(function(response) {
+				   // handle the response
+					checkFacebookLoginState();
+				}, {scope: 'email'});
 		  } else {
-			    FB.login(function(response) {
-		    	   // handle the response
-			    	checkFacebookLoginState();
-			    }, {scope: 'email'});
+				// the user isn't logged in to Facebook.
+				FB.login(function(response) {
+				   // handle the response
+					checkFacebookLoginState();
+				}, {scope: 'email'});
 		  }
 	});
 	
@@ -246,6 +254,8 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 
   $http.get( stoGetApiBaseUri() + '/competition', config).success(function(data, status) {
 	  	var baseUri = jQuery('#competition-view-base-uri').val();
+    	
+	  	jQuery("#challenges-list-loading").removeClass('hidden').show();
 	  	
 	  	for(var i in data){
 	  		var uriTmp = baseUri;
@@ -257,14 +267,15 @@ stsApp.controller('ChallengeListCtrl', function ($scope, $http) {
 	    if(data.length > 0){
 	    	jQuery("#challenges-no-items").hide();
 	    } else {
-	    	jQuery("#challenges-no-items").show();
+	    	jQuery("#challenges-no-items").removeClass('hidden').show();
 	    }
-	    
+
+	  	jQuery("#challenges-list-loading").hide();
 	    jQuery("#challenges-items").removeClass('hidden');
   }).error(function(data, status) {
     // Some error occurred
 	jQuery("#challenges-no-items h1").html("Challenges <br />failed to load");
-  	jQuery("#challenges-no-items").show();
+  	jQuery("#challenges-no-items").removeClass('hidden').show();
   });
   
 });
@@ -297,7 +308,9 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 	  data.phone = query;
 	  
 	  var dataString = jQuery.param(data);
-	  
+
+	  var defaultAvatar = stoGetFrontendBaseUri() + '/img/default-avatar-man.jpg';
+		
 	  $http.get( stoGetApiBaseUri() + '/user/?' + dataString, config).success(function(data, status) {
 		  	var baseUri = jQuery('#user-profile-view-base-uri').val();
 		  	
@@ -305,11 +318,12 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
 		  		var uriTmp = baseUri;
 		  		uriTmp = uriTmp.replace("replaceid", data[i].id);
 		  		data[i].uri = uriTmp;
+		  		data[i].thumbUri = data[i].image != "" ? stoGetImagesBaseUri() + '/' + data[i].image : defaultAvatar;
 		  		data[i].watching = false;
 		  		data[i].watchingId = 0;
 		  	}
-	
-		    $scope.users = data;
+		  	
+		  	$scope.users = data;
 		    
 		    if(!$scope.watchingsLoaded){
 		    	$scope.loadWatchings();
@@ -367,7 +381,7 @@ stsApp.controller('UserSearchListCtrl', function ($scope, $http) {
   
   $scope.isWatchingText = function( user ) {
 	  if(user.watching){
-		  return "unfallow";
+		  return "unfollow";
 	  }
 	  
 	  return "follow";
@@ -522,6 +536,14 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
   var urlPasswordChange = stoGetApiBaseUri() + '/auth/password-change/';
   
   $scope.formData = {};//gender
+  
+
+  jQuery('#change-profile-photo').click(function(){
+    jQuery( '.ajax-uploader-btn'  ).focus().trigger('click');
+    //$(':input[type="file"]').show().click().hide();
+    return false;
+  });
+
 
   $scope.proccessForm = function( oTarget ) {
 	  var changePass = false;
@@ -619,6 +641,7 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
 	  
   };
 
+
 });
 
 
@@ -678,6 +701,12 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
   $scope.filterActivityName = "";
   $scope.filterLocationName = "";
   
+  //google maps and clustering related variables
+  $scope.showItemsOnMap = false;
+  $scope.gmapMarkerCluster = null;
+  $scope.gmap = null;
+  $scope.iwin = null;
+  
   var config = {headers:  {
 	      'Authorization': 'Bearer ' + stoGetAuthToken(),
 	      'Accept': 'application/json;odata=verbose'
@@ -735,6 +764,9 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data;
+		    if($scope.showItemsOnMap){
+		    	$scope.updateMap();
+		    }
 		    
 		    jQuery("#places-items").removeClass('hidden');
 		    
@@ -742,7 +774,7 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 		    	jQuery("#places-no-items").hide();
 		      	jQuery("#places-list-loading").hide();
 		    } else {
-		    	jQuery("#places-no-items").show();
+		    	jQuery("#places-no-items").removeClass('hidden').show();
 		      	jQuery("#places-list-loading").hide();
 		    }
 	  }).error(function(data, status) {
@@ -751,6 +783,46 @@ stsApp.controller('PlacesListCtrl', function ($scope, $http) {
 	  });
   };
 
+  $scope.toggleMapView = function( ) {
+	  $scope.showItemsOnMap = $scope.showItemsOnMap ? false : true;
+	  
+	  if(!$scope.gmap){
+			$scope.gmap = stoCretaeGoogleMaps( 'mapcanvas' );
+			
+			$scope.gmapMarkerCluster = new MarkerClusterer($scope.gmap, null, {
+			      maxZoom: 11,
+			      gridSize: 11,
+			      ignoreHidden: true
+			});
+
+			$scope.iwin =  new google.maps.InfoWindow({
+				content: ""
+			});
+	  }
+	  
+	  $scope.updateMap();
+	  
+	  if($scope.showItemsOnMap){
+		  jQuery('#places-items-on-map').removeClass('hidden');
+		  jQuery('#places-items').addClass('hidden');
+	  } else {
+		  jQuery('#places-items-on-map').addClass('hidden');
+		  jQuery('#places-items').removeClass('hidden');
+	  }
+	  
+  };
+  
+  /** 
+   * Update markers on map based on $scope.places data
+   * destroy all markers and create new ones, clusterize
+   */
+  $scope.updateMap = function( ) {
+	  stoShowMarkers( $scope, $scope.places );
+	  //$scope.places
+	  //$scope.gmap
+  };
+  
+  
   //initial search
   $scope.doSearch();
   
@@ -799,6 +871,12 @@ stsApp.controller('CompetitionViewCtrl', function ($scope, $http) {
 		  	}
 	
 		    $scope.places = data.places;
+		    
+
+		    //TODO: maybe some angular callback? Maybe not needed?
+		    setTimeout(function(){
+		    	jQuery('#competition-place-items').removeClass('hidden');
+		    }, 250);
 		    
 		    if(data.places.length > 0){
 		    	jQuery("#places-no-items").hide();

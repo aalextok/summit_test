@@ -1,6 +1,11 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use common\models\User;
+
+use kartik\widgets\FileInput;
+
+$profilePhoto = User::getUserPhoto( $user->id );
 
 /* @var $this yii\web\View */
 ?>
@@ -8,7 +13,12 @@ use common\models\User;
   <form>
     <input type="hidden" value="<?php echo $id; ?>" id="user-profile-edit-user-id" />
 	<div class="profile-top">
-    	<img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle"/>
+    	
+    	
+    	<a href="#" id="change-profile-photo">
+    	  <img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle" data-image-id="<?php echo isset($profilePhoto['id']) ? $profilePhoto['id'] : 0; ?>" />
+    	</a>
+    	
 		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
 		<div class="profile-stats clearfix">
 			<div class="friends pull-left">FRIENDS <br><span><?php echo User::getUserFriendCount( $user->id ); ?></span></div>
@@ -30,6 +40,66 @@ use common\models\User;
           <?php echo Html::img('@web/img/loading-big.gif') ?>
       	  Loading ...
         </div>
+	</div>
+	
+	<div class="col-xs-12 profile-image-updater">
+        <?php
+        $initialPreview = [];
+        $initialPreviewConfig = [];
+        
+        /*
+        foreach($user->images as $image){
+            $initialPreview[] = Html::img(Yii::getAlias('@web').'/'.$image->location, ['class'=>'file-preview-image', 'alt' => $image->name, 'title' => $image->name]);
+        
+            $initialPreviewConfig[] = [
+                'caption' => $image->name,
+                'url' => Url::to(['site/delete-image', 'id' => $image->id]),
+                'key' => $image->id,
+            ];
+        }
+        */
+        
+        $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthKey();
+        $uri = $this->context->getApiBaseUri();
+        
+        $uri .= '/image/create';
+        
+        $ajaxSettings = new stdClass();
+        $ajaxSettings->headers = new stdClass();
+        
+        $ajaxSettings->headers->Authorization = 'Bearer ' . $authToken;
+        $ajaxSettings->headers->Accept = 'application/json;odata=verbose';
+        
+        //https://github.com/kartik-v/bootstrap-fileinput
+        echo FileInput::widget([
+            'name' => 'image',
+            'pluginEvents' => [
+              "fileuploaded" => 'function(event, data, previewId, index) { afterUploadPhoto(event, data);  }',
+              "fileuploaderror" => 'function(event, data, previewId, index){  }',
+              "fileloaded" => 'function(event, data, previewId, index) { autoUploadPhoto(event, data);  }',
+            ],
+            'options'=>[
+                'multiple' => false,
+                'accept' => 'image/*',
+                'class' => 'ajax-uploader-btn',
+            ],
+            'pluginOptions' => [
+                'uploadUrl' => $uri,  
+                'dropZoneEnabled' => false,           
+                'uploadExtraData' => [
+                  'model' => 'User',
+                  'model_id' => $user->id,
+                  'is_avatar' => '1',
+                ],
+                'ajaxSettings' => $ajaxSettings,
+                'initialPreview' => $initialPreview,
+                'initialPreviewConfig' => $initialPreviewConfig,
+                'overwriteInitial' => false,
+                'maxFileCount' => 1
+            ],
+        ]);
+        
+        ?>
 	</div>
 	
 	<div class="col-xs-6">

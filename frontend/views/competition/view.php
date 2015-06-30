@@ -17,7 +17,7 @@ use yii\helpers\Url;
     <h1><?php echo $competition->name; ?></h1>
   </div>
 
-  <div id="competition-place-items">
+  <div class="hidden" id="competition-place-items">
       <div class="col-xs-6" ng-repeat="place in places">
     	<div class="place-item">
     		<div class="challenge-place clearfix">

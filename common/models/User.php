@@ -347,20 +347,21 @@ class User extends ActiveRecord implements IdentityInterface
         }
       }
       
-      /*
+      //the last one is right one
       $item = (new yii\db\Query())
         ->from('image')
-        ->where( 'user_id = ' . $userId . ' AND watched_user_id = ' . $watchedUserId )
+        ->where( 'model_id = ' . $user->id . ' AND model = "User"' )
+        ->orderBy('id DESC')
         ->one();
       
-      if( isset($item['id']) ){
-        return $item['id'];
+      if( isset($item['id']) && $onlyUri){
+        return Url::base() . '/../../backend/web/' .  $item['location'];
       }
-      //$onlyUri
+      
+      if( isset($item['id']) && !$onlyUri){
+        return $item;
+      }
     
-      */
-      
-      
       return Url::base() . '/img/default-avatar-man.jpg';
     }
     

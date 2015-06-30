@@ -3,6 +3,7 @@
 $this->title = 'Activities';
 use yii\helpers\Html;
 use yii\helpers\Url;
+use frontend\widgets\PlacesMapRenderer;
 ?>
 <div class="row" ng-controller="PlacesListCtrl">
 	<div class="nav-top">
@@ -36,7 +37,7 @@ use yii\helpers\Url;
 			</div>
 		</div>
 		<div class="nav-map pull-right">
-			<a href="#">
+			<a href="#" ng-click="toggleMapView()">
 			  <?php echo Html::img('@web/img/map-icon.png', ['style' => 'height: 22px;']) ?>
 			</a>
 		</div>
@@ -44,8 +45,18 @@ use yii\helpers\Url;
 	
   <input type="hidden" value="<?php echo Url::toRoute(["place/view", 'id' => "replaceid"]); ?>" id="place-view-base-uri" />
   
-  <div class="vertical-middle" id="places-no-items">
-  	<h1>No places<br> at the moment  </h1>
+  <div class="ajax-content-loading" id="places-list-loading">
+    <?php echo Html::img('@web/img/loading-big.gif') ?>
+	Loading ...
+  </div>
+  
+  <div class="vertical-middle hidden" id="places-no-items">
+  	<h1>No places<br /> at the moment  </h1>
+  </div>
+  
+  <div class="hidden" id="places-items-on-map">
+    <div id="mapcanvas"></div>
+    <br />
   </div>
   
   <div class="row hidden" id="places-items">

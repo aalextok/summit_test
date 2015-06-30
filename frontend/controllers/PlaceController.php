@@ -42,6 +42,8 @@ class PlaceController extends \frontend\controllers\BaseController
 
     public function actionIndex()
     {
+        $this->setPageTitle("Activities");
+        
         $allActivities = Activity::find()->all();
         $allLocations = Location::find()->all();
         

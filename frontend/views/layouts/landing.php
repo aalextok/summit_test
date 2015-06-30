@@ -23,11 +23,12 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?php echo Html::encode( $this->context->getPageTitle() ) ?></title>
     <?php $this->head() ?>
     <script>
       var stoFrontendBaseUri = "<?php echo Url::base(); ?>";
       var stoApiBaseUri = "<?php echo $this->context->getApiBaseUri(); ?>";
+      var stoImagesBaseUri = "<?php echo $this->context->getApiBaseUri(); ?>";
       var stoAuthToken = "<?php echo $authToken; /* TODO: store in cookie for javascript? */ ?>";
     </script>  
 </head>
