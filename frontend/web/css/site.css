@@ -55,5 +55,13 @@
 #mapcanvas {
 	width: 100%;
 	height: 600px;
-	
+
 }
+
+/* not catually showing uploader- it's triggered and handled via javascript */
+.profile-image-updater {
+    position: absolute;
+    left: -9999px;
+}
+}
+

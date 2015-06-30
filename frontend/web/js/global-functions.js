@@ -13,6 +13,12 @@ function stoGetFrontendBaseUri(){
 	
 }
 
+function stoGetImagesBaseUri(){
+	return stoImagesBaseUri;
+	
+}
+
+
 function stoTimestampToIsoDate( msSinceEpoch ) {
 	   var d = new Date( msSinceEpoch );
 	   return d.getUTCFullYear() + '-' + (d.getUTCMonth() + 1) + '-' + d.getUTCDate() + 'T' +
@@ -32,6 +38,32 @@ function stoCretaeGoogleMaps( divId ) {
 	
 	return new google.maps.Map( document.getElementById( divId ) , myOptions);
 }
+
+
+function autoUploadPhoto(event, data){
+	$('#w0').fileinput('upload');
+}
+
+
+function afterUploadPhoto(event, data){
+	console.log( data );
+	var fullUri = stoGetImagesBaseUri() + '/' + data.response.location;
+	
+	/*
+	 * description: null
+	 * hash: "8c47f757c53f56f881e6e36719aa4d54"
+	 * id: 14
+	 * location: "images/user/8/55924abe4dbdc.jpg"
+	 * model: "User"model_id: "8"name: "CNC-V4-2"__proto__: Object
+	 * */
+	
+	jQuery('#change-profile-photo img').attr('src', fullUri);
+	jQuery('#change-profile-photo img').attr('data-image-id', data.response.id);
+}
+
+
+
+
 
 
 var openedInfowindowMarkerId = 0;

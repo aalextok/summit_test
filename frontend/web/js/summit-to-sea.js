@@ -533,19 +533,12 @@ stsApp.controller('ProfileEditCtrl', function ($scope, $http) {
   $scope.formData = {};//gender
   
 
-  jQuery('#user-profile-edit-user-id').click(function(){
-    //var previewField= jQuery(this).attr('data-target-input');
-    //var fileField= jQuery(this).attr('data-target-file-field');
-    
-    jQuery( jQuery(this).parents('.file-row').find('.inp-file-upload')  ).change(function(){
-      var path = jQuery(this).val();
-      jQuery( jQuery(this).parents('.file-row').find('.inp-file-preview') ).val( path );
-    });
-    
-    jQuery( jQuery(this).parents('.file-row').find('.inp-file-upload')  ).trigger('click');
-    
+  jQuery('#change-profile-photo').click(function(){
+    jQuery( '.ajax-uploader-btn'  ).focus().trigger('click');
+    //$(':input[type="file"]').show().click().hide();
     return false;
   });
+
 
   $scope.proccessForm = function( oTarget ) {
 	  var changePass = false;

@@ -28,6 +28,7 @@ $authToken = Yii::$app->user->isGuest ? "" : Yii::$app->user->identity->getAuthK
     <script>
       var stoFrontendBaseUri = "<?php echo Url::base(); ?>";
       var stoApiBaseUri = "<?php echo $this->context->getApiBaseUri(); ?>";
+      var stoImagesBaseUri = "<?php echo $this->context->getApiBaseUri(); ?>";
       var stoAuthToken = "<?php echo $authToken; /* TODO: store in cookie for javascript? */ ?>";
     </script>  
 </head>

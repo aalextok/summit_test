@@ -5,6 +5,9 @@ use common\models\User;
 
 use kartik\widgets\FileInput;
 
+$profile = User::getUserPhoto( $user );
+pre( $profile );
+
 /* @var $this yii\web\View */
 ?>
 <div class="row" ng-controller="ProfileEditCtrl">
@@ -14,9 +17,33 @@ use kartik\widgets\FileInput;
     	
     	
     	<a href="#" id="change-profile-photo">
-    	  <img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle"/>
+    	  <img src="<?php echo User::getUserPhoto( $user, true ); ?>" class="img-circle" data-image-id="" />
     	</a>
     	
+		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
+		<div class="profile-stats clearfix">
+			<div class="friends pull-left">FRIENDS <br><span><?php echo User::getUserFriendCount( $user->id ); ?></span></div>
+			<div class="meters pull-right">METERS <br><span><?php echo $user->meters_above_sea_level; ?></span></div>
+		</div>
+		<div class="profile-save pull-right">
+			<a href="#" ng-click="proccessForm( $event )">Save</a>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 feedbacks">
+    	<div class="alert alert-success hidden">
+    	  Profile updated.
+    	</div>
+    	<div class="alert alert-danger hidden" data-original="Profile update failed. Try again. " data-password-error="Password update failed">
+    	  Profile update failed. Try again. 
+    	</div>
+        <div class="ajax-content-loading hidden">
+          <?php echo Html::img('@web/img/loading-big.gif') ?>
+      	  Loading ...
+        </div>
+	</div>
+	
+	<div class="col-xs-12 profile-image-updater">
         <?php
         $initialPreview = [];
         $initialPreviewConfig = [];
@@ -44,12 +71,18 @@ use kartik\widgets\FileInput;
         $ajaxSettings->headers->Authorization = 'Bearer ' . $authToken;
         $ajaxSettings->headers->Accept = 'application/json;odata=verbose';
         
-        echo "<label class='control-label'>Pildid profile</label>";
+        //https://github.com/kartik-v/bootstrap-fileinput
         echo FileInput::widget([
             'name' => 'image',
+            'pluginEvents' => [
+              "fileuploaded" => 'function(event, data, previewId, index) { afterUploadPhoto(event, data);  }',
+              "fileuploaderror" => 'function(event, data, previewId, index){  }',
+              "fileloaded" => 'function(event, data, previewId, index) { autoUploadPhoto(event, data);  }',
+            ],
             'options'=>[
                 'multiple' => false,
-                'accept' => 'image/*'
+                'accept' => 'image/*',
+                'class' => 'ajax-uploader-btn',
             ],
             'pluginOptions' => [
                 'uploadUrl' => $uri,  
@@ -60,11 +93,6 @@ use kartik\widgets\FileInput;
                   'is_avatar' => '1',
                 ],
                 'ajaxSettings' => $ajaxSettings,
-                //'ajaxSettings' => {
-                //  "headers" => {
-                //    "Authorization" => 'Bearer " . $authToken . "'
-                //  }
-                //},
                 'initialPreview' => $initialPreview,
                 'initialPreviewConfig' => $initialPreviewConfig,
                 'overwriteInitial' => false,
@@ -72,35 +100,7 @@ use kartik\widgets\FileInput;
             ],
         ]);
         
-        /*
-        'Authorization': 'Bearer ' + stoGetAuthToken(),
-        
-        ajaxSettings: {
-          
-        }*/
         ?>
-    	
-		<div class="profile-name clearfix"><?php echo User::getUserDisplayName( $user ); ?></div>
-		<div class="profile-stats clearfix">
-			<div class="friends pull-left">FRIENDS <br><span><?php echo User::getUserFriendCount( $user->id ); ?></span></div>
-			<div class="meters pull-right">METERS <br><span><?php echo $user->meters_above_sea_level; ?></span></div>
-		</div>
-		<div class="profile-save pull-right">
-			<a href="#" ng-click="proccessForm( $event )">Save</a>
-		</div>
-	</div>
-	
-	<div class="col-xs-12 feedbacks">
-    	<div class="alert alert-success hidden">
-    	  Profile updated.
-    	</div>
-    	<div class="alert alert-danger hidden" data-original="Profile update failed. Try again. " data-password-error="Password update failed">
-    	  Profile update failed. Try again. 
-    	</div>
-        <div class="ajax-content-loading hidden">
-          <?php echo Html::img('@web/img/loading-big.gif') ?>
-      	  Loading ...
-        </div>
 	</div>
 	
 	<div class="col-xs-6">
